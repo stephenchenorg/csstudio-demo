@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>服務介紹 — 昇洋環境科技</title>
+  <meta name="description" content="昇洋環境科技提供實驗室確效檢測、潔淨室環境檢測、室內空氣品質檢測、薰蒸消毒等專業服務。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: {
+        colors: {
+          brand: { 50:'#F0FDF4',100:'#DCFCE7',200:'#BBF7D0',300:'#86EFAC',400:'#22C55E',500:'#15803D',600:'#166534',700:'#14532D' },
+          earth: { 50:'#FEFCE8',400:'#CA8A04',500:'#A16207' }, warm:'#F8F6F3',
+        },
+        fontFamily: { sans:['"Noto Sans TC"','"Inter"','sans-serif'] },
+      }}
+    }
+  </script>
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/components.css">
+  <style>
+    .hero-gradient { background: linear-gradient(160deg, #166534 0%, #15803D 40%, #22C55E 100%); }
+    .hero-pattern { background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Ccircle cx='40' cy='40' r='20'/%3E%3C/g%3E%3C/svg%3E"); }
+  </style>
+</head>
+<body class="bg-[#FAFCFA] text-[#1C2B1F]">
+
+  <!-- HEADER -->
+  <header class="bg-white/90 backdrop-blur-md border-b border-green-100 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8">
+      <div class="flex items-center justify-between h-18 lg:h-20">
+        <a href="index.html" class="flex items-center gap-3">
+          <div class="w-11 h-11 bg-gradient-to-br from-brand-500 to-brand-400 rounded-2xl flex items-center justify-center shadow-sm">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12.75 3.03v.568c0 .334.148.65.405.864l1.068.89c.442.369.535 1.01.216 1.49l-.51.766a2.25 2.25 0 01-1.161.886l-.143.048a1.107 1.107 0 00-.57 1.664c.369.555.169 1.307-.427 1.592L9 13.125"/></svg>
+          </div>
+          <div>
+            <div class="font-bold text-lg leading-tight">昇洋環境科技</div>
+            <div class="text-[10px] text-brand-500/60 tracking-widest">SYE SERVICE CO., LTD.</div>
+          </div>
+        </a>
+        <nav class="hidden lg:flex items-center gap-1">
+          <a href="index.html" class="px-4 py-2 text-sm font-medium text-gray-500 hover:text-brand-500 hover:bg-brand-50 rounded-full transition">首頁</a>
+          <a href="about.html" class="px-4 py-2 text-sm font-medium text-gray-500 hover:text-brand-500 hover:bg-brand-50 rounded-full transition">關於昇洋</a>
+          <a href="news.html" class="px-4 py-2 text-sm font-medium text-gray-500 hover:text-brand-500 hover:bg-brand-50 rounded-full transition">最新消息</a>
+          <a href="service.html" class="px-4 py-2 text-sm font-medium text-brand-500 bg-brand-50 rounded-full">服務介紹</a>
+          <a href="contact.html" class="px-4 py-2 text-sm font-medium text-gray-500 hover:text-brand-500 hover:bg-brand-50 rounded-full transition">聯絡我們</a>
+        </nav>
+        <div class="hidden lg:flex items-center gap-3">
+          <a href="member.html" class="text-sm text-gray-500 hover:text-brand-500 transition">會員登入</a>
+          <a href="contact.html" class="btn btn-primary text-sm">免費諮詢</a>
+        </div>
+        <button id="menuToggle" class="lg:hidden p-2 rounded-xl hover:bg-brand-50 transition" aria-label="選單">
+          <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/></svg>
+        </button>
+      </div>
+      <div id="mobileMenu" class="lg:hidden hidden pb-6 space-y-1">
+        <a href="index.html" class="block px-4 py-3 text-sm text-gray-600 hover:bg-brand-50 rounded-xl transition">首頁</a>
+        <a href="about.html" class="block px-4 py-3 text-sm text-gray-600 hover:bg-brand-50 rounded-xl transition">關於昇洋</a>
+        <a href="news.html" class="block px-4 py-3 text-sm text-gray-600 hover:bg-brand-50 rounded-xl transition">最新消息</a>
+        <a href="service.html" class="block px-4 py-3 text-sm font-medium text-brand-500 bg-brand-50 rounded-xl">服務介紹</a>
+        <a href="contact.html" class="block px-4 py-3 text-sm text-gray-600 hover:bg-brand-50 rounded-xl transition">聯絡我們</a>
+        <div class="pt-3 border-t border-green-100 flex items-center gap-3 px-4">
+          <a href="member.html" class="text-sm text-gray-500">會員登入</a>
+          <a href="contact.html" class="btn btn-primary text-sm">免費諮詢</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- BANNER -->
+  <section class="hero-gradient hero-pattern relative overflow-hidden">
+    <div class="absolute -top-40 -right-40 w-[500px] h-[500px] bg-white/5 rounded-[40%_60%_70%_30%/40%_50%_60%_50%]"></div>
+    <div class="relative max-w-7xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
+      <nav class="flex items-center gap-2 text-sm text-white/50 mb-6">
+        <a href="index.html" class="hover:text-white transition">首頁</a>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/></svg>
+        <span class="text-white">服務介紹</span>
+      </nav>
+      <h1 class="text-4xl sm:text-5xl font-extrabold text-white tracking-tight mb-4">服務介紹</h1>
+      <p class="text-white/60 text-lg max-w-xl">專業環境檢測與確效服務，符合國際標準規範</p>
+    </div>
+    <div class="absolute bottom-0 left-0 right-0">
+      <svg viewBox="0 0 1440 60" fill="none" class="w-full"><path d="M0 30C360 60 720 0 1080 30C1260 45 1380 50 1440 30V60H0V30Z" fill="#FAFCFA"/></svg>
+    </div>
+  </section>
+
+  <!-- SERVICE CONTENT -->
+  <section class="py-16 sm:py-24">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8">
+      <div class="grid lg:grid-cols-4 gap-10">
+
+        <!-- LEFT SIDEBAR -->
+        <aside class="lg:col-span-1">
+          <div class="bg-white rounded-2xl border border-green-100 p-6 sticky top-28">
+            <h3 class="font-bold text-base mb-5 text-brand-600">服務分類</h3>
+            <nav class="space-y-2">
+              <a href="#lab" class="sidebar-link block px-4 py-3 text-sm font-medium rounded-xl bg-brand-50 text-brand-500 transition hover:bg-brand-50 hover:text-brand-500">
+                實驗室、正壓室、負壓室（確效）
+              </a>
+              <a href="#cleanroom" class="sidebar-link block px-4 py-3 text-sm text-gray-500 rounded-xl transition hover:bg-brand-50 hover:text-brand-500">
+                廠房、潔淨室環境檢測
+              </a>
+              <a href="#plan" class="sidebar-link block px-4 py-3 text-sm text-gray-500 rounded-xl transition hover:bg-brand-50 hover:text-brand-500">
+                品質確效計畫、完整方案
+              </a>
+              <a href="#consult" class="sidebar-link block px-4 py-3 text-sm text-gray-500 rounded-xl transition hover:bg-brand-50 hover:text-brand-500">
+                法規諮詢
+              </a>
+            </nav>
+          </div>
+        </aside>
+
+        <!-- RIGHT CONTENT -->
+        <div class="lg:col-span-3 space-y-16">
+
+          <!-- Section: 實驗室確效 -->
+          <div id="lab">
+            <div class="section-label">實驗室確效檢測</div>
+            <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight mb-8">實驗室、正壓室、負壓室（確效）</h2>
+            <div class="grid sm:grid-cols-2 gap-6">
+
+              <!-- Card: 正壓實驗室 -->
+              <div class="card group p-0 overflow-hidden">
+                <div class="relative overflow-hidden">
+                  <img src="https://images.unsplash.com/photo-1581093458791-9d42e3c7e117?w=600&h=300&fit=crop" alt="正壓實驗室" class="w-full h-44 object-cover group-hover:scale-105 transition duration-500">
+                </div>
+                <div class="p-6">
+                  <div class="w-12 h-12 bg-brand-50 rounded-2xl flex items-center justify-center mb-4">
+                    <svg class="w-6 h-6 text-brand-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3"/></svg>
+                  </div>
+                  <h3 class="font-bold text-lg mb-2 group-hover:text-brand-500 transition">正壓實驗室環境確效檢測</h3>
+                  <p class="text-sm text-gray-500 leading-relaxed">針對正壓實驗室環境進行全面性確效檢測，確保實驗室符合國際標準之潔淨度與壓差要求。</p>
+                </div>
+              </div>
+
+              <!-- Card: 負壓實驗室 -->
+              <div class="card group p-0 overflow-hidden">
+                <div class="relative overflow-hidden">
+                  <img src="https://images.unsplash.com/photo-1559757175-5700dde675bc?w=600&h=300&fit=crop" alt="負壓實驗室" class="w-full h-44 object-cover group-hover:scale-105 transition duration-500">
+                </div>
+                <div class="p-6">
+                  <div class="w-12 h-12 bg-brand-50 rounded-2xl flex items-center justify-center mb-4">
+                    <svg class="w-6 h-6 text-brand-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622"/></svg>
+                  </div>
+                  <h3 class="font-bold text-lg mb-2 group-hover:text-brand-500 transition">負壓實驗室 BSL-2 / BSL-3</h3>
+                  <p class="text-sm text-gray-500 leading-relaxed">BSL-2 及 BSL-3 等級生物安全實驗室之負壓環境確效檢測，確保生物安全等級符合規範。</p>
+                </div>
+              </div>
+
+              <!-- Card: 動物房 -->
+              <div class="card group p-0 overflow-hidden">
+                <div class="relative overflow-hidden">
+                  <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&h=300&fit=crop" alt="動物房" class="w-full h-44 object-cover group-hover:scale-105 transition duration-500">
+                </div>
+                <div class="p-6">
+                  <div class="w-12 h-12 bg-brand-50 rounded-2xl flex items-center justify-center mb-4">
+                    <svg class="w-6 h-6 text-brand-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955a1.126 1.126 0 011.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75"/></svg>
+                  </div>
+                  <h3 class="font-bold text-lg mb-2 group-hover:text-brand-500 transition">動物房環境確效檢測</h3>
+                  <p class="text-sm text-gray-500 leading-relaxed">動物房環境之溫濕度、壓差、換氣次數、潔淨度等項目確效檢測，符合 AAALAC 規範。</p>
+                </div>
+              </div>
+
+              <!-- Card: BSC -->
+              <div class="card group p-0 overflow-hidden">
+                <div class="relative overflow-hidden">
+                  <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=600&h=300&fit=crop" alt="生物安全櫃" class="w-full h-44 object-cover group-hover:scale-105 transition duration-500">
+                </div>
+                <div class="p-6">
+                  <div class="w-12 h-12 bg-brand-50 rounded-2xl flex items-center justify-center mb-4">
+                    <svg class="w-6 h-6 text-brand-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zm0 9.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zm9.75-9.75A2.25 2.25 0 0115.75 3.75H18a2.25 2.25 0 012.25 2.25v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zm0 9.75a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 15.75V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z"/></svg>
+                  </div>
+                  <h3 class="font-bold text-lg mb-2 group-hover:text-brand-500 transition">生物安全櫃 Class II BSC</h3>
+                  <p class="text-sm text-gray-500 leading-relaxed">Class II 生物安全櫃功能性檢測，包含氣流速度、HEPA 過濾效率、交叉污染測試等。</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section: 潔淨室 -->
+          <div id="cleanroom">
+            <div class="section-label">環境檢測</div>
+            <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight mb-8">廠房、潔淨室環境檢測</h2>
+            <div class="bg-white rounded-2xl border border-green-100 overflow-hidden">
+              <img src="https://images.unsplash.com/photo-1581093458791-9d42e3c7e117?w=1200&h=400&fit=crop" alt="潔淨室環境" class="w-full h-56 sm:h-72 object-cover">
+              <div class="p-8">
+                <p class="text-gray-500 leading-relaxed mb-6">
+                  針對各類廠房及潔淨室環境，提供完整的環境檢測服務，包含微粒子計數、溫濕度監控、壓差量測、風速與換氣次數檢測等，確保製造環境符合 ISO 14644、GMP 等國際標準。
+                </p>
+                <div class="grid sm:grid-cols-3 gap-4">
+                  <div class="bg-brand-50 rounded-xl p-4 text-center">
+                    <div class="text-2xl font-extrabold text-brand-500 mb-1">ISO</div>
+                    <div class="text-xs text-gray-500">14644 標準</div>
+                  </div>
+                  <div class="bg-brand-50 rounded-xl p-4 text-center">
+                    <div class="text-2xl font-extrabold text-brand-500 mb-1">GMP</div>
+                    <div class="text-xs text-gray-500">藥品製造規範</div>
+                  </div>
+                  <div class="bg-brand-50 rounded-xl p-4 text-center">
+                    <div class="text-2xl font-extrabold text-brand-500 mb-1">TAF</div>
+                    <div class="text-xs text-gray-500">認證檢測</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section: 品質確效計畫 -->
+          <div id="plan">
+            <div class="section-label">確效計畫</div>
+            <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight mb-8">品質確效計畫、完整方案</h2>
+            <div class="bg-warm rounded-2xl p-8 sm:p-10">
+              <p class="text-gray-500 leading-relaxed mb-8">
+                依據 ISO、PIC/S、GTP、GMP 等國際標準規範，為客戶量身打造品質確效計畫與完整的檢測方案，從規劃、執行到報告產出，提供一站式專業服務。
+              </p>
+              <div class="grid sm:grid-cols-2 gap-6">
+                <div class="flex items-start gap-4">
+                  <div class="w-10 h-10 bg-brand-500 rounded-xl flex items-center justify-center shrink-0">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  </div>
+                  <div>
+                    <div class="font-bold text-sm mb-1">ISO 14644</div>
+                    <div class="text-xs text-gray-500">潔淨室與相關受控環境標準</div>
+                  </div>
+                </div>
+                <div class="flex items-start gap-4">
+                  <div class="w-10 h-10 bg-brand-500 rounded-xl flex items-center justify-center shrink-0">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  </div>
+                  <div>
+                    <div class="font-bold text-sm mb-1">PIC/S GMP</div>
+                    <div class="text-xs text-gray-500">國際醫藥品稽查協約組織規範</div>
+                  </div>
+                </div>
+                <div class="flex items-start gap-4">
+                  <div class="w-10 h-10 bg-brand-500 rounded-xl flex items-center justify-center shrink-0">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  </div>
+                  <div>
+                    <div class="font-bold text-sm mb-1">GTP</div>
+                    <div class="text-xs text-gray-500">人體組織優良操作規範</div>
+                  </div>
+                </div>
+                <div class="flex items-start gap-4">
+                  <div class="w-10 h-10 bg-brand-500 rounded-xl flex items-center justify-center shrink-0">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  </div>
+                  <div>
+                    <div class="font-bold text-sm mb-1">cGMP</div>
+                    <div class="text-xs text-gray-500">現行藥品優良製造規範</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section: 室內空氣品質 + 薰蒸消毒 -->
+          <div id="consult">
+            <div class="section-label">其他服務</div>
+            <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight mb-8">室內空氣品質檢測 & 薰蒸消毒</h2>
+            <div class="grid sm:grid-cols-2 gap-6">
+
+              <!-- IAQ -->
+              <div class="card group p-0 overflow-hidden">
+                <div class="relative overflow-hidden">
+                  <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&h=300&fit=crop" alt="室內空氣品質" class="w-full h-44 object-cover group-hover:scale-105 transition duration-500">
+                </div>
+                <div class="p-6">
+                  <div class="w-12 h-12 bg-brand-50 rounded-2xl flex items-center justify-center mb-4">
+                    <svg class="w-6 h-6 text-brand-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"/></svg>
+                  </div>
+                  <h3 class="font-bold text-lg mb-2 group-hover:text-brand-500 transition">室內空氣品質檢測</h3>
+                  <p class="text-sm text-gray-500 leading-relaxed mb-4">依據室內空氣品質管理法執行室內空氣品質檢測，包含 CO2、甲醛、PM2.5、PM10、TVOC 等項目。</p>
+                  <a href="https://www.epa.gov.tw" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 text-sm font-medium text-brand-500 hover:text-brand-600 transition">
+                    法規資訊
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"/></svg>
+                  </a>
+                </div>
+              </div>
+
+              <!-- 薰蒸消毒 -->
+              <div class="card group p-0 overflow-hidden">
+                <div class="relative overflow-hidden">
+                  <img src="https://images.unsplash.com/photo-1518173946687-a1e76ac77098?w=600&h=300&fit=crop" alt="薰蒸消毒" class="w-full h-44 object-cover group-hover:scale-105 transition duration-500">
+                </div>
+                <div class="p-6">
+                  <div class="w-12 h-12 bg-brand-50 rounded-2xl flex items-center justify-center mb-4">
+                    <svg class="w-6 h-6 text-brand-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.048 8.287 8.287 0 009 9.6a8.983 8.983 0 013.361-6.867 8.21 8.21 0 003 2.48z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 18a3.75 3.75 0 00.495-7.467 5.99 5.99 0 00-1.925 3.546 5.974 5.974 0 01-2.133-1.001A3.75 3.75 0 0012 18z"/></svg>
+                  </div>
+                  <h3 class="font-bold text-lg mb-2 group-hover:text-brand-500 transition">薰蒸消毒服務</h3>
+                  <p class="text-sm text-gray-500 leading-relaxed">提供甲醛薰蒸、過氧化氫薰蒸等專業消毒服務，適用於實驗室、潔淨室、動物房等場域之除污與滅菌。</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CTA -->
+          <div class="hero-gradient hero-pattern rounded-3xl p-8 sm:p-12 text-center text-white relative overflow-hidden">
+            <div class="absolute -bottom-10 -right-10 w-[200px] h-[200px] bg-white/5 rounded-[40%_60%_70%_30%/40%_50%_60%_50%]"></div>
+            <div class="relative">
+              <h3 class="text-2xl sm:text-3xl font-extrabold mb-4">需要專業檢測服務？</h3>
+              <p class="text-white/60 mb-8 max-w-lg mx-auto">歡迎聯絡我們，由專業團隊為您提供客製化的檢測方案與報價</p>
+              <a href="contact.html" class="btn btn-white text-base px-10 py-3.5 shadow-lg">
+                免費諮詢
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg>
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-brand-700 text-green-200/70">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 py-16">
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+        <div>
+          <div class="flex items-center gap-3 mb-5">
+            <div class="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center">
+              <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12.75 3.03v.568c0 .334.148.65.405.864l1.068.89"/></svg>
+            </div>
+            <span class="text-white font-bold">昇洋環境科技</span>
+          </div>
+          <p class="text-sm leading-relaxed">專業環境檢測服務的領導品牌。</p>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold mb-5 text-sm">快速連結</h4>
+          <ul class="space-y-3 text-sm"><li><a href="about.html" class="hover:text-white transition">關於昇洋</a></li><li><a href="news.html" class="hover:text-white transition">最新消息</a></li><li><a href="service.html" class="hover:text-white transition">服務介紹</a></li><li><a href="contact.html" class="hover:text-white transition">聯絡我們</a></li></ul>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold mb-5 text-sm">服務項目</h4>
+          <ul class="space-y-3 text-sm"><li>室內空氣品質檢測</li><li>實驗室認證與確效</li><li>薰蒸消毒服務</li><li>環境監測諮詢</li></ul>
+        </div>
+        <div>
+          <h4 class="text-white font-semibold mb-5 text-sm">聯絡資訊</h4>
+          <ul class="space-y-3 text-sm"><li>新北市樹林區保安街2段355號</li><li>(02) 2689-3177</li><li>shengyangservice1@gmail.com</li></ul>
+        </div>
+      </div>
+      <div class="border-t border-white/10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
+        <p>&copy; 2016–2026 昇洋環境科技股份有限公司</p>
+        <div class="flex items-center gap-3"><a href="member.html" class="hover:text-white transition">會員登入</a><span class="opacity-30">|</span><a href="join.html" class="hover:text-white transition">加入會員</a></div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('menuToggle').addEventListener('click',()=>{document.getElementById('mobileMenu').classList.toggle('hidden')});
+  </script>
+</body>
+</html>
