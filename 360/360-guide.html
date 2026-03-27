@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>360° 產品展示 — 完整方案指南</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0c1020;
+    color: #c8d0e0;
+    font-family: 'Segoe UI', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+    line-height: 1.8;
+  }
+
+  .page { max-width: 960px; margin: 0 auto; padding: 60px 28px 100px; }
+
+  h1 {
+    font-size: 36px; font-weight: 800; color: #fff;
+    text-align: center; margin-bottom: 8px;
+  }
+  h1 span { color: #00e5ff; }
+  .page-sub {
+    text-align: center; color: #5a6a8a; font-size: 14px;
+    margin-bottom: 50px; letter-spacing: 1px;
+  }
+
+  /* Method Card */
+  .method {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    padding: 32px;
+    margin-bottom: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .method::before {
+    content: attr(data-num);
+    position: absolute;
+    top: -20px; right: -10px;
+    font-size: 120px;
+    font-weight: 900;
+    color: rgba(0,229,255,0.04);
+    pointer-events: none;
+  }
+  .method-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+  .method-icon {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+  .method h2 {
+    font-size: 22px; color: #fff; font-weight: 700;
+  }
+  .method h2 small {
+    display: block;
+    font-size: 12px;
+    color: #00e5ff;
+    font-weight: 500;
+    letter-spacing: 1px;
+    margin-top: 2px;
+  }
+  .method h3 {
+    font-size: 16px;
+    color: #00e5ff;
+    margin: 22px 0 10px;
+    padding-left: 12px;
+    border-left: 3px solid #00e5ff;
+  }
+  .method p, .method li {
+    font-size: 14.5px;
+    color: #a0aec0;
+    line-height: 1.85;
+  }
+  .method li { margin-bottom: 5px; }
+  .method ul, .method ol { padding-left: 22px; }
+  .method strong { color: #e0e8f4; }
+
+  .badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+  .badge-rec { background: rgba(0,229,255,0.15); color: #00e5ff; }
+  .badge-easy { background: rgba(0,255,136,0.12); color: #00ff88; }
+  .badge-pro { background: rgba(255,170,0,0.12); color: #ffaa00; }
+  .badge-cost { background: rgba(255,51,68,0.1); color: #ff5566; }
+
+  .step-box {
+    background: rgba(0,229,255,0.04);
+    border: 1px solid rgba(0,229,255,0.1);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 12px 0;
+  }
+  .step-box .step-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #00e5ff;
+    margin-bottom: 6px;
+  }
+
+  .diagram {
+    background: #0a0e1a;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 14px 0;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    color: #6a8ab0;
+    white-space: pre;
+    overflow-x: auto;
+    line-height: 1.5;
+  }
+
+  .pros-cons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 12px 0;
+  }
+  .pros, .cons {
+    padding: 14px 16px;
+    border-radius: 10px;
+    font-size: 13px;
+  }
+  .pros {
+    background: rgba(0,255,136,0.04);
+    border: 1px solid rgba(0,255,136,0.1);
+  }
+  .cons {
+    background: rgba(255,51,68,0.04);
+    border: 1px solid rgba(255,51,68,0.1);
+  }
+  .pros h4 { color: #00ff88; font-size: 13px; margin-bottom: 8px; }
+  .cons h4 { color: #ff5566; font-size: 13px; margin-bottom: 8px; }
+  .pros li, .cons li { font-size: 13px; margin-bottom: 3px; }
+
+  .tool-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 10px 0;
+  }
+  .tool-tag {
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: #90a0b8;
+  }
+
+  .cost-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 8px 0;
+    font-size: 13px;
+    color: #6a7a9b;
+  }
+  .cost-bar .bar {
+    height: 6px;
+    border-radius: 3px;
+    background: linear-gradient(90deg, #00e5ff, #00ff88);
+  }
+
+  .summary-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 24px 0;
+    font-size: 13px;
+  }
+  .summary-table th, .summary-table td {
+    padding: 10px 14px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .summary-table th {
+    color: #6a7a9b;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .summary-table td { color: #b0bcd0; }
+  .summary-table tr:hover { background: rgba(0,229,255,0.03); }
+  .stars { color: #ffcc00; letter-spacing: 2px; }
+
+  .nav-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin: 30px 0 50px;
+  }
+  .nav-links a {
+    padding: 8px 18px;
+    border-radius: 8px;
+    border: 1px solid rgba(0,229,255,0.2);
+    color: #00e5ff;
+    text-decoration: none;
+    font-size: 13px;
+    transition: all 0.2s;
+  }
+  .nav-links a:hover {
+    background: rgba(0,229,255,0.1);
+  }
+
+  .back-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: 1px solid rgba(0,229,255,0.3);
+    background: rgba(15,20,35,0.9);
+    backdrop-filter: blur(12px);
+    color: #00e5ff;
+    text-decoration: none;
+    font-size: 13px;
+    z-index: 50;
+    transition: all 0.2s;
+  }
+  .back-btn:hover { background: rgba(0,229,255,0.12); }
+
+  @media (max-width: 600px) {
+    .pros-cons { grid-template-columns: 1fr; }
+    h1 { font-size: 26px; }
+    .method { padding: 22px 18px; }
+    .diagram { font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<h1>360° 產品展示 <span>完整方案指南</span></h1>
+<p class="page-sub">從拍攝、製作到網頁呈現 — 所有方法一次整理</p>
+
+<div class="nav-links">
+  <a href="#m1">方法一：多角度拍照</a>
+  <a href="#m2">方法二：3D 建模</a>
+  <a href="#m3">方法三：360 影片</a>
+  <a href="#m4">方法四：CSS/JS 模擬</a>
+  <a href="#m5">方法五：混合方案</a>
+  <a href="#compare">總比較表</a>
+</div>
+
+<!-- =========================================== -->
+<!-- METHOD 1 -->
+<!-- =========================================== -->
+<div class="method" data-num="01" id="m1">
+  <div class="method-head">
+    <div class="method-icon" style="background:rgba(0,229,255,0.1);">📸</div>
+    <h2>
+      方法一：多角度拍照旋轉
+      <small>MULTI-ANGLE PHOTOGRAPHY SPIN</small>
+    </h2>
+    <span class="badge badge-rec">最推薦</span>
+  </div>
+
+  <p>將產品放在轉盤上，固定相機角度，每隔固定度數拍一張照片（通常 24~72 張），再用 JavaScript 串成可拖曳旋轉的互動效果。這是<strong>業界最常用</strong>的產品 360° 展示方式。</p>
+
+  <h3>拍攝設備需求</h3>
+  <ul>
+    <li><strong>相機</strong> — 任何可手動控制曝光的相機（手機也行，單眼更佳）</li>
+    <li><strong>電動轉盤</strong> — 網拍轉盤 NT$500~3,000 或專業轉盤 NT$5,000~30,000</li>
+    <li><strong>三腳架</strong> — 固定相機位置，確保每張照片高度一致</li>
+    <li><strong>燈光</strong> — 柔光箱 ×2 或環形燈，確保均勻打光</li>
+    <li><strong>背景</strong> — 白色/黑色背景布或純色背景紙</li>
+  </ul>
+
+  <h3>拍攝步驟（人工操作）</h3>
+
+  <div class="step-box">
+    <div class="step-title">Step 1：場地佈置</div>
+    <p>白色背景紙鋪開，轉盤放中央，左右各放柔光箱（45° 角打光），相機上三腳架對準產品中心。</p>
+  </div>
+
+  <div class="diagram">
+        柔光箱                      柔光箱
+         ╲  ┌─────────────────┐  ╱
+          ╲ │                 │ ╱
+           ╲│   白色背景紙     │╱
+            │                 │
+            │   ┌─────────┐   │
+            │   │ 轉盤     │   │        ← 每次旋轉 5°~15°
+            │   │ ┌─────┐ │   │
+            │   │ │ 產品 │ │   │
+            │   │ └─────┘ │   │
+            │   └─────────┘   │
+            │                 │
+            └────────┬────────┘
+                     │
+                 📷 相機 (三腳架固定)
+  </div>
+
+  <div class="step-box">
+    <div class="step-title">Step 2：相機設定</div>
+    <p>手動模式（M mode），固定光圈 f/8~f/11、ISO 100、快門依測光調整。<strong>關閉自動白平衡</strong>，手動設定白平衡確保每張色溫一致。對焦後切到手動對焦（MF）鎖定。</p>
+  </div>
+
+  <div class="step-box">
+    <div class="step-title">Step 3：拍攝</div>
+    <p>
+      <strong>方式 A — 電動轉盤：</strong>設定自動旋轉，每轉 10° 停一下拍一張 → 共 36 張<br>
+      <strong>方式 B — 手動轉盤：</strong>每次手轉一個固定角度，拍一張<br>
+      <strong>方式 C — 人繞著拍：</strong>產品固定，攝影師繞著走，每隔固定距離拍一張（精度較低）<br><br>
+      <strong>建議張數：</strong>
+    </p>
+    <ul>
+      <li>24 張 = 每 15° 一張（最低限度，旋轉有跳動感）</li>
+      <li>36 張 = 每 10° 一張（推薦，流暢度與檔案大小平衡）</li>
+      <li>72 張 = 每 5° 一張（絲滑流暢，但檔案多）</li>
+    </ul>
+  </div>
+
+  <div class="step-box">
+    <div class="step-title">Step 4：後製</div>
+    <p>
+      1. Lightroom 批次調整：白平衡統一、曝光微調、去背景<br>
+      2. Photoshop 批次去背（或用 remove.bg 線上去背）<br>
+      3. 統一裁切為正方形（建議 1000×1000 或 1500×1500 px）<br>
+      4. 輸出為 JPG（品質 80%），檔名命名為 001.jpg ~ 036.jpg
+    </p>
+  </div>
+
+  <div class="step-box">
+    <div class="step-title">Step 5：網頁串接</div>
+    <p>用 JS 套件把這些照片串成可拖曳旋轉的互動效果。</p>
+  </div>
+
+  <h3>推薦 JS 套件</h3>
+  <div class="tool-list">
+    <span class="tool-tag">js-cloudimage-360-view（免費）</span>
+    <span class="tool-tag">360-image-viewer</span>
+    <span class="tool-tag">SpriteSpin（jQuery）</span>
+    <span class="tool-tag">Sirv 360 Viewer（付費 SaaS）</span>
+    <span class="tool-tag">Magic 360（付費 plugin）</span>
+    <span class="tool-tag">自己用 JS 寫（見下方範例）</span>
+  </div>
+
+  <h3>自己用 JS 串接的程式碼範例</h3>
+  <div class="diagram">
+&lt;!-- HTML --&gt;
+&lt;div id="viewer" style="width:600px;height:600px;cursor:grab;"&gt;
+  &lt;img id="spin-img" src="images/001.jpg" style="width:100%;height:100%;object-fit:contain;"&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+const totalFrames = 36;        // 你有幾張照片
+const folder = 'images/';      // 照片資料夾
+let current = 1;
+let dragging = false;
+let startX = 0;
+
+const img = document.getElementById('spin-img');
+const viewer = document.getElementById('viewer');
+
+// 預載所有圖片
+for (let i = 1; i &lt;= totalFrames; i++) {
+  const preload = new Image();
+  preload.src = folder + String(i).padStart(3, '0') + '.jpg';
+}
+
+viewer.addEventListener('pointerdown', (e) =&gt; {
+  dragging = true;
+  startX = e.clientX;
+  viewer.style.cursor = 'grabbing';
+});
+
+window.addEventListener('pointerup', () =&gt; {
+  dragging = false;
+  viewer.style.cursor = 'grab';
+});
+
+window.addEventListener('pointermove', (e) =&gt; {
+  if (!dragging) return;
+  const delta = e.clientX - startX;
+  if (Math.abs(delta) &gt; 5) {        // 靈敏度
+    current += delta &gt; 0 ? 1 : -1;
+    if (current &gt; totalFrames) current = 1;
+    if (current &lt; 1) current = totalFrames;
+    img.src = folder + String(current).padStart(3, '0') + '.jpg';
+    startX = e.clientX;
+  }
+});
+&lt;/script&gt;
+  </div>
+
+  <h3>多排拍攝（上下也能轉）</h3>
+  <p>如果想讓使用者也能上下翻轉看底部和頂部：</p>
+  <div class="diagram">
+      拍攝 5 排 × 36 張 = 180 張照片
+
+      排1：相機在上方 60° 俯視 → 拍 36 張
+      排2：相機在上方 30° 俯視 → 拍 36 張
+      排3：相機在平視 0°       → 拍 36 張（主要排）
+      排4：相機在下方 -30° 仰視 → 拍 36 張
+      排5：相機在下方 -60° 仰視 → 拍 36 張
+
+      每一排都完整轉 360°
+
+      拖曳左右 → 水平旋轉（切換同排不同張）
+      拖曳上下 → 垂直旋轉（切換不同排同角度）
+  </div>
+
+  <div class="pros-cons">
+    <div class="pros">
+      <h4>優點</h4>
+      <ul>
+        <li>畫質最高（真實照片）</li>
+        <li>客戶最信任（非虛擬）</li>
+        <li>設備門檻低</li>
+        <li>載入速度快</li>
+        <li>手機相容好</li>
+      </ul>
+    </div>
+    <div class="cons">
+      <h4>缺點</h4>
+      <ul>
+        <li>需拍攝時間（約 1~2 小時/產品）</li>
+        <li>後製去背耗時</li>
+        <li>每個新產品要重新拍</li>
+        <li>多排拍攝設置較複雜</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="cost-bar">
+    <span>成本：</span>
+    <div class="bar" style="width:100px;background:linear-gradient(90deg,#00ff88,#00e5ff);"></div>
+    <span>NT$500 ~ 5,000（自己拍）/ NT$3,000 ~ 15,000（外包一個產品）</span>
+  </div>
+</div>
+
+<!-- =========================================== -->
+<!-- METHOD 2 -->
+<!-- =========================================== -->
+<div class="method" data-num="02" id="m2">
+  <div class="method-head">
+    <div class="method-icon" style="background:rgba(255,170,0,0.1);">🧊</div>
+    <h2>
+      方法二：3D 建模渲染
+      <small>3D MODEL + WEBGL (THREE.JS)</small>
+    </h2>
+    <span class="badge badge-pro">專業級</span>
+  </div>
+
+  <p>用 3D 建模軟體建立產品模型，匯出為網頁格式（glTF/GLB），在網頁上用 Three.js 即時渲染。使用者可<strong>真正自由旋轉</strong>任意角度，還能加入動態光效。</p>
+
+  <h3>建模方式</h3>
+  <ul>
+    <li><strong>手動建模</strong> — 用 Blender（免費）/ 3ds Max / SolidWorks 建模</li>
+    <li><strong>3D 掃描</strong> — 用 3D 掃描器掃描實體產品，生成模型</li>
+    <li><strong>照片建模（Photogrammetry）</strong> — 拍 50~200 張不同角度照片，用軟體重建 3D</li>
+    <li><strong>AI 生成</strong> — 用 Meshy / Tripo3D / CSM 等 AI 從照片生成 3D 模型</li>
+  </ul>
+
+  <h3>照片建模（Photogrammetry）拍攝方法</h3>
+  <div class="step-box">
+    <div class="step-title">拍攝要求</div>
+    <p>
+      1. 拍攝 <strong>50~200 張</strong>照片，涵蓋所有角度<br>
+      2. 相鄰照片重疊率 &gt; 60%<br>
+      3. 環繞產品拍 3 圈：平視、俯視 45°、俯視 75°<br>
+      4. 光線均勻，<strong>避免強反光</strong>（金屬產品要噴霧消光）<br>
+      5. 背景簡單（不要太雜亂）
+    </p>
+  </div>
+
+  <div class="diagram">
+      俯視 75° 圈 ──→  ○ ○ ○ ○ ○ ○ ○ ○ ○    （約 15~20 張）
+                        ╲               ╱
+      俯視 45° 圈 ──→  ○ ○ ○ ○ ○ ○ ○ ○ ○ ○  （約 20~30 張）
+                        ╲               ╱
+      平視 0° 圈  ──→  ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ （約 25~40 張）
+                              │
+                          ┌───────┐
+                          │ 產 品  │
+                          └───────┘
+                              │
+      仰視圈（如可）──→  ○ ○ ○ ○ ○ ○ ○ ○ ○  （底部細節）
+  </div>
+
+  <h3>照片建模軟體</h3>
+  <div class="tool-list">
+    <span class="tool-tag">Meshroom（免費開源）</span>
+    <span class="tool-tag">Agisoft Metashape（專業付費）</span>
+    <span class="tool-tag">RealityCapture（最快速）</span>
+    <span class="tool-tag">Polycam（手機 App）</span>
+    <span class="tool-tag">KIRI Engine（手機 App）</span>
+    <span class="tool-tag">Luma AI（雲端 AI）</span>
+  </div>
+
+  <h3>網頁呈現流程</h3>
+  <div class="diagram">
+  3D 模型（.blend / .obj / .fbx）
+       │
+       ▼
+  匯出為 glTF / GLB 格式（Blender 直接匯出）
+       │
+       ▼
+  壓縮優化（用 gltf-transform 或 glTF Pipeline）
+  目標：&lt; 5MB 才適合網頁
+       │
+       ▼
+  Three.js + GLTFLoader 載入
+  加入 OrbitControls 讓使用者旋轉
+       │
+       ▼
+  部署到網站
+  </div>
+
+  <h3>Three.js 載入範例</h3>
+  <div class="diagram">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+const loader = new GLTFLoader();
+loader.load('fishing-light.glb', (gltf) =&gt; {
+  scene.add(gltf.scene);
+});
+
+// 使用者可自由旋轉、縮放
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+  </div>
+
+  <div class="pros-cons">
+    <div class="pros">
+      <h4>優點</h4>
+      <ul>
+        <li>真正任意角度旋轉</li>
+        <li>可加動態光效/發光</li>
+        <li>一個模型多種用途</li>
+        <li>可展示內部結構（爆炸圖）</li>
+      </ul>
+    </div>
+    <div class="cons">
+      <h4>缺點</h4>
+      <ul>
+        <li>建模技術門檻高</li>
+        <li>外包費用高</li>
+        <li>金屬質感難還原</li>
+        <li>手機效能可能不足</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="cost-bar">
+    <span>成本：</span>
+    <div class="bar" style="width:200px;background:linear-gradient(90deg,#ffaa00,#ff5566);"></div>
+    <span>NT$10,000 ~ 80,000（外包建模+網頁）/ 免費（自學 Blender）</span>
+  </div>
+</div>
+
+<!-- =========================================== -->
+<!-- METHOD 3 -->
+<!-- =========================================== -->
+<div class="method" data-num="03" id="m3">
+  <div class="method-head">
+    <div class="method-icon" style="background:rgba(0,136,255,0.1);">🎥</div>
+    <h2>
+      方法三：360° 環景影片/照片
+      <small>360° VIDEO / PANORAMA</small>
+    </h2>
+    <span class="badge badge-easy">適合場景展示</span>
+  </div>
+
+  <p>用 360° 全景相機拍攝，讓使用者在網頁上可以自由轉動視角觀看。<strong>注意：</strong>這是「環境的 360°」（觀看者站在中心向外看），不是「產品的 360°」（觀看者繞著產品看）。適合展示<strong>產品使用場景</strong>，不適合展示產品細節。</p>
+
+  <h3>拍攝設備</h3>
+  <ul>
+    <li><strong>Insta360 X4 / X3</strong> — NT$12,000~18,000，拍照錄影都行</li>
+    <li><strong>Ricoh Theta Z1</strong> — NT$28,000，畫質極好的 360 相機</li>
+    <li><strong>GoPro MAX</strong> — NT$15,000，防水耐操</li>
+    <li><strong>手機全景模式</strong> — 免費但品質有限（只能拍平面全景）</li>
+  </ul>
+
+  <h3>拍攝場景建議（漁業用燈）</h3>
+  <div class="step-box">
+    <div class="step-title">場景 A：甲板夜間照明</div>
+    <p>360° 相機放在漁船甲板中央，LED 燈開啟，展示夜間照明範圍。可以讓觀看者感受身歷其境在船上的感覺。</p>
+  </div>
+  <div class="step-box">
+    <div class="step-title">場景 B：水面集魚效果</div>
+    <p>360° 相機架在船舷邊，拍攝 LED 燈垂入水中的實況，展示水面下的光照效果和魚群聚集情況。</p>
+  </div>
+  <div class="step-box">
+    <div class="step-title">場景 C：安裝現場</div>
+    <p>在港口或船上展示 LED 燈的安裝位置、佈線方式、多盞燈的排列效果。</p>
+  </div>
+
+  <h3>網頁呈現方式</h3>
+  <div class="tool-list">
+    <span class="tool-tag">Pannellum（免費開源）</span>
+    <span class="tool-tag">A-Frame（免費，WebXR）</span>
+    <span class="tool-tag">Photo Sphere Viewer（免費）</span>
+    <span class="tool-tag">Google VR View</span>
+    <span class="tool-tag">Kuula（SaaS 平台）</span>
+    <span class="tool-tag">Momento360（免費上傳）</span>
+  </div>
+
+  <h3>Pannellum 使用範例</h3>
+  <div class="diagram">
+&lt;!-- 引入 Pannellum --&gt;
+&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum/build/pannellum.css"&gt;
+&lt;script src="https://cdn.jsdelivr.net/npm/pannellum/build/pannellum.js"&gt;&lt;/script&gt;
+
+&lt;div id="panorama" style="width:100%;height:500px;"&gt;&lt;/div&gt;
+
+&lt;script&gt;
+pannellum.viewer('panorama', {
+  type: 'equirectangular',
+  panorama: 'fishing-boat-360.jpg',   // 你的 360° 照片
+  autoLoad: true,
+  autoRotate: -2,
+  compass: true,
+  hotSpots: [{
+    pitch: -10, yaw: 120,
+    type: 'info',
+    text: 'LED 漁業用燈安裝位置'
+  }]
+});
+&lt;/script&gt;
+  </div>
+
+  <div class="pros-cons">
+    <div class="pros">
+      <h4>優點</h4>
+      <ul>
+        <li>臨場感極強</li>
+        <li>展示使用場景最佳</li>
+        <li>拍攝簡單（一鍵拍）</li>
+        <li>可加熱點說明</li>
+      </ul>
+    </div>
+    <div class="cons">
+      <h4>缺點</h4>
+      <ul>
+        <li>不能仔細看產品細節</li>
+        <li>需購買 360° 相機</li>
+        <li>影片檔案很大</li>
+        <li>夜間場景畫質可能差</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="cost-bar">
+    <span>成本：</span>
+    <div class="bar" style="width:140px;background:linear-gradient(90deg,#0088ff,#00e5ff);"></div>
+    <span>NT$12,000 ~ 28,000（相機）+ 免費（軟體）</span>
+  </div>
+</div>
+
+<!-- =========================================== -->
+<!-- METHOD 4 -->
+<!-- =========================================== -->
+<div class="method" data-num="04" id="m4">
+  <div class="method-head">
+    <div class="method-icon" style="background:rgba(0,255,136,0.1);">💻</div>
+    <h2>
+      方法四：CSS/JS 3D 模擬
+      <small>PROGRAMMATIC 3D SIMULATION</small>
+    </h2>
+    <span class="badge badge-easy">零素材</span>
+  </div>
+
+  <p>不需要任何照片或 3D 模型，用程式碼（Three.js 幾何體）直接建構產品的 3D 示意模型。適合當 <strong>prototype / demo</strong> 使用，就像你目前的 index.html。</p>
+
+  <h3>適合的情境</h3>
+  <ul>
+    <li>產品還沒做好，但需要先給客戶看概念</li>
+    <li>沒有拍攝條件，先用模擬展示功能特點</li>
+    <li>需要展示<strong>光效、散熱、結構</strong>等抽象概念</li>
+    <li>Demo / 提案 / 概念驗證階段</li>
+  </ul>
+
+  <h3>技術方案</h3>
+  <div class="tool-list">
+    <span class="tool-tag">Three.js（當前使用）</span>
+    <span class="tool-tag">Babylon.js</span>
+    <span class="tool-tag">CSS 3D Transform</span>
+    <span class="tool-tag">p5.js / WebGL</span>
+  </div>
+
+  <div class="pros-cons">
+    <div class="pros">
+      <h4>優點</h4>
+      <ul>
+        <li>完全免費、零素材</li>
+        <li>馬上可以做出來</li>
+        <li>可互動（開關燈、換色）</li>
+        <li>不需要拍照或建模</li>
+      </ul>
+    </div>
+    <div class="cons">
+      <h4>缺點</h4>
+      <ul>
+        <li>不是真實產品外觀</li>
+        <li>只能當概念展示</li>
+        <li>細節有限</li>
+        <li>正式場合略顯不足</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================== -->
+<!-- METHOD 5 -->
+<!-- =========================================== -->
+<div class="method" data-num="05" id="m5">
+  <div class="method-head">
+    <div class="method-icon" style="background:rgba(255,204,0,0.1);">🔗</div>
+    <h2>
+      方法五：混合方案（推薦正式使用）
+      <small>HYBRID APPROACH</small>
+    </h2>
+    <span class="badge badge-rec">正式商用推薦</span>
+  </div>
+
+  <p>實務上最好的做法是<strong>組合多種方式</strong>，在同一個產品頁面上提供完整體驗：</p>
+
+  <h3>建議組合</h3>
+  <div class="diagram">
+  ┌─────────────────────────────────────────────────┐
+  │                  產品頁面                         │
+  │                                                   │
+  │  ┌───────────────────────────────────────────┐   │
+  │  │  區塊 1：多角度拍照旋轉                       │   │
+  │  │  → 36 張照片 360° 轉盤                       │   │
+  │  │  → 讓客戶看清楚產品外觀、質感、做工          │   │
+  │  └───────────────────────────────────────────┘   │
+  │                                                   │
+  │  ┌───────────────────────────────────────────┐   │
+  │  │  區塊 2：3D 互動展示（選配）                   │   │
+  │  │  → Three.js 模型，可開關燈、換色              │   │
+  │  │  → 展示功能特點（透視、爆炸圖）              │   │
+  │  └───────────────────────────────────────────┘   │
+  │                                                   │
+  │  ┌───────────────────────────────────────────┐   │
+  │  │  區塊 3：360° 場景體驗                        │   │
+  │  │  → 360° 全景照片/影片                         │   │
+  │  │  → 在漁船上的實際使用情況                     │   │
+  │  └───────────────────────────────────────────┘   │
+  │                                                   │
+  │  ┌───────────────────────────────────────────┐   │
+  │  │  區塊 4：產品規格 + 比較表 + CTA             │   │
+  │  └───────────────────────────────────────────┘   │
+  └─────────────────────────────────────────────────┘
+  </div>
+
+  <div class="pros-cons">
+    <div class="pros">
+      <h4>為什麼混合最好</h4>
+      <ul>
+        <li>多角度照片 → 真實感和信任感</li>
+        <li>3D 互動 → 展示功能亮點</li>
+        <li>360 場景 → 臨場感和情境</li>
+        <li>涵蓋所有客戶需求</li>
+      </ul>
+    </div>
+    <div class="cons">
+      <h4>考量</h4>
+      <ul>
+        <li>製作時間較長</li>
+        <li>需要多種素材</li>
+        <li>網頁較重（需做好 lazy loading）</li>
+        <li>維護成本較高</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- =========================================== -->
+<!-- COMPARISON TABLE -->
+<!-- =========================================== -->
+<div class="method" data-num="" id="compare">
+  <h2 style="margin-bottom:20px;">總比較表</h2>
+
+  <table class="summary-table">
+    <thead>
+      <tr>
+        <th>方案</th>
+        <th>真實感</th>
+        <th>互動性</th>
+        <th>成本</th>
+        <th>難度</th>
+        <th>適合用途</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>多角度拍照</strong></td>
+        <td><span class="stars">★★★★★</span></td>
+        <td><span class="stars">★★★☆☆</span></td>
+        <td>低</td>
+        <td>低</td>
+        <td>產品細節展示</td>
+      </tr>
+      <tr>
+        <td><strong>3D 建模</strong></td>
+        <td><span class="stars">★★★★☆</span></td>
+        <td><span class="stars">★★★★★</span></td>
+        <td>高</td>
+        <td>高</td>
+        <td>功能/結構展示</td>
+      </tr>
+      <tr>
+        <td><strong>360° 影片</strong></td>
+        <td><span class="stars">★★★★★</span></td>
+        <td><span class="stars">★★☆☆☆</span></td>
+        <td>中</td>
+        <td>低</td>
+        <td>場景/環境展示</td>
+      </tr>
+      <tr>
+        <td><strong>CSS/JS 模擬</strong></td>
+        <td><span class="stars">★★☆☆☆</span></td>
+        <td><span class="stars">★★★★★</span></td>
+        <td>免費</td>
+        <td>中</td>
+        <td>概念 Demo</td>
+      </tr>
+      <tr>
+        <td><strong>混合方案</strong></td>
+        <td><span class="stars">★★★★★</span></td>
+        <td><span class="stars">★★★★★</span></td>
+        <td>中高</td>
+        <td>中高</td>
+        <td>正式商用網站</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>結論建議</h3>
+  <div class="step-box">
+    <div class="step-title">今天 Demo 用</div>
+    <p>→ 用 <strong>index.html</strong>（CSS/JS 模擬）即可，已包含完整文案和互動功能。</p>
+  </div>
+  <div class="step-box">
+    <div class="step-title">正式上線用</div>
+    <p>→ 拍 36 張多角度照片 + 搭配 360° 使用場景影片 → 最佳性價比。</p>
+  </div>
+  <div class="step-box">
+    <div class="step-title">預算充足</div>
+    <p>→ 混合方案全上：多角度照片 + 3D 互動模型 + 360° 場景 → 最完整。</p>
+  </div>
+</div>
+
+</div>
+
+<a href="index.html" class="back-btn">← 回到 3D Demo</a>
+
+</body>
+</html>

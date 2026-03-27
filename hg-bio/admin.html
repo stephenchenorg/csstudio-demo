@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HG BIO 管理後台 - 最新消息</title>
+  <link rel="icon" href="images/favicon.png" sizes="32x32">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    :root {
+      --fi-primary: #F59E0B;
+      --fi-primary-hover: #D97706;
+      --fi-primary-light: #FEF3C7;
+      --fi-danger: #EF4444;
+      --fi-danger-hover: #DC2626;
+      --fi-danger-light: #FEE2E2;
+      --fi-success: #10B981;
+      --fi-success-light: #D1FAE5;
+      --fi-info: #6366F1;
+      --fi-info-light: #E0E7FF;
+      --fi-sidebar-bg: #1E1B2E;
+      --fi-sidebar-active: #2D2A3E;
+      --fi-sidebar-text: #9CA3AF;
+      --fi-sidebar-text-active: #FFFFFF;
+      --fi-body-bg: #F3F4F6;
+      --fi-card-bg: #FFFFFF;
+      --fi-border: #E5E7EB;
+      --fi-text: #111827;
+      --fi-text-secondary: #6B7280;
+      --fi-radius: 8px;
+      --fi-radius-lg: 12px;
+      --fi-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+      --fi-shadow-lg: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', 'Noto Sans TC', sans-serif;
+      background: var(--fi-body-bg);
+      color: var(--fi-text);
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ===== Sidebar ===== */
+    .sidebar {
+      width: 260px;
+      background: var(--fi-sidebar-bg);
+      color: var(--fi-sidebar-text);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      z-index: 100;
+    }
+
+    .sidebar-brand {
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .sidebar-brand img {
+      height: 32px;
+      filter: brightness(0) invert(1);
+    }
+
+    .sidebar-brand span {
+      font-size: 15px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .sidebar-nav {
+      padding: 12px;
+      flex: 1;
+    }
+
+    .sidebar-section {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      padding: 16px 12px 8px;
+    }
+
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      border-radius: var(--fi-radius);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--fi-sidebar-text);
+      text-decoration: none;
+      transition: all 0.15s;
+      margin-bottom: 2px;
+    }
+
+    .sidebar-link:hover {
+      background: rgba(255,255,255,0.05);
+      color: var(--fi-sidebar-text-active);
+    }
+
+    .sidebar-link.active {
+      background: var(--fi-sidebar-active);
+      color: var(--fi-primary);
+    }
+
+    .sidebar-link i {
+      width: 20px;
+      text-align: center;
+      font-size: 15px;
+    }
+
+    .sidebar-footer {
+      padding: 16px 24px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .sidebar-user {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sidebar-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--fi-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    .sidebar-user-info {
+      flex: 1;
+    }
+
+    .sidebar-user-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .sidebar-user-role {
+      font-size: 11px;
+      color: var(--fi-sidebar-text);
+    }
+
+    /* ===== Main Content ===== */
+    .main-content {
+      margin-left: 260px;
+      flex: 1;
+      min-height: 100vh;
+    }
+
+    /* Top Bar */
+    .topbar {
+      background: var(--fi-card-bg);
+      border-bottom: 1px solid var(--fi-border);
+      padding: 0 32px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .topbar-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: var(--fi-text-secondary);
+    }
+
+    .topbar-breadcrumb a {
+      color: var(--fi-text-secondary);
+      text-decoration: none;
+    }
+
+    .topbar-breadcrumb a:hover { color: var(--fi-primary); }
+    .topbar-breadcrumb .sep { color: #D1D5DB; }
+    .topbar-breadcrumb .current { color: var(--fi-text); font-weight: 500; }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .topbar-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: var(--fi-radius);
+      font-size: 13px;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s;
+      font-family: inherit;
+    }
+
+    .topbar-btn-ghost {
+      background: transparent;
+      color: var(--fi-text-secondary);
+      border: 1px solid var(--fi-border);
+    }
+    .topbar-btn-ghost:hover { background: var(--fi-body-bg); }
+
+    /* Page Container */
+    .page { padding: 24px 32px; }
+
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .page-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--fi-text);
+    }
+
+    .page-subtitle {
+      font-size: 14px;
+      color: var(--fi-text-secondary);
+      margin-top: 4px;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 18px;
+      border-radius: var(--fi-radius);
+      font-size: 14px;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-family: inherit;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: var(--fi-primary);
+      color: #fff;
+    }
+    .btn-primary:hover { background: var(--fi-primary-hover); }
+
+    .btn-danger {
+      background: var(--fi-danger);
+      color: #fff;
+    }
+    .btn-danger:hover { background: var(--fi-danger-hover); }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--fi-text-secondary);
+      border: 1px solid var(--fi-border);
+    }
+    .btn-ghost:hover { background: var(--fi-body-bg); }
+
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 13px;
+    }
+
+    .btn-icon {
+      width: 34px;
+      height: 34px;
+      padding: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--fi-radius);
+      border: none;
+      cursor: pointer;
+      background: transparent;
+      color: var(--fi-text-secondary);
+      transition: all 0.15s;
+    }
+    .btn-icon:hover { background: var(--fi-body-bg); }
+    .btn-icon.danger:hover { background: var(--fi-danger-light); color: var(--fi-danger); }
+
+    /* Stats Cards */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: var(--fi-card-bg);
+      border: 1px solid var(--fi-border);
+      border-radius: var(--fi-radius-lg);
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .stat-card-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--fi-radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .stat-card-icon.primary { background: var(--fi-primary-light); color: var(--fi-primary); }
+    .stat-card-icon.success { background: var(--fi-success-light); color: var(--fi-success); }
+    .stat-card-icon.info { background: var(--fi-info-light); color: var(--fi-info); }
+
+    .stat-card-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--fi-text);
+      line-height: 1;
+    }
+
+    .stat-card-label {
+      font-size: 13px;
+      color: var(--fi-text-secondary);
+      margin-top: 4px;
+    }
+
+    /* Table Card */
+    .card {
+      background: var(--fi-card-bg);
+      border: 1px solid var(--fi-border);
+      border-radius: var(--fi-radius-lg);
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--fi-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-header-title {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    /* Table */
+    .table-wrapper { overflow-x: auto; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead th {
+      padding: 12px 24px;
+      text-align: left;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--fi-text-secondary);
+      background: var(--fi-body-bg);
+      border-bottom: 1px solid var(--fi-border);
+      white-space: nowrap;
+    }
+
+    tbody td {
+      padding: 14px 24px;
+      font-size: 14px;
+      border-bottom: 1px solid var(--fi-border);
+      vertical-align: middle;
+    }
+
+    tbody tr:last-child td { border-bottom: none; }
+
+    tbody tr:hover { background: #FAFAFA; }
+
+    .table-thumb {
+      width: 64px;
+      height: 40px;
+      border-radius: 6px;
+      object-fit: cover;
+    }
+
+    .table-title {
+      font-weight: 500;
+      color: var(--fi-text);
+      max-width: 320px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .badge-yellow { background: var(--fi-primary-light); color: #92400E; }
+    .badge-green { background: var(--fi-success-light); color: #065F46; }
+    .badge-blue { background: var(--fi-info-light); color: #3730A3; }
+
+    .table-actions {
+      display: flex;
+      gap: 4px;
+    }
+
+    .table-empty {
+      padding: 48px 24px;
+      text-align: center;
+      color: var(--fi-text-secondary);
+    }
+
+    .table-empty i {
+      font-size: 40px;
+      margin-bottom: 12px;
+      color: #D1D5DB;
+      display: block;
+    }
+
+    /* ===== Modal ===== */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: var(--fi-card-bg);
+      border-radius: var(--fi-radius-lg);
+      width: 100%;
+      max-width: 640px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--fi-shadow-lg);
+    }
+
+    .modal-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--fi-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+      color: var(--fi-text-secondary);
+      padding: 4px;
+    }
+    .modal-close:hover { color: var(--fi-text); }
+
+    .modal-body { padding: 24px; }
+
+    .modal-footer {
+      padding: 16px 24px;
+      border-top: 1px solid var(--fi-border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    /* Form */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--fi-text);
+      margin-bottom: 6px;
+    }
+
+    .form-label .required {
+      color: var(--fi-danger);
+    }
+
+    .form-hint {
+      font-size: 12px;
+      color: var(--fi-text-secondary);
+      margin-top: 4px;
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--fi-border);
+      border-radius: var(--fi-radius);
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--fi-text);
+      background: var(--fi-card-bg);
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      outline: none;
+      border-color: var(--fi-primary);
+      box-shadow: 0 0 0 3px rgba(245,158,11,0.15);
+    }
+
+    .form-textarea { resize: vertical; min-height: 80px; }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .form-img-preview {
+      margin-top: 8px;
+    }
+
+    .form-img-preview img {
+      max-height: 120px;
+      border-radius: var(--fi-radius);
+      border: 1px solid var(--fi-border);
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--fi-text);
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: var(--fi-radius);
+      font-size: 14px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: var(--fi-shadow-lg);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 300;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .toast i { color: var(--fi-success); }
+
+    /* Confirm Dialog */
+    .confirm-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 250;
+      align-items: center;
+      justify-content: center;
+    }
+    .confirm-overlay.open { display: flex; }
+
+    .confirm-box {
+      background: var(--fi-card-bg);
+      border-radius: var(--fi-radius-lg);
+      padding: 24px;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .confirm-box i {
+      font-size: 40px;
+      color: var(--fi-danger);
+      margin-bottom: 12px;
+    }
+
+    .confirm-box h3 {
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+
+    .confirm-box p {
+      font-size: 14px;
+      color: var(--fi-text-secondary);
+      margin-bottom: 20px;
+    }
+
+    .confirm-actions {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    /* ===== Onboarding Guide ===== */
+    .guide-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 500;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .guide-overlay.open { display: flex; }
+
+    .guide-modal {
+      background: var(--fi-card-bg);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 560px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    }
+
+    .guide-hero {
+      background: linear-gradient(135deg, #1E1B2E 0%, #2D2A3E 100%);
+      padding: 36px 32px 28px;
+      text-align: center;
+      color: #fff;
+    }
+
+    .guide-hero-icon {
+      width: 64px;
+      height: 64px;
+      background: var(--fi-primary);
+      border-radius: 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      margin-bottom: 16px;
+    }
+
+    .guide-hero h2 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .guide-hero p {
+      font-size: 14px;
+      color: rgba(255,255,255,0.65);
+    }
+
+    .guide-body {
+      padding: 28px 32px 8px;
+    }
+
+    .guide-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .guide-step {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .guide-step-num {
+      width: 32px;
+      height: 32px;
+      min-width: 32px;
+      border-radius: 50%;
+      background: var(--fi-primary-light);
+      color: var(--fi-primary-hover);
+      font-weight: 700;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .guide-step h4 {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--fi-text);
+      margin-bottom: 2px;
+    }
+
+    .guide-step p {
+      font-size: 13px;
+      color: var(--fi-text-secondary);
+      line-height: 1.5;
+    }
+
+    .guide-step .key-hint {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--fi-body-bg);
+      border: 1px solid var(--fi-border);
+      padding: 1px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      color: var(--fi-text-secondary);
+      font-family: 'Inter', monospace;
+    }
+
+    .guide-tip {
+      margin-top: 20px;
+      padding: 12px 16px;
+      background: #FFFBEB;
+      border: 1px solid #FDE68A;
+      border-radius: var(--fi-radius);
+      font-size: 13px;
+      color: #92400E;
+      line-height: 1.6;
+    }
+
+    .guide-tip i {
+      margin-right: 6px;
+    }
+
+    .guide-footer {
+      padding: 20px 32px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .guide-check {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--fi-text-secondary);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .guide-check input {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--fi-primary);
+      cursor: pointer;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .main-content { margin-left: 0; }
+      .stats-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .guide-modal { max-width: 100%; }
+      .guide-hero, .guide-body, .guide-footer { padding-left: 20px; padding-right: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <img src="images/logo.png" alt="HG BIO">
+      <span>HG BIO Admin</span>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section">Main</div>
+      <a href="#" class="sidebar-link">
+        <i class="fas fa-chart-pie"></i> Dashboard
+      </a>
+      <div class="sidebar-section">Content</div>
+      <a href="#" class="sidebar-link active">
+        <i class="fas fa-newspaper"></i> 最新消息
+      </a>
+      <a href="#" class="sidebar-link" onclick="return false;">
+        <i class="fas fa-box-open"></i> 產品管理
+      </a>
+      <a href="#" class="sidebar-link" onclick="return false;">
+        <i class="fas fa-images"></i> 媒體庫
+      </a>
+      <div class="sidebar-section">Settings</div>
+      <a href="#" class="sidebar-link" onclick="return false;">
+        <i class="fas fa-building"></i> 公司資訊
+      </a>
+      <a href="#" class="sidebar-link" onclick="return false;">
+        <i class="fas fa-users"></i> 使用者管理
+      </a>
+      <a href="#" class="sidebar-link" onclick="return false;">
+        <i class="fas fa-cog"></i> 系統設定
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar">A</div>
+        <div class="sidebar-user-info">
+          <div class="sidebar-user-name">Admin</div>
+          <div class="sidebar-user-role">管理員</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="main-content">
+
+    <!-- Top Bar -->
+    <div class="topbar">
+      <div class="topbar-breadcrumb">
+        <a href="#">Dashboard</a>
+        <span class="sep">/</span>
+        <span class="current">最新消息</span>
+      </div>
+      <div class="topbar-actions">
+        <a href="index.html" target="_blank" class="topbar-btn topbar-btn-ghost">
+          <i class="fas fa-external-link-alt"></i> 查看前台
+        </a>
+      </div>
+    </div>
+
+    <!-- Page -->
+    <div class="page">
+
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-card-icon primary"><i class="fas fa-newspaper"></i></div>
+          <div>
+            <div class="stat-card-value" id="stat-total">0</div>
+            <div class="stat-card-label">總文章數</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-icon success"><i class="fas fa-eye"></i></div>
+          <div>
+            <div class="stat-card-value" id="stat-published">0</div>
+            <div class="stat-card-label">已發布</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-icon info"><i class="fas fa-tags"></i></div>
+          <div>
+            <div class="stat-card-value" id="stat-categories">0</div>
+            <div class="stat-card-label">分類數</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Table Card -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-header-title">文章列表</div>
+          <button class="btn btn-primary" onclick="openCreateModal()">
+            <i class="fas fa-plus"></i> 新增文章
+          </button>
+        </div>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:80px">圖片</th>
+                <th>標題</th>
+                <th style="width:100px">分類</th>
+                <th style="width:110px">日期</th>
+                <th style="width:100px">操作</th>
+              </tr>
+            </thead>
+            <tbody id="news-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Create/Edit Modal -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title" id="modal-title">新增文章</div>
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="edit-id">
+
+        <div class="form-group">
+          <label class="form-label">標題（中文）<span class="required">*</span></label>
+          <input type="text" class="form-input" id="form-title-zh" placeholder="輸入中文標題">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">標題（English）<span class="required">*</span></label>
+          <input type="text" class="form-input" id="form-title-en" placeholder="Enter English title">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">摘要（中文）<span class="required">*</span></label>
+          <textarea class="form-textarea" id="form-excerpt-zh" rows="3" placeholder="輸入中文摘要..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">摘要（English）<span class="required">*</span></label>
+          <textarea class="form-textarea" id="form-excerpt-en" rows="3" placeholder="Enter English excerpt..."></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">分類 <span class="required">*</span></label>
+            <select class="form-select" id="form-tag">
+              <option value="保健新知">保健新知 / Insights</option>
+              <option value="HG情報">HG情報 / HG News</option>
+              <option value="原廠資訊">原廠資訊 / Supplier Info</option>
+              <option value="QA補給站">QA補給站 / Q&A</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">日期 <span class="required">*</span></label>
+            <input type="date" class="form-input" id="form-date">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">封面圖片網址</label>
+          <input type="text" class="form-input" id="form-image" placeholder="images/hero-protein.png 或 https://...">
+          <div class="form-hint">可使用本機路徑或外部圖片網址</div>
+          <div class="form-img-preview" id="img-preview"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="closeModal()">取消</button>
+        <button class="btn btn-primary" onclick="saveNews()">
+          <i class="fas fa-check"></i> 儲存
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirm Delete Dialog -->
+  <div class="confirm-overlay" id="confirm-overlay">
+    <div class="confirm-box">
+      <i class="fas fa-exclamation-triangle"></i>
+      <h3>確認刪除</h3>
+      <p>刪除後將無法復原，確定要刪除這篇文章嗎？</p>
+      <div class="confirm-actions">
+        <button class="btn btn-ghost" onclick="closeConfirm()">取消</button>
+        <button class="btn btn-danger" id="confirm-delete-btn">
+          <i class="fas fa-trash"></i> 確認刪除
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast">
+    <i class="fas fa-check-circle"></i>
+    <span id="toast-msg">儲存成功</span>
+  </div>
+
+  <!-- Onboarding Guide -->
+  <div class="guide-overlay" id="guide-overlay">
+    <div class="guide-modal">
+      <div class="guide-hero">
+        <div class="guide-hero-icon"><i class="fas fa-rocket"></i></div>
+        <h2>歡迎來到 HG BIO 管理後台</h2>
+        <p>以下是快速上手指引，幫助您輕鬆管理網站內容</p>
+      </div>
+      <div class="guide-body">
+        <div class="guide-steps">
+          <div class="guide-step">
+            <div class="guide-step-num">1</div>
+            <div>
+              <h4>新增文章</h4>
+              <p>點擊右上方橘色 <span class="key-hint"><i class="fas fa-plus"></i> 新增文章</span> 按鈕，填入中英文標題、摘要、選擇分類與日期，即可發布</p>
+            </div>
+          </div>
+          <div class="guide-step">
+            <div class="guide-step-num">2</div>
+            <div>
+              <h4>編輯 / 刪除</h4>
+              <p>在文章列表的操作欄，點 <span class="key-hint"><i class="fas fa-pen"></i></span> 編輯內容，點 <span class="key-hint"><i class="fas fa-trash"></i></span> 刪除文章</p>
+            </div>
+          </div>
+          <div class="guide-step">
+            <div class="guide-step-num">3</div>
+            <div>
+              <h4>查看前台效果</h4>
+              <p>點右上角 <span class="key-hint"><i class="fas fa-external-link-alt"></i> 查看前台</span> 按鈕，首頁的「最新消息」區塊與頂部跑馬燈會即時反映您的修改</p>
+            </div>
+          </div>
+        </div>
+        <div class="guide-tip">
+          <i class="fas fa-lightbulb"></i>
+          <strong>小提醒：</strong>這是 Demo 展示版本，資料儲存在您的瀏覽器中。換瀏覽器或清除瀏覽資料後會恢復預設內容，實際上線後將改為資料庫儲存。
+        </div>
+      </div>
+      <div class="guide-footer">
+        <label class="guide-check">
+          <input type="checkbox" id="guide-no-show">
+          不再顯示
+        </label>
+        <button class="btn btn-primary" onclick="closeGuide()">
+          <i class="fas fa-check"></i> 了解，開始使用
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ===== Default Data =====
+    const DEFAULT_NEWS = [
+      {
+        id: 1,
+        titleZh: '猛健樂｜減重原理・副作用與飲食建議一次看懂',
+        titleEn: 'Mounjaro | Weight Loss Mechanism, Side Effects & Dietary Tips Explained',
+        excerptZh: 'GLP-1 受體促效劑如何幫助體重管理？搭配高蛋白飲食的關鍵策略，避免肌肉流失的營養補充方案...',
+        excerptEn: 'How do GLP-1 receptor agonists aid weight management? Key strategies for high-protein diets and nutrition plans to prevent muscle loss...',
+        tag: '保健新知',
+        tagEn: 'Insights',
+        date: '2026-03-15',
+        image: 'images/hero-protein.png'
+      },
+      {
+        id: 2,
+        titleZh: '從膠囊到果凍：HG BIO 杭州參訪金采生物，觀察劑型創新方向',
+        titleEn: 'From Capsules to Jellies: HG BIO Visits Hangzhou to Explore Dosage Form Innovation',
+        excerptZh: '和聚團隊赴杭州參訪金采生物，實地了解果凍條、口溶膜等新型劑型技術，掌握保健食品劑型發展趨勢...',
+        excerptEn: 'The HG BIO team visited Hangzhou to explore jelly stick, oral film, and other new dosage form technologies, keeping up with industry trends...',
+        tag: 'HG情報',
+        tagEn: 'HG News',
+        date: '2026-03-08',
+        image: 'images/hero-brands-desktop.png'
+      },
+      {
+        id: 3,
+        titleZh: '從美國與台灣最新飲食指南，看保健食品市場趨勢',
+        titleEn: 'Health Supplement Market Trends from the Latest US & Taiwan Dietary Guidelines',
+        excerptZh: '2025-2030 美國飲食指南與台灣國民飲食指標更新，蛋白質攝取、腸道健康成為關注焦點...',
+        excerptEn: 'With the 2025-2030 US dietary guidelines and Taiwan\'s updated national dietary recommendations, protein intake and gut health are now in the spotlight...',
+        tag: '保健新知',
+        tagEn: 'Insights',
+        date: '2026-02-20',
+        image: 'images/hero-news-desktop.png'
+      }
+    ];
+
+    const TAG_EN_MAP = {
+      '保健新知': 'Insights',
+      'HG情報': 'HG News',
+      '原廠資訊': 'Supplier Info',
+      'QA補給站': 'Q&A'
+    };
+
+    const TAG_BADGE_MAP = {
+      '保健新知': 'badge-yellow',
+      'HG情報': 'badge-green',
+      '原廠資訊': 'badge-blue',
+      'QA補給站': 'badge-yellow'
+    };
+
+    // ===== State =====
+    function getNews() {
+      const stored = localStorage.getItem('hgbio_news');
+      return stored ? JSON.parse(stored) : DEFAULT_NEWS;
+    }
+
+    function saveNewsData(data) {
+      localStorage.setItem('hgbio_news', JSON.stringify(data));
+    }
+
+    // ===== Render Table =====
+    function renderTable() {
+      const news = getNews();
+      const tbody = document.getElementById('news-tbody');
+
+      if (news.length === 0) {
+        tbody.innerHTML = `
+          <tr><td colspan="5" class="table-empty">
+            <i class="fas fa-inbox"></i>
+            <div>目前沒有文章，點擊「新增文章」建立第一篇</div>
+          </td></tr>`;
+      } else {
+        tbody.innerHTML = news.map(item => `
+          <tr>
+            <td><img src="${item.image}" class="table-thumb" alt="" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2264%22 height=%2240%22%3E%3Crect fill=%22%23eee%22 width=%2264%22 height=%2240%22/%3E%3C/svg%3E'"></td>
+            <td><div class="table-title">${item.titleZh}</div></td>
+            <td><span class="badge ${TAG_BADGE_MAP[item.tag] || 'badge-yellow'}">${item.tag}</span></td>
+            <td>${item.date}</td>
+            <td>
+              <div class="table-actions">
+                <button class="btn-icon" title="編輯" onclick="openEditModal(${item.id})"><i class="fas fa-pen"></i></button>
+                <button class="btn-icon danger" title="刪除" onclick="confirmDelete(${item.id})"><i class="fas fa-trash"></i></button>
+              </div>
+            </td>
+          </tr>
+        `).join('');
+      }
+
+      // Update stats
+      document.getElementById('stat-total').textContent = news.length;
+      document.getElementById('stat-published').textContent = news.length;
+      const cats = [...new Set(news.map(n => n.tag))];
+      document.getElementById('stat-categories').textContent = cats.length;
+    }
+
+    // ===== Modal =====
+    function openCreateModal() {
+      document.getElementById('modal-title').textContent = '新增文章';
+      document.getElementById('edit-id').value = '';
+      document.getElementById('form-title-zh').value = '';
+      document.getElementById('form-title-en').value = '';
+      document.getElementById('form-excerpt-zh').value = '';
+      document.getElementById('form-excerpt-en').value = '';
+      document.getElementById('form-tag').value = '保健新知';
+      document.getElementById('form-date').value = new Date().toISOString().split('T')[0];
+      document.getElementById('form-image').value = 'images/hero-protein.png';
+      updateImgPreview();
+      document.getElementById('modal-overlay').classList.add('open');
+    }
+
+    function openEditModal(id) {
+      const news = getNews();
+      const item = news.find(n => n.id === id);
+      if (!item) return;
+
+      document.getElementById('modal-title').textContent = '編輯文章';
+      document.getElementById('edit-id').value = id;
+      document.getElementById('form-title-zh').value = item.titleZh;
+      document.getElementById('form-title-en').value = item.titleEn;
+      document.getElementById('form-excerpt-zh').value = item.excerptZh;
+      document.getElementById('form-excerpt-en').value = item.excerptEn;
+      document.getElementById('form-tag').value = item.tag;
+      document.getElementById('form-date').value = item.date;
+      document.getElementById('form-image').value = item.image;
+      updateImgPreview();
+      document.getElementById('modal-overlay').classList.add('open');
+    }
+
+    function closeModal() {
+      document.getElementById('modal-overlay').classList.remove('open');
+    }
+
+    function saveNews() {
+      const editId = document.getElementById('edit-id').value;
+      const titleZh = document.getElementById('form-title-zh').value.trim();
+      const titleEn = document.getElementById('form-title-en').value.trim();
+      const excerptZh = document.getElementById('form-excerpt-zh').value.trim();
+      const excerptEn = document.getElementById('form-excerpt-en').value.trim();
+      const tag = document.getElementById('form-tag').value;
+      const date = document.getElementById('form-date').value;
+      const image = document.getElementById('form-image').value.trim();
+
+      if (!titleZh || !titleEn || !excerptZh || !excerptEn || !date) {
+        showToast('請填寫所有必填欄位', 'warning');
+        return;
+      }
+
+      const news = getNews();
+      const entry = {
+        titleZh, titleEn, excerptZh, excerptEn,
+        tag,
+        tagEn: TAG_EN_MAP[tag] || tag,
+        date,
+        image: image || 'images/hero-protein.png'
+      };
+
+      if (editId) {
+        const idx = news.findIndex(n => n.id === parseInt(editId));
+        if (idx !== -1) {
+          entry.id = parseInt(editId);
+          news[idx] = entry;
+        }
+      } else {
+        entry.id = Date.now();
+        news.unshift(entry);
+      }
+
+      saveNewsData(news);
+      renderTable();
+      closeModal();
+      showToast(editId ? '文章已更新' : '文章已新增');
+    }
+
+    // ===== Delete =====
+    let deleteTargetId = null;
+
+    function confirmDelete(id) {
+      deleteTargetId = id;
+      document.getElementById('confirm-overlay').classList.add('open');
+    }
+
+    function closeConfirm() {
+      deleteTargetId = null;
+      document.getElementById('confirm-overlay').classList.remove('open');
+    }
+
+    document.getElementById('confirm-delete-btn').addEventListener('click', () => {
+      if (deleteTargetId !== null) {
+        let news = getNews().filter(n => n.id !== deleteTargetId);
+        saveNewsData(news);
+        renderTable();
+        closeConfirm();
+        showToast('文章已刪除');
+      }
+    });
+
+    // ===== Image Preview =====
+    document.getElementById('form-image').addEventListener('input', updateImgPreview);
+
+    function updateImgPreview() {
+      const url = document.getElementById('form-image').value.trim();
+      const container = document.getElementById('img-preview');
+      if (url) {
+        container.innerHTML = `<img src="${url}" alt="preview" onerror="this.style.display='none'">`;
+      } else {
+        container.innerHTML = '';
+      }
+    }
+
+    // ===== Toast =====
+    function showToast(msg, type) {
+      const toast = document.getElementById('toast');
+      const icon = toast.querySelector('i');
+      document.getElementById('toast-msg').textContent = msg;
+      icon.className = type === 'warning' ? 'fas fa-exclamation-circle' : 'fas fa-check-circle';
+      icon.style.color = type === 'warning' ? 'var(--fi-primary)' : 'var(--fi-success)';
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    // ===== Onboarding Guide =====
+    function showGuide() {
+      const dismissed = localStorage.getItem('hgbio_guide_dismissed');
+      if (!dismissed) {
+        document.getElementById('guide-overlay').classList.add('open');
+      }
+    }
+
+    function closeGuide() {
+      document.getElementById('guide-overlay').classList.remove('open');
+      if (document.getElementById('guide-no-show').checked) {
+        localStorage.setItem('hgbio_guide_dismissed', '1');
+      }
+    }
+
+    // Close guide on overlay click
+    document.getElementById('guide-overlay').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) closeGuide();
+    });
+
+    // ===== Init =====
+    renderTable();
+    showGuide();
+  </script>
+
+</body>
+</html>

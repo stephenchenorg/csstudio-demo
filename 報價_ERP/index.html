@@ -1,0 +1,2519 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BigSeller 類型 SaaS ERP 系統開發報價單</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Microsoft JhengHei", "PingFang TC", "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header .subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .header .saas-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .quote-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .quote-info div {
+            text-align: left;
+        }
+
+        /* Content */
+        .content {
+            padding: 40px;
+        }
+
+        /* Section */
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            color: #667eea;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* Info Table */
+        .info-table {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .info-box {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .info-box h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .info-box p {
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .info-box strong {
+            color: #333;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            border: 1px solid #e0e0e0;
+            padding: 12px 15px;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        th {
+            background: #f8f9fa;
+            color: #333;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: #fafafa;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        /* Price Highlight */
+        .price-highlight {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin: 30px 0;
+        }
+
+        .price-highlight h2 {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .price-row:last-child {
+            border-bottom: none;
+        }
+
+        .price-row.total {
+            font-size: 24px;
+            font-weight: bold;
+            padding-top: 20px;
+            margin-top: 10px;
+            border-top: 2px solid rgba(255,255,255,0.5);
+        }
+
+        /* Accordion Styles */
+        .accordion {
+            margin-bottom: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .accordion-header {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .accordion-header:hover {
+            background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+        }
+
+        .accordion-header h4 {
+            color: #667eea;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+        }
+
+        .accordion-header .badge {
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+        }
+
+        .accordion-header .arrow {
+            font-size: 20px;
+            color: #667eea;
+            transition: transform 0.3s ease;
+        }
+
+        .accordion.active .accordion-header .arrow {
+            transform: rotate(180deg);
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+            background: white;
+        }
+
+        .accordion.active .accordion-content {
+            max-height: 3000px;
+        }
+
+        .accordion-inner {
+            padding: 25px;
+        }
+
+        /* Feature Item */
+        .feature-item {
+            border-left: 3px solid #667eea;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            background: #f8f9ff;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .feature-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .feature-item h5 {
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+
+        .feature-item p {
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        .feature-item .tech-tag {
+            display: inline-block;
+            background: #e8f4fd;
+            color: #667eea;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            margin-right: 5px;
+            margin-top: 5px;
+        }
+
+        .feature-item .saas-note {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin-top: 10px;
+            font-size: 12px;
+            color: #856404;
+        }
+
+        .feature-item .saas-note strong {
+            color: #664d03;
+        }
+
+        /* SaaS Architecture Box */
+        .saas-box {
+            background: linear-gradient(135deg, #e8f4fd 0%, #f0e6ff 100%);
+            border: 2px solid #667eea;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .saas-box h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .saas-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .saas-box li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+            font-size: 14px;
+        }
+
+        .saas-box li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        /* Payment Schedule */
+        .payment-schedule {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 20px 0;
+        }
+
+        .payment-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .payment-item:last-child {
+            border-bottom: none;
+        }
+
+        .payment-phase {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+
+        .payment-phase .num {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .payment-phase .label {
+            font-size: 10px;
+        }
+
+        .payment-detail {
+            flex: 1;
+        }
+
+        .payment-detail h4 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .payment-detail p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .payment-amount {
+            text-align: right;
+        }
+
+        .payment-amount .amount {
+            font-size: 20px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .payment-amount .percent {
+            font-size: 14px;
+            color: #999;
+        }
+
+        /* Bank Info */
+        .bank-info {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .bank-info h4 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+
+        .bank-info p {
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        /* Signature */
+        .signature-section {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        .signature-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            margin-top: 30px;
+        }
+
+        .signature-box {
+            text-align: center;
+        }
+
+        .signature-box h4 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .signature-line {
+            border-bottom: 1px solid #333;
+            height: 60px;
+            margin-bottom: 10px;
+        }
+
+        .signature-box p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Footer */
+        .footer {
+            background: #333;
+            color: white;
+            padding: 30px 40px;
+            text-align: center;
+        }
+
+        .footer p {
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .container {
+                box-shadow: none;
+            }
+
+            .accordion-content {
+                max-height: none !important;
+            }
+
+            .section {
+                page-break-inside: avoid;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .info-table,
+            .signature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .payment-item {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .payment-phase {
+                margin: 0 0 15px 0;
+            }
+
+            .payment-amount {
+                text-align: center;
+                margin-top: 15px;
+            }
+        }
+
+        /* Complexity Badge */
+        .complexity-high { background: #dc3545; }
+        .complexity-medium { background: #ffc107; color: #333; }
+        .complexity-low { background: #28a745; }
+
+        /* Notes */
+        .notes {
+            background: #e8f4fd;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .notes h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .notes ul {
+            margin-left: 20px;
+        }
+
+        .notes li {
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        /* Feature Table */
+        .feature-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .feature-table .module-name {
+            background: #f0f0ff;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #667eea;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 30px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -24px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #667eea;
+            border: 3px solid white;
+            box-shadow: 0 0 0 2px #667eea;
+        }
+
+        .timeline-item h4 {
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+
+        .timeline-item p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* Sub feature list */
+        .sub-features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .sub-features li {
+            font-size: 12px;
+            color: #555;
+            padding: 5px 10px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            list-style: none;
+        }
+
+        @media (max-width: 768px) {
+            .sub-features {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>BigSeller 類型 SaaS ERP 系統開發報價單</h1>
+            <p class="subtitle">多平台電商 ERP 後台管理系統 - SaaS 多租戶版本</p>
+            <span class="saas-badge">SaaS Multi-Tenant Architecture</span>
+            <div class="quote-info">
+                <div>
+                    <p><strong>報價單號：</strong>QT-2026012701</p>
+                    <p><strong>報價日期：</strong>2026 年 01 月 27 日</p>
+                </div>
+                <div>
+                    <p><strong>報價有效期：</strong>30 天</p>
+                    <p><strong>專案代碼：</strong>ERP-SAAS-2026</p>
+                </div>
+            </div>
+            <!-- 參考圖片連結 -->
+            <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.3);">
+                <p style="font-size: 14px; margin-bottom: 10px;">📷 參考畫面截圖：</p>
+                <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;">
+                    <a href="images/參考圖1.png" target="_blank" style="background: rgba(255,255,255,0.2); color: white; padding: 6px 12px; border-radius: 4px; text-decoration: none; font-size: 13px;">參考圖 1</a>
+                    <a href="images/參考圖2.png" target="_blank" style="background: rgba(255,255,255,0.2); color: white; padding: 6px 12px; border-radius: 4px; text-decoration: none; font-size: 13px;">參考圖 2</a>
+                    <a href="images/參考圖3.png" target="_blank" style="background: rgba(255,255,255,0.2); color: white; padding: 6px 12px; border-radius: 4px; text-decoration: none; font-size: 13px;">參考圖 3</a>
+                    <a href="images/參考圖4.png" target="_blank" style="background: rgba(255,255,255,0.2); color: white; padding: 6px 12px; border-radius: 4px; text-decoration: none; font-size: 13px;">參考圖 4</a>
+                    <a href="images/參考圖5.png" target="_blank" style="background: rgba(255,255,255,0.2); color: white; padding: 6px 12px; border-radius: 4px; text-decoration: none; font-size: 13px;">參考圖 5</a>
+                    <a href="images/參考圖6.png" target="_blank" style="background: rgba(255,255,255,0.2); color: white; padding: 6px 12px; border-radius: 4px; text-decoration: none; font-size: 13px;">參考圖 6</a>
+                    <a href="images/參考圖7.png" target="_blank" style="background: rgba(255,255,255,0.2); color: white; padding: 6px 12px; border-radius: 4px; text-decoration: none; font-size: 13px;">參考圖 7</a>
+                    <a href="images/參考圖8.png" target="_blank" style="background: rgba(255,255,255,0.2); color: white; padding: 6px 12px; border-radius: 4px; text-decoration: none; font-size: 13px;">參考圖 8</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="content">
+            <!-- 客戶與廠商資訊 -->
+            <div class="section">
+                <h2 class="section-title">一、客戶與廠商資訊</h2>
+                <div class="info-table">
+                    <div class="info-box">
+                        <h3>甲方（客戶）</h3>
+                        <p><strong>公司名稱：</strong>台米大數據有限公司 TAIMI BIGDATA CO., LTD.</p>
+                        <p><strong>統一編號：</strong>83207409</p>
+                        <p><strong>公司地址：</strong>臺中市潭子區潭陽里中山路二段293號1樓</p>
+                        <p><strong>負責人：</strong>曾煥余</p>
+                        <p><strong>聯絡電話：</strong>04-2535-2667</p>
+                    </div>
+                    <div class="info-box">
+                        <h3>乙方（廠商）</h3>
+                        <p><strong>公司名稱：</strong>渙潮科技有限公司</p>
+                        <p><strong>統一編號：</strong>60634762</p>
+                        <p><strong>公司地址：</strong>台中市北屯區東山里橫坑巷 27-35 號 1 樓</p>
+                        <p><strong>負責人：</strong>蔡美麗</p>
+                        <p><strong>聯絡人：</strong>陳立昇 (SA 架構師)</p>
+                        <p><strong>聯絡電話：</strong>0982-885-485</p>
+                        <p><strong>電子郵件：</strong>tasb00429@gmail.com</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 專案概述 -->
+            <div class="section">
+                <h2 class="section-title">二、專案概述</h2>
+                <p style="margin-bottom: 20px;">
+                    本專案旨在開發一套 <strong>SaaS（Software as a Service）多租戶架構</strong> 的 BigSeller 類型電商 ERP 系統。系統採用多租戶設計，支援多家企業客戶同時使用，每個租戶資料完全隔離。平台營運方可透過訂閱制向客戶收費，建立持續性收入模式。
+                </p>
+
+                <!-- SaaS 架構說明 -->
+                <div class="saas-box">
+                    <h4>🏢 SaaS 多租戶架構特點</h4>
+                    <ul>
+                        <li><strong>多租戶資料隔離：</strong>每個企業客戶（租戶）的資料完全獨立，互不可見</li>
+                        <li><strong>訂閱制付費模式：</strong>支援月付/年付方案，自動扣款與續約提醒</li>
+                        <li><strong>方案與功能權限：</strong>不同訂閱方案開放不同功能模組（基礎版/專業版/企業版）</li>
+                        <li><strong>租戶自助註冊：</strong>企業客戶可自行註冊、選擇方案、完成付款</li>
+                        <li><strong>平台管理後台：</strong>營運方可管理所有租戶、查看收入報表、調整方案</li>
+                        <li><strong>彈性擴展架構：</strong>支援水平擴展，隨用戶增長自動調配資源</li>
+                        <li><strong>統一版本更新：</strong>所有租戶同步享有功能更新，無需個別部署</li>
+                    </ul>
+                </div>
+
+                <div class="notes">
+                    <h4>專案亮點</h4>
+                    <ul>
+                        <li>支援 <strong>8+ 電商平台</strong> API 整合</li>
+                        <li>完整的 <strong>進銷存管理</strong> 功能</li>
+                        <li>多倉庫、多貨位的 <strong>WMS 倉儲系統</strong></li>
+                        <li>即時數據大屏與 <strong>BI 報表分析</strong></li>
+                        <li>完善的 <strong>權限管理</strong> 與操作日誌</li>
+                        <li>支援 <strong>多語言、多幣別</strong> 跨境電商需求</li>
+                        <li><strong>SaaS 訂閱計費系統</strong> 與金流整合</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- BigSeller 原始功能架構 -->
+            <div class="section">
+                <h2 class="section-title">二、BigSeller 原始功能架構參考</h2>
+                <p style="margin-bottom: 20px; color: #666;">以下為 BigSeller ERP 系統的原始導航架構，作為本專案開發的功能參考依據：</p>
+
+                <!-- 模組卡片容器 -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 24px;">
+
+                    <!-- 產品 -->
+                    <div style="background: #fff; border-radius: 16px; box-shadow: 0 4px 20px rgba(102,126,234,0.15); overflow: hidden;">
+                        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 16px 20px; color: white;">
+                            <h4 style="margin: 0; font-size: 20px; font-weight: 600;">📦 產品</h4>
+                        </div>
+                        <div style="padding: 20px;">
+                            <!-- 通用功能 -->
+                            <div style="margin-bottom: 16px;">
+                                <div style="background: #667eea; color: white; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; display: inline-block; margin-bottom: 8px;">通用功能</div>
+                                <div style="display: flex; flex-wrap: wrap; gap: 6px; padding-left: 8px;">
+                                    <span style="background: #f0f2ff; color: #5a6fd6; padding: 4px 10px; border-radius: 4px; font-size: 12px;">產品採集</span>
+                                    <span style="background: #f0f2ff; color: #5a6fd6; padding: 4px 10px; border-radius: 4px; font-size: 12px;">產品搬家</span>
+                                    <span style="background: #f0f2ff; color: #5a6fd6; padding: 4px 10px; border-radius: 4px; font-size: 12px;">1688選品</span>
+                                    <span style="background: #f0f2ff; color: #5a6fd6; padding: 4px 10px; border-radius: 4px; font-size: 12px;">圖片空間</span>
+                                </div>
+                            </div>
+                            <!-- 信息聯動 -->
+                            <div style="margin-bottom: 16px;">
+                                <div style="background: #667eea; color: white; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; display: inline-block; margin-bottom: 8px;">信息聯動</div>
+                                <div style="display: flex; flex-wrap: wrap; gap: 6px; padding-left: 8px;">
+                                    <span style="background: #f0f2ff; color: #5a6fd6; padding: 4px 10px; border-radius: 4px; font-size: 12px;">聯動記錄</span>
+                                </div>
+                            </div>
+                            <!-- 主商品管理 -->
+                            <div style="margin-bottom: 16px;">
+                                <div style="background: #667eea; color: white; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; display: inline-block; margin-bottom: 8px;">
+                                    主商品管理 <span style="background: #fff; color: #667eea; padding: 1px 6px; border-radius: 10px; font-size: 10px; margin-left: 4px;">New</span>
+                                </div>
+                            </div>
+                            <!-- Shopee -->
+                            <div style="margin-bottom: 16px;">
+                                <div style="background: #667eea; color: white; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; display: inline-block; margin-bottom: 8px;">Shopee</div>
+                                <div style="display: flex; flex-wrap: wrap; gap: 6px; padding-left: 8px;">
+                                    <span style="background: #f0f2ff; color: #5a6fd6; padding: 4px 10px; border-radius: 4px; font-size: 12px;">站點草稿箱</span>
+                                    <span style="background: #f0f2ff; color: #5a6fd6; padding: 4px 10px; border-radius: 4px; font-size: 12px;">在線產品</span>
+                                    <span style="background: #f0f2ff; color: #5a6fd6; padding: 4px 10px; border-radius: 4px; font-size: 12px;">置頂活動</span>
+                                    <span style="background: #f0f2ff; color: #5a6fd6; padding: 4px 10px; border-radius: 4px; font-size: 12px;">折扣活動</span>
+                                    <span style="background: #f0f2ff; color: #5a6fd6; padding: 4px 10px; border-radius: 4px; font-size: 12px;">店內閃購</span>
+                                    <span style="background: #f0f2ff; color: #5a6fd6; padding: 4px 10px; border-radius: 4px; font-size: 12px;">店鋪分類</span>
+                                    <span style="background: #f0f2ff; color: #5a6fd6; padding: 4px 10px; border-radius: 4px; font-size: 12px;">產品模板</span>
+                                    <span style="background: #f0f2ff; color: #5a6fd6; padding: 4px 10px; border-radius: 4px; font-size: 12px;">套裝優惠</span>
+                                    <span style="background: #f0f2ff; color: #5a6fd6; padding: 4px 10px; border-radius: 4px; font-size: 12px;">視頻中心</span>
+                                </div>
+                            </div>
+                            <!-- Shopify -->
+                            <div style="margin-bottom: 16px;">
+                                <div style="background: #667eea; color: white; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; display: inline-block; margin-bottom: 8px;">Shopify</div>
+                                <div style="display: flex; flex-wrap: wrap; gap: 6px; padding-left: 8px;">
+                                    <span style="background: #f0f2ff; color: #5a6fd6; padding: 4px 10px; border-radius: 4px; font-size: 12px;">草稿箱</span>
+                                    <span style="background: #f0f2ff; color: #5a6fd6; padding: 4px 10px; border-radius: 4px; font-size: 12px;">在線產品</span>
+                                </div>
+                            </div>
+                            <!-- 多平台授權 -->
+                            <div>
+                                <div style="background: #667eea; color: white; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; display: inline-block; margin-bottom: 8px;">
+                                    多平台授權 <span style="background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: normal;">含 6 平台</span>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap; gap: 6px; padding-left: 8px;">
+                                    <span style="background: #f0f2ff; color: #5a6fd6; padding: 4px 10px; border-radius: 4px; font-size: 12px;">蝦皮 Shopee</span>
+                                    <span style="background: #f0f2ff; color: #5a6fd6; padding: 4px 10px; border-radius: 4px; font-size: 12px;">Shopify</span>
+                                    <span style="background: #f0f2ff; color: #5a6fd6; padding: 4px 10px; border-radius: 4px; font-size: 12px;">1688</span>
+                                    <span style="background: #f0f2ff; color: #5a6fd6; padding: 4px 10px; border-radius: 4px; font-size: 12px;">酷澎 Coupang</span>
+                                    <span style="background: #f0f2ff; color: #5a6fd6; padding: 4px 10px; border-radius: 4px; font-size: 12px;">momo mo+</span>
+                                    <span style="background: #f0f2ff; color: #5a6fd6; padding: 4px 10px; border-radius: 4px; font-size: 12px;">Amego電子發票</span>
+                                </div>
+                                <div style="margin-top: 8px; padding: 8px 12px; background: #fff3cd; border-radius: 6px; font-size: 11px; color: #856404;">
+                                    ⚠️ 本報價含 6 個電商平台整合，超過 6 個平台將另行報價
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 訂單 -->
+                    <div style="background: #fff; border-radius: 16px; box-shadow: 0 4px 20px rgba(240,147,251,0.15); overflow: hidden;">
+                        <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 16px 20px; color: white;">
+                            <h4 style="margin: 0; font-size: 20px; font-weight: 600;">📋 訂單</h4>
+                        </div>
+                        <div style="padding: 20px;">
+                            <!-- 訂單處理 -->
+                            <div style="margin-bottom: 16px;">
+                                <div style="background: #e85d75; color: white; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; display: inline-block; margin-bottom: 8px;">訂單處理</div>
+                                <div style="display: flex; flex-wrap: wrap; gap: 6px; padding-left: 8px;">
+                                    <span style="background: #fef0f2; color: #d64d63; padding: 4px 10px; border-radius: 4px; font-size: 12px;">訂單處理</span>
+                                    <span style="background: #fef0f2; color: #d64d63; padding: 4px 10px; border-radius: 4px; font-size: 12px;">訂單錄入</span>
+                                    <span style="background: #fef0f2; color: #d64d63; padding: 4px 10px; border-radius: 4px; font-size: 12px;">POS零售訂單</span>
+                                    <span style="background: #fef0f2; color: #d64d63; padding: 4px 10px; border-radius: 4px; font-size: 12px;">聊天訂單</span>
+                                    <span style="background: #fef0f2; color: #d64d63; padding: 4px 10px; border-radius: 4px; font-size: 12px;">手工訂單</span>
+                                    <span style="background: #fef0f2; color: #d64d63; padding: 4px 10px; border-radius: 4px; font-size: 12px;">待審核</span>
+                                </div>
+                            </div>
+                            <!-- 售後管理 -->
+                            <div style="margin-bottom: 16px;">
+                                <div style="background: #e85d75; color: white; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; display: inline-block; margin-bottom: 8px;">售後管理</div>
+                                <div style="display: flex; flex-wrap: wrap; gap: 6px; padding-left: 8px;">
+                                    <span style="background: #fef0f2; color: #d64d63; padding: 4px 10px; border-radius: 4px; font-size: 12px;">售後單處理</span>
+                                    <span style="background: #fef0f2; color: #d64d63; padding: 4px 10px; border-radius: 4px; font-size: 12px;">退貨入庫</span>
+                                    <span style="background: #fef0f2; color: #d64d63; padding: 4px 10px; border-radius: 4px; font-size: 12px;">退貨入庫-三方倉</span>
+                                </div>
+                            </div>
+                            <!-- 物流管理 -->
+                            <div style="margin-bottom: 16px;">
+                                <div style="background: #e85d75; color: white; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; display: inline-block; margin-bottom: 8px;">物流管理</div>
+                                <div style="display: flex; flex-wrap: wrap; gap: 6px; padding-left: 8px;">
+                                    <span style="background: #fef0f2; color: #d64d63; padding: 4px 10px; border-radius: 4px; font-size: 12px;">物流追蹤</span>
+                                    <span style="background: #fef0f2; color: #d64d63; padding: 4px 10px; border-radius: 4px; font-size: 12px;">運費核對</span>
+                                    <span style="background: #fef0f2; color: #d64d63; padding: 4px 10px; border-radius: 4px; font-size: 12px;">簽單管理</span>
+                                    <span style="background: #fef0f2; color: #d64d63; padding: 4px 10px; border-radius: 4px; font-size: 12px;">物流配置</span>
+                                </div>
+                            </div>
+                            <!-- 訂單工具 -->
+                            <div>
+                                <div style="background: #e85d75; color: white; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; display: inline-block; margin-bottom: 8px;">訂單工具</div>
+                                <div style="display: flex; flex-wrap: wrap; gap: 6px; padding-left: 8px;">
+                                    <span style="background: #fef0f2; color: #d64d63; padding: 4px 10px; border-radius: 4px; font-size: 12px;">標記設置</span>
+                                    <span style="background: #fef0f2; color: #d64d63; padding: 4px 10px; border-radius: 4px; font-size: 12px;">贈品規則</span>
+                                    <span style="background: #fef0f2; color: #d64d63; padding: 4px 10px; border-radius: 4px; font-size: 12px;">打印設置</span>
+                                    <span style="background: #fef0f2; color: #d64d63; padding: 4px 10px; border-radius: 4px; font-size: 12px;">自定義面單</span>
+                                    <span style="background: #fef0f2; color: #d64d63; padding: 4px 10px; border-radius: 4px; font-size: 12px;">自動安排</span>
+                                    <span style="background: #fef0f2; color: #d64d63; padding: 4px 10px; border-radius: 4px; font-size: 12px;">分倉規則</span>
+                                    <span style="background: #fef0f2; color: #d64d63; padding: 4px 10px; border-radius: 4px; font-size: 12px;">預警中心</span>
+                                    <span style="background: #fef0f2; color: #d64d63; padding: 4px 10px; border-radius: 4px; font-size: 12px;">+3 更多</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 庫存 -->
+                    <div style="background: #fff; border-radius: 16px; box-shadow: 0 4px 20px rgba(79,172,254,0.15); overflow: hidden;">
+                        <div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); padding: 16px 20px; color: white;">
+                            <h4 style="margin: 0; font-size: 20px; font-weight: 600;">📊 庫存</h4>
+                        </div>
+                        <div style="padding: 20px;">
+                            <!-- 出入庫 -->
+                            <div style="margin-bottom: 16px;">
+                                <div style="background: #3d9be9; color: white; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; display: inline-block; margin-bottom: 8px;">出入庫</div>
+                                <div style="display: flex; flex-wrap: wrap; gap: 6px; padding-left: 8px;">
+                                    <span style="background: #eef7ff; color: #2d7bc9; padding: 4px 10px; border-radius: 4px; font-size: 12px;">手動入庫</span>
+                                    <span style="background: #eef7ff; color: #2d7bc9; padding: 4px 10px; border-radius: 4px; font-size: 12px;">手動出庫</span>
+                                    <span style="background: #eef7ff; color: #2d7bc9; padding: 4px 10px; border-radius: 4px; font-size: 12px;">收貨</span>
+                                    <span style="background: #eef7ff; color: #2d7bc9; padding: 4px 10px; border-radius: 4px; font-size: 12px;">庫存更新記錄</span>
+                                    <span style="background: #eef7ff; color: #2d7bc9; padding: 4px 10px; border-radius: 4px; font-size: 12px;">貨位庫存更新記錄</span>
+                                </div>
+                            </div>
+                            <!-- 商品SKU -->
+                            <div style="margin-bottom: 16px;">
+                                <div style="background: #3d9be9; color: white; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; display: inline-block; margin-bottom: 8px;">商品SKU</div>
+                                <div style="display: flex; flex-wrap: wrap; gap: 6px; padding-left: 8px;">
+                                    <span style="background: #eef7ff; color: #2d7bc9; padding: 4px 10px; border-radius: 4px; font-size: 12px;">商品SKU</span>
+                                    <span style="background: #eef7ff; color: #2d7bc9; padding: 4px 10px; border-radius: 4px; font-size: 12px;">1688商品匹配</span>
+                                    <span style="background: #eef7ff; color: #2d7bc9; padding: 4px 10px; border-radius: 4px; font-size: 12px;">商品分類</span>
+                                </div>
+                            </div>
+                            <!-- SKU匹配關係 -->
+                            <div style="margin-bottom: 16px;">
+                                <div style="background: #3d9be9; color: white; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; display: inline-block; margin-bottom: 8px;">SKU匹配關係</div>
+                                <div style="display: flex; flex-wrap: wrap; gap: 6px; padding-left: 8px;">
+                                    <span style="background: #eef7ff; color: #2d7bc9; padding: 4px 10px; border-radius: 4px; font-size: 12px;">按產品查看</span>
+                                    <span style="background: #eef7ff; color: #2d7bc9; padding: 4px 10px; border-radius: 4px; font-size: 12px;">按商品查看</span>
+                                </div>
+                            </div>
+                            <!-- 庫存聯動 -->
+                            <div style="margin-bottom: 16px;">
+                                <div style="background: #3d9be9; color: white; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; display: inline-block; margin-bottom: 8px;">庫存聯動</div>
+                                <div style="display: flex; flex-wrap: wrap; gap: 6px; padding-left: 8px;">
+                                    <span style="background: #eef7ff; color: #2d7bc9; padding: 4px 10px; border-radius: 4px; font-size: 12px;">活動預留庫存</span>
+                                    <span style="background: #eef7ff; color: #2d7bc9; padding: 4px 10px; border-radius: 4px; font-size: 12px;">庫存推送規則</span>
+                                    <span style="background: #eef7ff; color: #2d7bc9; padding: 4px 10px; border-radius: 4px; font-size: 12px;">推送記錄</span>
+                                </div>
+                            </div>
+                            <!-- 倉庫管理 -->
+                            <div style="margin-bottom: 16px;">
+                                <div style="background: #3d9be9; color: white; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; display: inline-block; margin-bottom: 8px;">倉庫管理</div>
+                                <div style="display: flex; flex-wrap: wrap; gap: 6px; padding-left: 8px;">
+                                    <span style="background: #eef7ff; color: #2d7bc9; padding: 4px 10px; border-radius: 4px; font-size: 12px;">庫存清單</span>
+                                    <span style="background: #eef7ff; color: #2d7bc9; padding: 4px 10px; border-radius: 4px; font-size: 12px;">貨位庫存</span>
+                                    <span style="background: #eef7ff; color: #2d7bc9; padding: 4px 10px; border-radius: 4px; font-size: 12px;">調撥</span>
+                                    <span style="background: #eef7ff; color: #2d7bc9; padding: 4px 10px; border-radius: 4px; font-size: 12px;">倉庫盤點</span>
+                                    <span style="background: #eef7ff; color: #2d7bc9; padding: 4px 10px; border-radius: 4px; font-size: 12px;">移貨</span>
+                                    <span style="background: #eef7ff; color: #2d7bc9; padding: 4px 10px; border-radius: 4px; font-size: 12px;">+3 更多</span>
+                                </div>
+                            </div>
+                            <!-- 庫內補貨 & 分銷 -->
+                            <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+                                <div>
+                                    <div style="background: #3d9be9; color: white; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; display: inline-block; margin-bottom: 8px;">庫內補貨</div>
+                                    <div style="display: flex; flex-wrap: wrap; gap: 6px; padding-left: 8px;">
+                                        <span style="background: #eef7ff; color: #2d7bc9; padding: 4px 10px; border-radius: 4px; font-size: 12px;">補貨上架</span>
+                                        <span style="background: #eef7ff; color: #2d7bc9; padding: 4px 10px; border-radius: 4px; font-size: 12px;">補貨預警</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div style="background: #3d9be9; color: white; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; display: inline-block; margin-bottom: 8px;">分銷</div>
+                                    <div style="display: flex; flex-wrap: wrap; gap: 6px; padding-left: 8px;">
+                                        <span style="background: #eef7ff; color: #2d7bc9; padding: 4px 10px; border-radius: 4px; font-size: 12px;">分銷商品</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- WMS -->
+                    <div style="background: #fff; border-radius: 16px; box-shadow: 0 4px 20px rgba(67,233,123,0.15); overflow: hidden;">
+                        <div style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); padding: 16px 20px; color: white;">
+                            <h4 style="margin: 0; font-size: 20px; font-weight: 600;">🏭 WMS 倉儲管理</h4>
+                        </div>
+                        <div style="padding: 20px;">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                                <!-- 入庫作業 -->
+                                <div>
+                                    <div style="background: #2eb872; color: white; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; display: inline-block; margin-bottom: 8px;">入庫作業</div>
+                                    <div style="display: flex; flex-direction: column; gap: 4px; padding-left: 8px;">
+                                        <span style="background: #eefbf3; color: #1d7a4d; padding: 4px 10px; border-radius: 4px; font-size: 12px;">收貨上架</span>
+                                        <span style="background: #eefbf3; color: #1d7a4d; padding: 4px 10px; border-radius: 4px; font-size: 12px;">質檢入庫</span>
+                                    </div>
+                                </div>
+                                <!-- 出庫作業 -->
+                                <div>
+                                    <div style="background: #2eb872; color: white; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; display: inline-block; margin-bottom: 8px;">出庫作業</div>
+                                    <div style="display: flex; flex-direction: column; gap: 4px; padding-left: 8px;">
+                                        <span style="background: #eefbf3; color: #1d7a4d; padding: 4px 10px; border-radius: 4px; font-size: 12px;">揀貨</span>
+                                        <span style="background: #eefbf3; color: #1d7a4d; padding: 4px 10px; border-radius: 4px; font-size: 12px;">複核</span>
+                                        <span style="background: #eefbf3; color: #1d7a4d; padding: 4px 10px; border-radius: 4px; font-size: 12px;">打包出庫</span>
+                                    </div>
+                                </div>
+                                <!-- 倉內作業 -->
+                                <div>
+                                    <div style="background: #2eb872; color: white; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; display: inline-block; margin-bottom: 8px;">倉內作業</div>
+                                    <div style="display: flex; flex-direction: column; gap: 4px; padding-left: 8px;">
+                                        <span style="background: #eefbf3; color: #1d7a4d; padding: 4px 10px; border-radius: 4px; font-size: 12px;">移庫</span>
+                                        <span style="background: #eefbf3; color: #1d7a4d; padding: 4px 10px; border-radius: 4px; font-size: 12px;">盤點</span>
+                                        <span style="background: #eefbf3; color: #1d7a4d; padding: 4px 10px; border-radius: 4px; font-size: 12px;">補貨</span>
+                                    </div>
+                                </div>
+                                <!-- 貨架管理 -->
+                                <div>
+                                    <div style="background: #2eb872; color: white; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; display: inline-block; margin-bottom: 8px;">貨架管理</div>
+                                    <div style="display: flex; flex-direction: column; gap: 4px; padding-left: 8px;">
+                                        <span style="background: #eefbf3; color: #1d7a4d; padding: 4px 10px; border-radius: 4px; font-size: 12px;">貨架設置</span>
+                                        <span style="background: #eefbf3; color: #1d7a4d; padding: 4px 10px; border-radius: 4px; font-size: 12px;">貨位管理</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 操作日誌 -->
+                            <div style="margin-top: 16px;">
+                                <div style="background: #2eb872; color: white; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; display: inline-block; margin-bottom: 8px;">操作日誌</div>
+                                <div style="display: flex; flex-wrap: wrap; gap: 6px; padding-left: 8px;">
+                                    <span style="background: #eefbf3; color: #1d7a4d; padding: 4px 10px; border-radius: 4px; font-size: 12px;">作業追蹤</span>
+                                    <span style="background: #eefbf3; color: #1d7a4d; padding: 4px 10px; border-radius: 4px; font-size: 12px;">異常記錄</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 採購 -->
+                    <div style="background: #fff; border-radius: 16px; box-shadow: 0 4px 20px rgba(250,112,154,0.15); overflow: hidden;">
+                        <div style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); padding: 16px 20px; color: white;">
+                            <h4 style="margin: 0; font-size: 20px; font-weight: 600;">🛒 採購</h4>
+                        </div>
+                        <div style="padding: 20px;">
+                            <!-- 採購計劃 -->
+                            <div style="margin-bottom: 16px;">
+                                <div style="background: #e8607e; color: white; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; display: inline-block; margin-bottom: 8px;">採購計劃</div>
+                                <div style="display: flex; flex-wrap: wrap; gap: 6px; padding-left: 8px;">
+                                    <span style="background: #fef0f3; color: #c8506a; padding: 4px 10px; border-radius: 4px; font-size: 12px;">採購建議</span>
+                                </div>
+                            </div>
+                            <!-- 採購單 -->
+                            <div style="margin-bottom: 16px;">
+                                <div style="background: #e8607e; color: white; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; display: inline-block; margin-bottom: 8px;">採購單</div>
+                                <div style="display: flex; flex-wrap: wrap; gap: 6px; padding-left: 8px;">
+                                    <span style="background: #fef0f3; color: #c8506a; padding: 4px 10px; border-radius: 4px; font-size: 12px;">草稿箱</span>
+                                    <span style="background: #fef0f3; color: #c8506a; padding: 4px 10px; border-radius: 4px; font-size: 12px;">待發貨</span>
+                                    <span style="background: #fef0f3; color: #c8506a; padding: 4px 10px; border-radius: 4px; font-size: 12px;">在途中</span>
+                                    <span style="background: #fef0f3; color: #c8506a; padding: 4px 10px; border-radius: 4px; font-size: 12px;">部分收貨</span>
+                                    <span style="background: #fef0f3; color: #c8506a; padding: 4px 10px; border-radius: 4px; font-size: 12px;">已完成</span>
+                                    <span style="background: #fef0f3; color: #c8506a; padding: 4px 10px; border-radius: 4px; font-size: 12px;">已取消</span>
+                                </div>
+                            </div>
+                            <!-- 供應商 -->
+                            <div>
+                                <div style="background: #e8607e; color: white; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; display: inline-block; margin-bottom: 8px;">供應商</div>
+                                <div style="display: flex; flex-wrap: wrap; gap: 6px; padding-left: 8px;">
+                                    <span style="background: #fef0f3; color: #c8506a; padding: 4px 10px; border-radius: 4px; font-size: 12px;">供應商列表</span>
+                                    <span style="background: #fef0f3; color: #c8506a; padding: 4px 10px; border-radius: 4px; font-size: 12px;">貨源管理</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 營銷 -->
+                    <div style="background: #fff; border-radius: 16px; box-shadow: 0 4px 20px rgba(161,140,209,0.15); overflow: hidden;">
+                        <div style="background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); padding: 16px 20px; color: white;">
+                            <h4 style="margin: 0; font-size: 20px; font-weight: 600;">📣 營銷</h4>
+                        </div>
+                        <div style="padding: 20px;">
+                            <!-- 廣告管理 -->
+                            <div style="margin-bottom: 16px;">
+                                <div style="background: #8b6fc0; color: white; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; display: inline-block; margin-bottom: 8px;">廣告管理</div>
+                                <div style="display: flex; flex-wrap: wrap; gap: 6px; padding-left: 8px;">
+                                    <span style="background: #f5f0ff; color: #6b4fa0; padding: 4px 10px; border-radius: 4px; font-size: 12px;">廣告概覽</span>
+                                </div>
+                            </div>
+                            <!-- 營銷工具 -->
+                            <div style="margin-bottom: 16px;">
+                                <div style="background: #8b6fc0; color: white; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; display: inline-block; margin-bottom: 8px;">營銷工具</div>
+                                <div style="display: flex; flex-wrap: wrap; gap: 6px; padding-left: 8px;">
+                                    <span style="background: #f5f0ff; color: #6b4fa0; padding: 4px 10px; border-radius: 4px; font-size: 12px;">水印模板</span>
+                                    <span style="background: #f5f0ff; color: #6b4fa0; padding: 4px 10px; border-radius: 4px; font-size: 12px;">營銷水印</span>
+                                    <span style="background: #f5f0ff; color: #6b4fa0; padding: 4px 10px; border-radius: 4px; font-size: 12px;">自動回評</span>
+                                </div>
+                            </div>
+                            <!-- 線下促銷 -->
+                            <div style="margin-bottom: 16px;">
+                                <div style="background: #8b6fc0; color: white; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; display: inline-block; margin-bottom: 8px;">線下促銷</div>
+                                <div style="display: flex; flex-wrap: wrap; gap: 6px; padding-left: 8px;">
+                                    <span style="background: #f5f0ff; color: #6b4fa0; padding: 4px 10px; border-radius: 4px; font-size: 12px;">商品促銷</span>
+                                    <span style="background: #f5f0ff; color: #6b4fa0; padding: 4px 10px; border-radius: 4px; font-size: 12px;">訂單促銷</span>
+                                    <span style="background: #f5f0ff; color: #6b4fa0; padding: 4px 10px; border-radius: 4px; font-size: 12px;">贈品促銷</span>
+                                </div>
+                            </div>
+                            <!-- 社媒 -->
+                            <div style="margin-bottom: 16px;">
+                                <div style="background: #8b6fc0; color: white; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; display: inline-block; margin-bottom: 8px;">社媒</div>
+                                <div style="display: flex; flex-wrap: wrap; gap: 6px; padding-left: 8px;">
+                                    <span style="background: #f5f0ff; color: #6b4fa0; padding: 4px 10px; border-radius: 4px; font-size: 12px;">Facebook帖子營銷</span>
+                                </div>
+                            </div>
+                            <!-- 銷售價格 -->
+                            <div style="margin-bottom: 16px;">
+                                <div style="background: #8b6fc0; color: white; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; display: inline-block; margin-bottom: 8px;">銷售價格</div>
+                                <div style="display: flex; flex-wrap: wrap; gap: 6px; padding-left: 8px;">
+                                    <span style="background: #f5f0ff; color: #6b4fa0; padding: 4px 10px; border-radius: 4px; font-size: 12px;">POS零售價格</span>
+                                    <span style="background: #f5f0ff; color: #6b4fa0; padding: 4px 10px; border-radius: 4px; font-size: 12px;">聊天訂單價格</span>
+                                    <span style="background: #f5f0ff; color: #6b4fa0; padding: 4px 10px; border-radius: 4px; font-size: 12px;">手工訂單價格</span>
+                                </div>
+                            </div>
+                            <!-- 客戶管理 -->
+                            <div>
+                                <div style="background: #8b6fc0; color: white; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; display: inline-block; margin-bottom: 8px;">客戶管理</div>
+                                <div style="display: flex; flex-wrap: wrap; gap: 6px; padding-left: 8px;">
+                                    <span style="background: #f5f0ff; color: #6b4fa0; padding: 4px 10px; border-radius: 4px; font-size: 12px;">客戶列表</span>
+                                    <span style="background: #f5f0ff; color: #6b4fa0; padding: 4px 10px; border-radius: 4px; font-size: 12px;">買家黑名單</span>
+                                    <span style="background: #f5f0ff; color: #6b4fa0; padding: 4px 10px; border-radius: 4px; font-size: 12px;">客戶等級</span>
+                                    <span style="background: #f5f0ff; color: #6b4fa0; padding: 4px 10px; border-radius: 4px; font-size: 12px;">客戶分級價格</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 數據 -->
+                    <div style="background: #fff; border-radius: 16px; box-shadow: 0 4px 20px rgba(48,207,208,0.15); overflow: hidden;">
+                        <div style="background: linear-gradient(135deg, #30cfd0 0%, #330867 100%); padding: 16px 20px; color: white;">
+                            <h4 style="margin: 0; font-size: 20px; font-weight: 600;">📈 數據</h4>
+                        </div>
+                        <div style="padding: 20px;">
+                            <!-- 數據匯總 -->
+                            <div style="margin-bottom: 16px;">
+                                <div style="background: #20a8a9; color: white; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; display: inline-block; margin-bottom: 8px;">數據匯總</div>
+                                <div style="display: flex; flex-wrap: wrap; gap: 6px; padding-left: 8px;">
+                                    <span style="background: #e5f7f7; color: #158080; padding: 4px 10px; border-radius: 4px; font-size: 12px;">實時數據大屏</span>
+                                    <span style="background: #e5f7f7; color: #158080; padding: 4px 10px; border-radius: 4px; font-size: 12px;">波次作業看板</span>
+                                    <span style="background: #e5f7f7; color: #158080; padding: 4px 10px; border-radius: 4px; font-size: 12px;">廣告概覽</span>
+                                </div>
+                            </div>
+                            <!-- 銷售分析 -->
+                            <div style="margin-bottom: 16px;">
+                                <div style="background: #20a8a9; color: white; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; display: inline-block; margin-bottom: 8px;">銷售分析</div>
+                                <div style="display: flex; flex-wrap: wrap; gap: 6px; padding-left: 8px;">
+                                    <span style="background: #e5f7f7; color: #158080; padding: 4px 10px; border-radius: 4px; font-size: 12px;">店鋪報告</span>
+                                    <span style="background: #e5f7f7; color: #158080; padding: 4px 10px; border-radius: 4px; font-size: 12px;">訂單報告</span>
+                                    <span style="background: #e5f7f7; color: #158080; padding: 4px 10px; border-radius: 4px; font-size: 12px;">銷量報告</span>
+                                    <span style="background: #e5f7f7; color: #158080; padding: 4px 10px; border-radius: 4px; font-size: 12px;">利潤報告</span>
+                                </div>
+                            </div>
+                            <!-- 進銷存分析 -->
+                            <div style="margin-bottom: 16px;">
+                                <div style="background: #20a8a9; color: white; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; display: inline-block; margin-bottom: 8px;">進銷存分析</div>
+                                <div style="display: flex; flex-wrap: wrap; gap: 6px; padding-left: 8px;">
+                                    <span style="background: #e5f7f7; color: #158080; padding: 4px 10px; border-radius: 4px; font-size: 12px;">進銷存報告</span>
+                                    <span style="background: #e5f7f7; color: #158080; padding: 4px 10px; border-radius: 4px; font-size: 12px;">商品銷售報告</span>
+                                </div>
+                            </div>
+                            <!-- 其他分析 -->
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                                <div>
+                                    <div style="background: #20a8a9; color: white; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; display: inline-block; margin-bottom: 8px;">作業分析</div>
+                                    <div style="padding-left: 8px;">
+                                        <span style="background: #e5f7f7; color: #158080; padding: 4px 10px; border-radius: 4px; font-size: 12px;">作業報告</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div style="background: #20a8a9; color: white; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; display: inline-block; margin-bottom: 8px;">財務報告</div>
+                                    <div style="padding-left: 8px;">
+                                        <span style="background: #e5f7f7; color: #158080; padding: 4px 10px; border-radius: 4px; font-size: 12px;">平台對賬</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div style="background: #20a8a9; color: white; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; display: inline-block; margin-bottom: 8px;">賬戶監控</div>
+                                    <div style="padding-left: 8px;">
+                                        <span style="background: #e5f7f7; color: #158080; padding: 4px 10px; border-radius: 4px; font-size: 12px;">店鋪健康</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div style="background: #20a8a9; color: white; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; display: inline-block; margin-bottom: 8px;">財務軟件</div>
+                                    <div style="display: flex; flex-wrap: wrap; gap: 4px; padding-left: 8px;">
+                                        <span style="background: #e5f7f7; color: #158080; padding: 4px 10px; border-radius: 4px; font-size: 12px;">SQL Account</span>
+                                        <span style="background: #e5f7f7; color: #158080; padding: 4px 10px; border-radius: 4px; font-size: 12px;">Accurate</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 服務 -->
+                    <div style="background: #fff; border-radius: 16px; box-shadow: 0 4px 20px rgba(255,154,158,0.15); overflow: hidden;">
+                        <div style="background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); padding: 16px 20px; color: white;">
+                            <h4 style="margin: 0; font-size: 20px; font-weight: 600;">⚙️ 服務</h4>
+                        </div>
+                        <div style="padding: 20px;">
+                            <!-- 增值服務 -->
+                            <div style="margin-bottom: 16px;">
+                                <div style="background: #e07a7e; color: white; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; display: inline-block; margin-bottom: 8px;">增值服務</div>
+                                <div style="display: flex; flex-wrap: wrap; gap: 6px; padding-left: 8px;">
+                                    <span style="background: #fef0f1; color: #c06064; padding: 4px 10px; border-radius: 4px; font-size: 12px;">訂閱服務</span>
+                                    <span style="background: #fef0f1; color: #c06064; padding: 4px 10px; border-radius: 4px; font-size: 12px;">預約培訓 <span style="background: #4caf50; color: white; padding: 1px 5px; border-radius: 8px; font-size: 10px;">Free</span></span>
+                                </div>
+                            </div>
+                            <!-- 優質服務 -->
+                            <div style="margin-bottom: 16px;">
+                                <div style="background: #e07a7e; color: white; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; display: inline-block; margin-bottom: 8px;">優質服務</div>
+                                <div style="display: flex; flex-wrap: wrap; gap: 6px; padding-left: 8px;">
+                                    <span style="background: #fef0f1; color: #c06064; padding: 4px 10px; border-radius: 4px; font-size: 12px;">優質服務商</span>
+                                </div>
+                            </div>
+                            <!-- 其他 -->
+                            <div>
+                                <div style="background: #e07a7e; color: white; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; display: inline-block; margin-bottom: 8px;">其他</div>
+                                <div style="display: flex; flex-wrap: wrap; gap: 6px; padding-left: 8px;">
+                                    <span style="background: #fef0f1; color: #c06064; padding: 4px 10px; border-radius: 4px; font-size: 12px;">APP下載</span>
+                                    <span style="background: #fef0f1; color: #c06064; padding: 4px 10px; border-radius: 4px; font-size: 12px;">客服聊天軟件</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div style="margin-top: 25px; padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #667eea;">
+                    <p style="margin: 0; color: #555; font-size: 14px;">
+                        <strong>📌 說明：</strong>以上為 BigSeller ERP 系統的原始導航結構，本報價將以此為基礎進行 SaaS 化開發，
+                        並新增「SaaS 平台核心模組」（多租戶架構、訂閱計費、方案管理等），詳見下方功能模組說明。
+                    </p>
+                </div>
+            </div>
+
+            <!-- 系統功能模組 -->
+            <div class="section">
+                <h2 class="section-title">三、系統功能模組總覽</h2>
+
+                <table class="feature-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 25%;">模組名稱</th>
+                            <th style="width: 10%;">子模塊數</th>
+                            <th style="width: 10%;">功能點數</th>
+                            <th style="width: 10%;">複雜度</th>
+                            <th style="width: 45%;">主要功能</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="module-name">0. SaaS 平台核心</td>
+                            <td class="text-center">5</td>
+                            <td class="text-center">25+</td>
+                            <td class="text-center"><span class="badge complexity-high">高</span></td>
+                            <td>多租戶架構、訂閱計費、方案管理、平台管理後台</td>
+                        </tr>
+                        <tr>
+                            <td class="module-name">1. 產品管理</td>
+                            <td class="text-center">4</td>
+                            <td class="text-center">26+</td>
+                            <td class="text-center"><span class="badge complexity-high">高</span></td>
+                            <td>產品採集、產品搬家、1688選品、圖片空間、多平台商品管理</td>
+                        </tr>
+                        <tr>
+                            <td class="module-name">2. 訂單管理</td>
+                            <td class="text-center">5</td>
+                            <td class="text-center">18+</td>
+                            <td class="text-center"><span class="badge complexity-high">高</span></td>
+                            <td>訂單處理、批量發貨、售後管理、物流追蹤、訂單工具</td>
+                        </tr>
+                        <tr>
+                            <td class="module-name">3. 庫存 & WMS 管理</td>
+                            <td class="text-center">7</td>
+                            <td class="text-center">22+</td>
+                            <td class="text-center"><span class="badge complexity-high">高</span></td>
+                            <td>出入庫、SKU管理、庫存聯動、倉庫管理、盤點、補貨</td>
+                        </tr>
+                        <tr>
+                            <td class="module-name">4. 採購管理</td>
+                            <td class="text-center">3</td>
+                            <td class="text-center">9+</td>
+                            <td class="text-center"><span class="badge complexity-medium">中</span></td>
+                            <td>採購建議、採購單管理、供應商管理、貨源管理</td>
+                        </tr>
+                        <tr>
+                            <td class="module-name">5. 營銷管理</td>
+                            <td class="text-center">6</td>
+                            <td class="text-center">15+</td>
+                            <td class="text-center"><span class="badge complexity-medium">中</span></td>
+                            <td>廣告管理、促銷設定、價格管理、客戶管理、水印工具</td>
+                        </tr>
+                        <tr>
+                            <td class="module-name">6. 數據分析</td>
+                            <td class="text-center">7</td>
+                            <td class="text-center">14+</td>
+                            <td class="text-center"><span class="badge complexity-high">高</span></td>
+                            <td>實時大屏、銷售報表、利潤分析、進銷存報表、財務對賬</td>
+                        </tr>
+                        <tr>
+                            <td class="module-name">7. 系統基礎</td>
+                            <td class="text-center">6</td>
+                            <td class="text-center">20+</td>
+                            <td class="text-center"><span class="badge complexity-high">高</span></td>
+                            <td>用戶權限、角色管理、操作日誌、系統配置、多語言</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr style="background: #f0f0ff; font-weight: bold;">
+                            <td>合計</td>
+                            <td class="text-center">43</td>
+                            <td class="text-center">149+</td>
+                            <td colspan="2"></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <!-- 功能模組詳情 - 可展開 -->
+            <div class="section">
+                <h2 class="section-title">四、功能模組詳細內容（點擊展開）</h2>
+                <p style="margin-bottom: 20px; color: #666;">點擊各模組查看詳細功能說明與 SaaS 實作建議</p>
+
+                <!-- Module 0: SaaS 平台核心 -->
+                <div class="accordion active">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <h4><span class="badge">00</span> SaaS 平台核心模組</h4>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-inner">
+                            <div class="feature-item">
+                                <h5>🏢 多租戶架構 (Multi-Tenancy)</h5>
+                                <p>系統核心架構，確保每個企業客戶（租戶）的資料完全隔離，同時共享系統程式碼。</p>
+                                <div class="saas-note">
+                                    <strong>SaaS 實作建議：</strong><br>
+                                    • 採用「單一資料庫 + tenant_id 欄位」架構，所有資料表增加 tenant_id 外鍵<br>
+                                    • 使用 Laravel 的 Global Scope 自動過濾租戶資料<br>
+                                    • 中間件自動識別當前租戶（透過子網域或登入資訊）<br>
+                                    • 大型租戶可選配獨立資料庫實現完全隔離
+                                </div>
+                                <span class="tech-tag">Laravel Tenancy</span>
+                                <span class="tech-tag">Global Scope</span>
+                                <span class="tech-tag">Middleware</span>
+                            </div>
+
+                            <div class="feature-item">
+                                <h5>💳 訂閱計費系統 (Subscription Billing)</h5>
+                                <p>管理租戶的訂閱方案、計費週期、自動扣款、發票開立等功能。</p>
+                                <div class="saas-note">
+                                    <strong>SaaS 實作建議：</strong><br>
+                                    • 整合綠界/藍新金流實現自動扣款<br>
+                                    • 支援信用卡綁定、超商繳費、ATM 轉帳<br>
+                                    • 到期前 7 天自動發送續約提醒<br>
+                                    • 提供 14 天免費試用期機制<br>
+                                    • 支援升級/降級方案，按比例計算費用
+                                </div>
+                                <span class="tech-tag">ECPay 綠界</span>
+                                <span class="tech-tag">Laravel Cashier</span>
+                                <span class="tech-tag">Webhook</span>
+                            </div>
+
+                            <div class="feature-item">
+                                <h5>📊 方案與功能權限管理</h5>
+                                <p>定義不同訂閱方案可使用的功能模組、API 呼叫次數、儲存空間等限制。</p>
+                                <div class="saas-note">
+                                    <strong>SaaS 實作建議：</strong><br>
+                                    • 建立 Plans 資料表定義方案內容<br>
+                                    • 使用 Feature Flags 控制功能開關<br>
+                                    • 設計用量計數器（訂單數/SKU數/店鋪數）<br>
+                                    • 超過限額時優雅降級或提示升級
+                                </div>
+                                <ul class="sub-features">
+                                    <li>基礎版：3 店鋪、1000 SKU、基礎報表</li>
+                                    <li>專業版：10 店鋪、5000 SKU、進階報表</li>
+                                    <li>企業版：無限店鋪、無限 SKU、完整功能</li>
+                                    <li>自訂方案：依需求客製功能組合</li>
+                                </ul>
+                                <span class="tech-tag">Feature Flags</span>
+                                <span class="tech-tag">Rate Limiting</span>
+                            </div>
+
+                            <div class="feature-item">
+                                <h5>🖥️ 平台營運管理後台 (Super Admin)</h5>
+                                <p>平台營運方專用後台，管理所有租戶、查看營收報表、處理客服問題。</p>
+                                <div class="saas-note">
+                                    <strong>SaaS 實作建議：</strong><br>
+                                    • 與租戶後台完全分離的獨立系統<br>
+                                    • 可切換進入任一租戶後台（模擬登入）協助排錯<br>
+                                    • 營收儀表板顯示 MRR、ARR、Churn Rate 等關鍵指標<br>
+                                    • 租戶健康度監控（活躍度、用量、異常）
+                                </div>
+                                <ul class="sub-features">
+                                    <li>租戶列表與狀態管理</li>
+                                    <li>營收報表與財務統計</li>
+                                    <li>系統公告發布</li>
+                                    <li>客服工單管理</li>
+                                    <li>租戶模擬登入</li>
+                                    <li>系統監控與告警</li>
+                                </ul>
+                                <span class="tech-tag">獨立 Admin Panel</span>
+                                <span class="tech-tag">Impersonation</span>
+                            </div>
+
+                            <div class="feature-item">
+                                <h5>🚀 租戶自助入駐流程</h5>
+                                <p>企業客戶可自行完成註冊、選擇方案、付款、開通全流程。</p>
+                                <div class="saas-note">
+                                    <strong>SaaS 實作建議：</strong><br>
+                                    • 設計精美的 Landing Page 介紹功能與定價<br>
+                                    • 註冊流程：填資料 → 選方案 → 付款 → 自動開通<br>
+                                    • 開通後自動發送歡迎信與新手引導<br>
+                                    • 支援 14 天免費試用，到期前提醒付款
+                                </div>
+                                <span class="tech-tag">Onboarding Flow</span>
+                                <span class="tech-tag">Email Automation</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Module 1: 產品管理 -->
+                <div class="accordion">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <h4><span class="badge">01</span> 產品管理模組</h4>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-inner">
+                            <div class="feature-item">
+                                <h5>🔍 產品採集 (API Product Import)</h5>
+                                <p>透過電商平台官方 API 抓取商品資訊，安全合規地快速建立商品資料庫（如果串接平台有提供相關 API）。</p>
+                                <div class="saas-note">
+                                    <strong>SaaS 實作建議：</strong><br>
+                                    • 整合各電商平台官方 API（淘寶開放平台、1688 API、蝦皮 Open API 等）<br>
+                                    • 每位客戶需自行申請並填入各平台的 API Key / App Secret<br>
+                                    • 採集任務放入 Queue 非同步執行，避免阻塞<br>
+                                    • 按租戶方案限制每日採集次數<br>
+                                    • 圖片下載後上傳至租戶專屬 S3 資料夾
+                                </div>
+                                <div class="warning-note" style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 12px; margin: 10px 0; border-radius: 4px;">
+                                    <strong>⚠️ 重要說明：</strong><br>
+                                    • API Key 由客戶自行申請，系統僅提供設定介面<br>
+                                    • <strong>API 呼叫費用由廠商（客戶）自行吸收</strong>，非本報價包含範圍
+                                </div>
+                                <ul class="sub-features">
+                                    <li>平台 API 授權設定介面（OAuth 2.0）</li>
+                                    <li>API Key / Secret 加密儲存</li>
+                                    <li>商品資訊批量同步</li>
+                                    <li>圖片批量下載與壓縮</li>
+                                    <li>支援淘寶、1688、蝦皮等平台 API</li>
+                                    <li>採集歷史記錄與錯誤日誌</li>
+                                </ul>
+                                <span class="tech-tag">Platform API</span>
+                                <span class="tech-tag">OAuth 2.0</span>
+                                <span class="tech-tag">Queue Job</span>
+                                <span class="tech-tag">S3 Storage</span>
+                                <span class="tech-tag">Encryption</span>
+                            </div>
+
+                            <div class="feature-item">
+                                <h5>🚚 產品搬家 (Cross-Platform Migration)</h5>
+                                <p>將商品從 A 平台一鍵複製到 B 平台，自動處理欄位映射與格式轉換（如果串接平台有提供相關 API）。</p>
+                                <div class="saas-note">
+                                    <strong>SaaS 實作建議：</strong><br>
+                                    • 設計統一的商品中間格式 (Canonical Format)<br>
+                                    • 各平台 Adapter 負責格式轉換<br>
+                                    • 搬家前預覽差異，確認後批量執行<br>
+                                    • 記錄搬家日誌，失敗可重試
+                                </div>
+                                <span class="tech-tag">Adapter Pattern</span>
+                                <span class="tech-tag">Batch Processing</span>
+                            </div>
+
+                            <div class="feature-item">
+                                <h5>🖼️ 圖片空間管理</h5>
+                                <p>統一管理所有商品圖片，支援分類、裁剪、壓縮、CDN 加速。</p>
+                                <div class="saas-note">
+                                    <strong>SaaS 實作建議：</strong><br>
+                                    • 每個租戶獨立的 S3 Prefix（如 tenant-123/images/）<br>
+                                    • 按方案限制儲存空間（基礎版 5GB、專業版 50GB）<br>
+                                    • 使用 CloudFront/Cloudflare CDN 加速<br>
+                                    • 圖片上傳時自動壓縮與生成縮圖
+                                </div>
+                                <span class="tech-tag">AWS S3</span>
+                                <span class="tech-tag">CloudFront CDN</span>
+                                <span class="tech-tag">Image Optimization</span>
+                            </div>
+
+                            <div class="feature-item">
+                                <h5>🔗 多平台信息聯動</h5>
+                                <p>修改主商品資訊後，自動同步更新到所有已上架的平台（如果串接平台有提供相關 API）。</p>
+                                <div class="saas-note">
+                                    <strong>SaaS 實作建議：</strong><br>
+                                    • 設計「主商品」與「平台商品」的關聯結構<br>
+                                    • 可設定聯動規則（價格聯動、庫存聯動、標題聯動）<br>
+                                    • 同步任務使用 Queue，記錄同步結果<br>
+                                    • 同步失敗時通知用戶並可手動重試
+                                </div>
+                                <span class="tech-tag">Event Driven</span>
+                                <span class="tech-tag">Queue</span>
+                                <span class="tech-tag">Webhook</span>
+                            </div>
+
+                            <div class="feature-item">
+                                <h5>📦 多平台商品管理</h5>
+                                <p>會根據要串接的平台提供商品上下架跟編輯功能。</p>
+                                <div class="saas-note">
+                                    <strong>SaaS 實作建議：</strong><br>
+                                    • 每個租戶獨立授權自己的店鋪<br>
+                                    • 店鋪授權 Token 加密儲存<br>
+                                    • 統一的商品列表頁，可篩選平台/店鋪<br>
+                                    • 批量操作（批量上架、批量改價、批量下架）
+                                </div>
+                                <ul class="sub-features">
+                                    <li>Shopee 店鋪管理</li>
+                                    <li>Shopify 店鋪管理</li>
+                                    <li>1688 選品採購</li>
+                                    <li>酷澎 Coupang 管理</li>
+                                    <li>momo mo+ 管理</li>
+                                    <li>Amego 電子發票</li>
+                                    <li>批量編輯與上下架</li>
+                                    <li>商品狀態監控</li>
+                                </ul>
+                                <span class="tech-tag">OAuth 2.0</span>
+                                <span class="tech-tag">Token 加密</span>
+                                <span class="tech-tag">Batch Operation</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Module 2: 訂單管理 -->
+                <div class="accordion">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <h4><span class="badge">02</span> 訂單管理模組</h4>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-inner">
+                            <div class="feature-item">
+                                <h5>📋 多平台訂單聚合</h5>
+                                <p>將所有平台的訂單統一拉取到系統中，提供一站式訂單管理（如果串接平台有提供相關 API）。</p>
+                                <div class="saas-note">
+                                    <strong>SaaS 實作建議：</strong><br>
+                                    • 定時任務每 5-15 分鐘同步各平台新訂單<br>
+                                    • 訂單資料標準化後存入本地資料庫<br>
+                                    • 使用 Webhook 接收平台即時推送（如有）<br>
+                                    • 訂單去重機制避免重複匯入
+                                </div>
+                                <ul class="sub-features">
+                                    <li>訂單列表與進階篩選</li>
+                                    <li>訂單狀態即時同步</li>
+                                    <li>訂單詳情查看</li>
+                                    <li>訂單搜尋（訂單號/買家/商品）</li>
+                                    <li>訂單匯出 Excel</li>
+                                    <li>異常訂單標記</li>
+                                </ul>
+                                <span class="tech-tag">Scheduled Job</span>
+                                <span class="tech-tag">Webhook</span>
+                                <span class="tech-tag">Data Normalization</span>
+                            </div>
+
+                            <div class="feature-item">
+                                <h5>📦 批量發貨與面單打印</h5>
+                                <p>一次選取多筆訂單，批量安排物流、打印面單，大幅提升出貨效率（如果串接平台有提供相關 API）。</p>
+                                <div class="saas-note">
+                                    <strong>SaaS 實作建議：</strong><br>
+                                    • 整合各平台的出貨 API（取號、打印面單）<br>
+                                    • 支援自訂面單模板（使用 HTML 模板引擎）<br>
+                                    • 批量打印使用 PDF 合併，一次下載<br>
+                                    • 打印記錄追蹤，避免重複打印
+                                </div>
+                                <span class="tech-tag">PDF Generation</span>
+                                <span class="tech-tag">Template Engine</span>
+                                <span class="tech-tag">Batch API Call</span>
+                            </div>
+
+                            <div class="feature-item">
+                                <h5>🔄 售後退款退貨管理</h5>
+                                <p>處理買家的退款、退貨申請，追蹤售後進度，退貨商品入庫（如果串接平台有提供相關 API）。</p>
+                                <div class="saas-note">
+                                    <strong>SaaS 實作建議：</strong><br>
+                                    • 同步平台售後單到系統<br>
+                                    • 設計售後工作流（申請→審核→退款/退貨→完成）<br>
+                                    • 退貨入庫與庫存系統連動<br>
+                                    • 售後原因分析報表
+                                </div>
+                                <span class="tech-tag">Workflow Engine</span>
+                                <span class="tech-tag">Status Machine</span>
+                            </div>
+
+                            <div class="feature-item">
+                                <h5>🚛 物流追蹤</h5>
+                                <p>追蹤所有已出貨包裹的物流狀態，異常包裹自動標記提醒（如果串接平台有提供相關 API）。</p>
+                                <div class="saas-note">
+                                    <strong>SaaS 實作建議：</strong><br>
+                                    • 整合快遞 100 或 17Track 等物流查詢 API<br>
+                                    • 定時批量查詢更新物流狀態<br>
+                                    • 異常狀態（退件、滯留）自動告警<br>
+                                    • 物流時效統計報表
+                                </div>
+                                <span class="tech-tag">快遞100 API</span>
+                                <span class="tech-tag">17Track API</span>
+                                <span class="tech-tag">Alert System</span>
+                            </div>
+
+                            <div class="feature-item">
+                                <h5>⚙️ 訂單自動化工具</h5>
+                                <p>自動標記、自動分倉、自動匹配物流、贈品規則等自動化功能。</p>
+                                <div class="saas-note">
+                                    <strong>SaaS 實作建議：</strong><br>
+                                    • 設計規則引擎，用戶可自訂條件與動作<br>
+                                    • 條件：訂單金額、商品、地區、店鋪等<br>
+                                    • 動作：標記、分倉、選物流、加贈品等<br>
+                                    • 規則執行日誌追蹤
+                                </div>
+                                <ul class="sub-features">
+                                    <li>訂單自動標記規則</li>
+                                    <li>自動分倉規則</li>
+                                    <li>物流自動匹配</li>
+                                    <li>贈品自動添加</li>
+                                    <li>自定義面單模板</li>
+                                    <li>打印日誌記錄</li>
+                                </ul>
+                                <span class="tech-tag">Rule Engine</span>
+                                <span class="tech-tag">Condition Builder</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Module 3: 庫存 & WMS 管理 -->
+                <div class="accordion">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <h4><span class="badge">03</span> 庫存 & WMS 管理模組</h4>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-inner">
+                            <div class="feature-item">
+                                <h5>📥 出入庫管理</h5>
+                                <p>記錄所有庫存的進出，包含採購入庫、銷售出庫、退貨入庫、手動調整等。</p>
+                                <div class="saas-note">
+                                    <strong>SaaS 實作建議：</strong><br>
+                                    • 設計 inventory_transactions 記錄每筆異動<br>
+                                    • 每筆異動關聯來源單據（採購單/訂單/調整單）<br>
+                                    • 庫存變動採用事件驅動，觸發聯動更新<br>
+                                    • 支援批次號管理（選配，用於效期管理）
+                                </div>
+                                <ul class="sub-features">
+                                    <li>手動入庫作業</li>
+                                    <li>手動出庫作業</li>
+                                    <li>採購收貨入庫</li>
+                                    <li>退貨入庫</li>
+                                    <li>庫存異動記錄</li>
+                                    <li>貨位異動記錄</li>
+                                </ul>
+                                <span class="tech-tag">Event Sourcing</span>
+                                <span class="tech-tag">Transaction Log</span>
+                            </div>
+
+                            <div class="feature-item">
+                                <h5>🏷️ SKU 管理</h5>
+                                <p>管理所有商品的 SKU 資料，包含基本資訊、成本、供應商關聯等。</p>
+                                <div class="saas-note">
+                                    <strong>SaaS 實作建議：</strong><br>
+                                    • SKU 為庫存管理的最小單位<br>
+                                    • 支援 SKU 與多平台商品的映射關係<br>
+                                    • SKU 分類管理，支援多層級<br>
+                                    • 批量匯入匯出（Excel 模板）
+                                </div>
+                                <span class="tech-tag">SKU Mapping</span>
+                                <span class="tech-tag">Excel Import</span>
+                            </div>
+
+                            <div class="feature-item">
+                                <h5>🔄 庫存聯動與推送</h5>
+                                <p>本地庫存變動時，自動推送更新到各電商平台，確保庫存同步（如果串接平台有提供相關 API）。</p>
+                                <div class="saas-note">
+                                    <strong>SaaS 實作建議：</strong><br>
+                                    • 設計推送規則（推送比例、安全庫存、指定平台）<br>
+                                    • 庫存變動事件觸發推送任務<br>
+                                    • 推送失敗自動重試，記錄推送日誌<br>
+                                    • 活動期間可預留庫存不推送
+                                </div>
+                                <span class="tech-tag">Event Trigger</span>
+                                <span class="tech-tag">Retry Mechanism</span>
+                                <span class="tech-tag">Stock Reservation</span>
+                            </div>
+
+                            <div class="feature-item">
+                                <h5>🏭 多倉庫管理</h5>
+                                <p>支援多個倉庫，每個倉庫獨立庫存，支援倉庫間調撥。</p>
+                                <div class="saas-note">
+                                    <strong>SaaS 實作建議：</strong><br>
+                                    • 倉庫資料表存放倉庫基本資訊<br>
+                                    • 庫存表以 SKU + 倉庫 為唯一鍵<br>
+                                    • 調撥單管理倉庫間移動<br>
+                                    • 按方案限制可建立的倉庫數量
+                                </div>
+                                <ul class="sub-features">
+                                    <li>倉庫基本資料設定</li>
+                                    <li>庫區劃分管理</li>
+                                    <li>貨架貨位管理</li>
+                                    <li>倉庫間調撥</li>
+                                    <li>倉內移貨</li>
+                                    <li>庫存分佈查詢</li>
+                                </ul>
+                                <span class="tech-tag">Multi-Warehouse</span>
+                                <span class="tech-tag">Transfer Order</span>
+                            </div>
+
+                            <div class="feature-item">
+                                <h5>📊 庫存盤點</h5>
+                                <p>定期盤點庫存，比對系統數量與實際數量，處理盤盈盤虧。</p>
+                                <div class="saas-note">
+                                    <strong>SaaS 實作建議：</strong><br>
+                                    • 盤點單凍結盤點期間的庫存異動<br>
+                                    • 支援全盤、抽盤、動態盤點模式<br>
+                                    • 差異報告審核後自動調整庫存<br>
+                                    • 盤點 App（選配）支援 PDA 掃碼盤點
+                                </div>
+                                <span class="tech-tag">Inventory Freeze</span>
+                                <span class="tech-tag">Variance Report</span>
+                            </div>
+
+                            <div class="feature-item">
+                                <h5>🔔 補貨預警</h5>
+                                <p>庫存低於安全水位時自動預警，並生成補貨建議。</p>
+                                <div class="saas-note">
+                                    <strong>SaaS 實作建議：</strong><br>
+                                    • 每個 SKU 設定安全庫存量<br>
+                                    • 定時任務檢查庫存水位<br>
+                                    • 低於安全庫存時發送通知（站內信/Email/APP）<br>
+                                    • 一鍵生成採購建議單
+                                </div>
+                                <span class="tech-tag">Alert Threshold</span>
+                                <span class="tech-tag">Notification</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Module 4: 採購管理 -->
+                <div class="accordion">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <h4><span class="badge">04</span> 採購管理模組</h4>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-inner">
+                            <div class="feature-item">
+                                <h5>📈 智能採購建議</h5>
+                                <p>根據銷量、庫存、交期自動計算建議採購數量，減少缺貨與庫存積壓。</p>
+                                <div class="saas-note">
+                                    <strong>SaaS 實作建議：</strong><br>
+                                    • 計算公式：建議量 = 預計銷量 × 備貨天數 + 安全庫存 - 現有庫存 - 在途庫存<br>
+                                    • 預計銷量可採用近 7/14/30 天平均日銷<br>
+                                    • 考慮供應商交期因素<br>
+                                    • 支援手動調整建議數量後一鍵生成採購單
+                                </div>
+                                <span class="tech-tag">Demand Forecasting</span>
+                                <span class="tech-tag">Auto Calculation</span>
+                            </div>
+
+                            <div class="feature-item">
+                                <h5>📝 採購單管理</h5>
+                                <p>完整的採購單生命週期管理，從建立、審核、發送到收貨。</p>
+                                <div class="saas-note">
+                                    <strong>SaaS 實作建議：</strong><br>
+                                    • 採購單狀態機：草稿 → 待發貨 → 在途 → 部分收貨 → 已完成<br>
+                                    • 支援採購單審核流程（選配）<br>
+                                    • 收貨時逐筆或批量確認數量<br>
+                                    • 採購成本自動更新 SKU 成本價
+                                </div>
+                                <ul class="sub-features">
+                                    <li>採購單新增/編輯</li>
+                                    <li>採購單審核（選配）</li>
+                                    <li>發送採購單給供應商</li>
+                                    <li>採購收貨作業</li>
+                                    <li>部分收貨處理</li>
+                                    <li>採購單對帳</li>
+                                </ul>
+                                <span class="tech-tag">State Machine</span>
+                                <span class="tech-tag">Approval Flow</span>
+                            </div>
+
+                            <div class="feature-item">
+                                <h5>🏢 供應商管理</h5>
+                                <p>管理供應商資料，包含聯絡資訊、結算方式、供應商品等。</p>
+                                <div class="saas-note">
+                                    <strong>SaaS 實作建議：</strong><br>
+                                    • 供應商基本資料（公司名、聯絡人、電話、地址）<br>
+                                    • 結算方式（現結、月結、帳期）<br>
+                                    • 供應商與 SKU 的關聯（貨源管理）<br>
+                                    • 供應商評價與歷史採購統計
+                                </div>
+                                <span class="tech-tag">Vendor Master</span>
+                                <span class="tech-tag">SKU-Vendor Mapping</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Module 5: 營銷管理 -->
+                <div class="accordion">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <h4><span class="badge">05</span> 營銷管理模組</h4>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-inner">
+                            <div class="feature-item">
+                                <h5>📊 廣告數據總覽</h5>
+                                <p>聚合各平台廣告數據，統一展示花費、曝光、點擊、轉化、ROI（如果串接平台有提供相關 API）。</p>
+                                <div class="saas-note">
+                                    <strong>SaaS 實作建議：</strong><br>
+                                    • 整合 Shopee Ads 等平台廣告 API<br>
+                                    • 每日定時同步廣告數據<br>
+                                    • 統一指標計算（ROAS、ACOS、CPC 等）<br>
+                                    • 趨勢圖表與對比分析
+                                </div>
+                                <span class="tech-tag">Ads API</span>
+                                <span class="tech-tag">Data Aggregation</span>
+                                <span class="tech-tag">Chart.js</span>
+                            </div>
+
+                            <div class="feature-item">
+                                <h5>🎯 促銷活動管理</h5>
+                                <p>設定商品折扣、滿額優惠、贈品活動等促銷規則。</p>
+                                <div class="saas-note">
+                                    <strong>SaaS 實作建議：</strong><br>
+                                    • 促銷類型：商品折扣、訂單滿減、買贈活動<br>
+                                    • 設定活動期間、適用商品/分類<br>
+                                    • 促銷與庫存預留聯動<br>
+                                    • 促銷效果報表分析
+                                </div>
+                                <ul class="sub-features">
+                                    <li>商品促銷（折扣/特價）</li>
+                                    <li>訂單促銷（滿減/滿折）</li>
+                                    <li>贈品活動</li>
+                                    <li>活動時間排程</li>
+                                </ul>
+                                <span class="tech-tag">Promotion Engine</span>
+                                <span class="tech-tag">Rule Builder</span>
+                            </div>
+
+                            <div class="feature-item">
+                                <h5>🖼️ 營銷水印工具</h5>
+                                <p>批量為商品圖片添加營銷水印（促銷標籤、價格標籤等）。</p>
+                                <div class="saas-note">
+                                    <strong>SaaS 實作建議：</strong><br>
+                                    • 水印模板設計器（拖拽式）<br>
+                                    • 支援文字、圖片、價格變數<br>
+                                    • 批量套用到選取的商品圖片<br>
+                                    • 使用 Canvas API 或 ImageMagick 合成
+                                </div>
+                                <span class="tech-tag">Canvas API</span>
+                                <span class="tech-tag">Image Processing</span>
+                            </div>
+
+                            <div class="feature-item">
+                                <h5>👥 客戶管理 (CRM Lite)</h5>
+                                <p>管理買家資料、購買記錄、客戶分級、黑名單等（如果串接平台有提供相關 API）。</p>
+                                <div class="saas-note">
+                                    <strong>SaaS 實作建議：</strong><br>
+                                    • 自動彙整各平台買家資料（去重合併）<br>
+                                    • 客戶標籤與分群<br>
+                                    • RFM 模型自動分級（Recency/Frequency/Monetary）<br>
+                                    • 黑名單買家自動攔截訂單
+                                </div>
+                                <ul class="sub-features">
+                                    <li>客戶列表與搜尋</li>
+                                    <li>客戶標籤管理</li>
+                                    <li>客戶等級與 RFM 分析</li>
+                                    <li>買家黑名單</li>
+                                    <li>分級價格設定</li>
+                                </ul>
+                                <span class="tech-tag">Customer Merge</span>
+                                <span class="tech-tag">RFM Model</span>
+                                <span class="tech-tag">Blacklist</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Module 6: 數據分析 -->
+                <div class="accordion">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <h4><span class="badge">06</span> 數據分析模組</h4>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-inner">
+                            <div class="feature-item">
+                                <h5>📺 數據儀表板</h5>
+                                <p>展示銷售額、訂單數、庫存等關鍵指標，適合大螢幕展示。</p>
+                                <div class="saas-note">
+                                    <strong>SaaS 實作建議：</strong><br>
+                                    • 採用定時排程更新（非即時推送）<br>
+                                    • 更新頻率依數據類型調整（如：每 5 分鐘 / 每小時 / 每日）<br>
+                                    • 關鍵指標快取在 Redis，減少資料庫負擔<br>
+                                    • 大屏專屬頁面，支援全螢幕模式<br>
+                                    • 可自訂顯示的指標卡片
+                                </div>
+                                <span class="tech-tag">Scheduled Job</span>
+                                <span class="tech-tag">Redis Cache</span>
+                                <span class="tech-tag">ECharts/Chart.js</span>
+                            </div>
+
+                            <div class="feature-item">
+                                <h5>📈 銷售分析報表</h5>
+                                <p>多維度銷售分析，包含店鋪、商品、時間、地區等維度。</p>
+                                <div class="saas-note">
+                                    <strong>SaaS 實作建議：</strong><br>
+                                    • 預計算每日銷售數據存入報表資料表<br>
+                                    • 支援同比、環比對比分析<br>
+                                    • 報表匯出 Excel/PDF<br>
+                                    • 大數據量報表使用非同步生成
+                                </div>
+                                <ul class="sub-features">
+                                    <li>店鋪銷售報表</li>
+                                    <li>商品銷售排行</li>
+                                    <li>訂單趨勢分析</li>
+                                    <li>銷售額/訂單數/客單價</li>
+                                    <li>同比/環比對比</li>
+                                    <li>報表匯出</li>
+                                </ul>
+                                <span class="tech-tag">Pre-Aggregation</span>
+                                <span class="tech-tag">Report Builder</span>
+                            </div>
+
+                            <div class="feature-item">
+                                <h5>💰 利潤分析報表</h5>
+                                <p>計算真實利潤，扣除商品成本、平台費用、物流費用、廣告費用。</p>
+                                <div class="saas-note">
+                                    <strong>SaaS 實作建議：</strong><br>
+                                    • 利潤 = 銷售額 - 成本 - 平台佣金 - 物流費 - 廣告費 - 其他費用<br>
+                                    • 平台佣金依各平台規則計算<br>
+                                    • 成本取自 SKU 成本價或採購均價<br>
+                                    • 支援毛利、淨利不同口徑分析
+                                </div>
+                                <span class="tech-tag">Cost Calculation</span>
+                                <span class="tech-tag">Profit Margin</span>
+                            </div>
+
+                            <div class="feature-item">
+                                <h5>📦 進銷存報表</h5>
+                                <p>統計進貨、銷售、庫存的金額與數量，計算庫存周轉率。</p>
+                                <div class="saas-note">
+                                    <strong>SaaS 實作建議：</strong><br>
+                                    • 期初庫存 + 進貨 - 銷售 - 其他出庫 = 期末庫存<br>
+                                    • 庫存周轉天數 = 平均庫存金額 / 日均銷售成本<br>
+                                    • 按商品、分類、倉庫維度分析<br>
+                                    • 滯銷品預警報表
+                                </div>
+                                <span class="tech-tag">Inventory Turnover</span>
+                                <span class="tech-tag">Aging Analysis</span>
+                            </div>
+
+                            <div class="feature-item">
+                                <h5>🏦 平台財務對賬</h5>
+                                <p>與電商平台的結算帳單核對，找出差異項目（如果串接平台有提供相關 API）。</p>
+                                <div class="saas-note">
+                                    <strong>SaaS 實作建議：</strong><br>
+                                    • 同步平台結算單據<br>
+                                    • 自動比對訂單金額、佣金、運費補貼等<br>
+                                    • 標記差異項目人工審核<br>
+                                    • 對帳報表匯出
+                                </div>
+                                <span class="tech-tag">Reconciliation</span>
+                                <span class="tech-tag">Settlement API</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Module 7: 系統基礎 -->
+                <div class="accordion">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <h4><span class="badge">07</span> 系統基礎模組</h4>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-inner">
+                            <div class="feature-item">
+                                <h5>👤 用戶與權限管理</h5>
+                                <p>管理租戶內的用戶帳號、角色、細粒度功能權限。</p>
+                                <div class="saas-note">
+                                    <strong>SaaS 實作建議：</strong><br>
+                                    • 每個租戶獨立的用戶體系<br>
+                                    • RBAC 權限模型（用戶-角色-權限）<br>
+                                    • 權限控制到功能按鈕層級<br>
+                                    • 按方案限制可建立的用戶數量
+                                </div>
+                                <ul class="sub-features">
+                                    <li>用戶帳號管理</li>
+                                    <li>角色定義與權限分配</li>
+                                    <li>功能權限控制</li>
+                                    <li>數據權限（店鋪/倉庫）</li>
+                                    <li>登入日誌</li>
+                                    <li>密碼安全策略</li>
+                                </ul>
+                                <span class="tech-tag">RBAC</span>
+                                <span class="tech-tag">Spatie Permission</span>
+                            </div>
+
+                            <div class="feature-item">
+                                <h5>📝 操作日誌審計</h5>
+                                <p>記錄用戶的所有關鍵操作，供事後查詢與審計。</p>
+                                <div class="saas-note">
+                                    <strong>SaaS 實作建議：</strong><br>
+                                    • 記錄：誰(who)、何時(when)、做了什麼(what)、變更前後(diff)<br>
+                                    • 使用 Laravel Auditing 套件<br>
+                                    • 日誌資料獨立存放，定期歸檔<br>
+                                    • 敏感操作即時告警
+                                </div>
+                                <span class="tech-tag">Activity Log</span>
+                                <span class="tech-tag">Audit Trail</span>
+                            </div>
+
+                            <div class="feature-item">
+                                <h5>🔔 通知中心</h5>
+                                <p>系統通知、預警提醒、公告推送等多渠道通知功能。</p>
+                                <div class="saas-note">
+                                    <strong>SaaS 實作建議：</strong><br>
+                                    • 通知渠道：站內信、Email、APP 推送（選配）<br>
+                                    • 用戶可設定接收偏好<br>
+                                    • 通知模板管理<br>
+                                    • 未讀通知角標提示
+                                </div>
+                                <span class="tech-tag">Laravel Notification</span>
+                                <span class="tech-tag">Multi-Channel</span>
+                            </div>
+
+                            <div class="feature-item">
+                                <h5>🌐 多語言支援</h5>
+                                <p>系統介面多語言切換，金額統一使用新台幣（TWD）。</p>
+                                <div class="saas-note">
+                                    <strong>SaaS 實作建議：</strong><br>
+                                    • 使用 i18n 國際化機制<br>
+                                    • 支援繁體中文、簡體中文、英文等語系<br>
+                                    • 語言包獨立管理，方便擴充<br>
+                                    • 用戶可自行切換偏好語言
+                                </div>
+                                <span class="tech-tag">i18n</span>
+                                <span class="tech-tag">TWD Only</span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Module 8: 發票管理 -->
+                <div class="accordion">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <h4><span class="badge">08</span> 發票管理模組</h4>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-inner">
+                            <div class="feature-item">
+                                <h5>🧾 代開發票服務</h5>
+                                <p>系統整合電子發票平台，可代客戶開立電子發票，支援 B2B、B2C 發票類型。</p>
+                                <div class="saas-note">
+                                    <strong>SaaS 實作建議：</strong><br>
+                                    • 整合財政部電子發票整合服務平台（MIG）<br>
+                                    • 支援 B2B（三聯式）與 B2C（二聯式）發票<br>
+                                    • 發票自動依訂單資訊產生<br>
+                                    • 租戶獨立的發票字軌管理
+                                </div>
+                                <ul class="sub-features">
+                                    <li>電子發票開立</li>
+                                    <li>發票作廢/折讓</li>
+                                    <li>發票補印</li>
+                                    <li>統一編號驗證</li>
+                                    <li>載具歸戶（手機條碼/自然人憑證）</li>
+                                    <li>愛心碼捐贈</li>
+                                </ul>
+                                <span class="tech-tag">E-Invoice API</span>
+                                <span class="tech-tag">MIG 整合</span>
+                            </div>
+
+                            <div class="feature-item">
+                                <h5>📋 發票字軌管理</h5>
+                                <p>管理發票字軌號碼的配發、使用與回報，確保發票號碼正確無誤。</p>
+                                <div class="saas-note">
+                                    <strong>SaaS 實作建議：</strong><br>
+                                    • 自動向財政部申請字軌<br>
+                                    • 字軌使用量監控與預警<br>
+                                    • 單雙月字軌自動切換<br>
+                                    • 跨租戶字軌隔離
+                                </div>
+                                <ul class="sub-features">
+                                    <li>字軌申請與下載</li>
+                                    <li>字軌配號管理</li>
+                                    <li>用量監控預警</li>
+                                    <li>作廢號碼回報</li>
+                                </ul>
+                                <span class="tech-tag">Invoice Track</span>
+                                <span class="tech-tag">Auto-Allocation</span>
+                            </div>
+
+                            <div class="feature-item">
+                                <h5>📊 發票報表與申報</h5>
+                                <p>產生發票相關報表，協助營業稅申報作業。</p>
+                                <div class="saas-note">
+                                    <strong>SaaS 實作建議：</strong><br>
+                                    • 自動產生媒體申報檔<br>
+                                    • 發票明細表、彙總表匯出<br>
+                                    • 依期別（單月/雙月）統計<br>
+                                    • 異常發票清單提醒
+                                </div>
+                                <ul class="sub-features">
+                                    <li>銷項發票明細表</li>
+                                    <li>發票彙總統計</li>
+                                    <li>媒體申報檔產出</li>
+                                    <li>發票異常檢核</li>
+                                </ul>
+                                <span class="tech-tag">Tax Report</span>
+                                <span class="tech-tag">Media File</span>
+                            </div>
+
+                            <div class="feature-item">
+                                <h5>🔗 第三方發票平台整合</h5>
+                                <p>支援整合主流電子發票加值中心，簡化發票開立流程。</p>
+                                <div class="saas-note">
+                                    <strong>SaaS 實作建議：</strong><br>
+                                    • 支援綠界、藍新等發票加值中心 API<br>
+                                    • 統一發票介面，後端可切換服務商<br>
+                                    • 發票開立狀態回調與同步<br>
+                                    • 租戶可選擇使用的發票服務商
+                                </div>
+                                <ul class="sub-features">
+                                    <li>綠界電子發票</li>
+                                    <li>藍新電子發票</li>
+                                    <li>ezPay 電子發票</li>
+                                    <li>發票狀態同步</li>
+                                </ul>
+                                <span class="tech-tag">ECPay</span>
+                                <span class="tech-tag">NewebPay</span>
+                                <span class="tech-tag">Webhook</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- 技術架構 -->
+            <div class="section">
+                <h2 class="section-title">五、技術架構（SaaS 版本）</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 25%;">項目</th>
+                            <th style="width: 35%;">技術方案</th>
+                            <th style="width: 40%;">SaaS 考量</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>前端框架</strong></td>
+                            <td>Vue.js 3 + Astro.build</td>
+                            <td>SPA 架構，支援多租戶 UI 客製化</td>
+                        </tr>
+                        <tr>
+                            <td><strong>後端框架</strong></td>
+                            <td>Laravel 11 (PHP 8.3+)</td>
+                            <td>使用 Tenancy Package 實現多租戶</td>
+                        </tr>
+                        <tr>
+                            <td><strong>資料庫</strong></td>
+                            <td>MariaDB + Redis</td>
+                            <td>單一資料庫 + tenant_id 隔離方案</td>
+                        </tr>
+                        <tr>
+                            <td><strong>消息隊列</strong></td>
+                            <td>Laravel Queue + Redis</td>
+                            <td>租戶任務隔離，避免互相影響</td>
+                        </tr>
+                        <tr>
+                            <td><strong>檔案儲存</strong></td>
+                            <td>AWS S3</td>
+                            <td>按租戶 Prefix 隔離檔案</td>
+                        </tr>
+                        <tr>
+                            <td><strong>訂閱計費</strong></td>
+                            <td>Laravel Cashier + 綠界/藍新</td>
+                            <td>支援信用卡、超商、ATM 付款</td>
+                        </tr>
+                        <tr>
+                            <td><strong>部署環境</strong></td>
+                            <td>Docker + GCP VM / GCP GKE</td>
+                            <td>容器化部署，支援彈性擴展</td>
+                        </tr>
+                        <tr>
+                            <td><strong>監控告警</strong></td>
+                            <td>Prometheus + Grafana</td>
+                            <td>租戶級別的用量與效能監控</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 專案時程 -->
+            <div class="section">
+                <h2 class="section-title">六、專案時程規劃</h2>
+
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <h4>Phase 1：需求分析與系統設計</h4>
+                        <p>需求訪談、SaaS 架構設計、資料庫設計、UI/UX 設計稿、計費方案規劃</p>
+                        <p style="color: #667eea; margin-top: 5px;"><strong>預計週期：4 週</strong></p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4>Phase 2：SaaS 核心與基礎模組</h4>
+                        <p>多租戶架構、訂閱計費系統、用戶權限、平台管理後台</p>
+                        <p style="color: #667eea; margin-top: 5px;"><strong>預計週期：6 週</strong></p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4>Phase 3：核心業務模組開發</h4>
+                        <p>產品管理、訂單管理、庫存 & WMS 管理核心功能開發</p>
+                        <p style="color: #667eea; margin-top: 5px;"><strong>預計週期：8 週</strong></p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4>Phase 4：進階模組與平台對接</h4>
+                        <p>採購、營銷、數據分析模組，電商平台 API 串接</p>
+                        <p style="color: #667eea; margin-top: 5px;"><strong>預計週期：8 週</strong></p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4>Phase 5：測試與上線</h4>
+                        <p>系統整合測試、壓力測試、UAT 驗收、正式部署上線</p>
+                        <p style="color: #667eea; margin-top: 5px;"><strong>預計週期：4 週</strong></p>
+                    </div>
+                </div>
+
+                <p style="margin-top: 20px; text-align: center; font-size: 18px; color: #667eea;">
+                    <strong>總專案週期：約 30 週（7.5 個月）</strong>
+                </p>
+            </div>
+
+            <!-- 報價明細 -->
+            <div class="section">
+                <h2 class="section-title">七、報價明細</h2>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 40%;">項目</th>
+                            <th style="width: 20%;" class="text-center">數量</th>
+                            <th style="width: 20%;" class="text-right">單價</th>
+                            <th style="width: 20%;" class="text-right">金額</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="background: #fff3cd;">
+                            <td><strong>SaaS 平台核心模組</strong></td>
+                            <td class="text-center">1 式</td>
+                            <td class="text-right">-</td>
+                            <td class="text-right">$200,000</td>
+                        </tr>
+                        <tr>
+                            <td>產品管理模組開發</td>
+                            <td class="text-center">1 式</td>
+                            <td class="text-right">-</td>
+                            <td class="text-right">$150,000</td>
+                        </tr>
+                        <tr>
+                            <td>訂單管理模組開發</td>
+                            <td class="text-center">1 式</td>
+                            <td class="text-right">-</td>
+                            <td class="text-right">$150,000</td>
+                        </tr>
+                        <tr>
+                            <td>庫存 & WMS 管理模組開發</td>
+                            <td class="text-center">1 式</td>
+                            <td class="text-right">-</td>
+                            <td class="text-right">$130,000</td>
+                        </tr>
+                        <tr>
+                            <td>採購管理模組開發</td>
+                            <td class="text-center">1 式</td>
+                            <td class="text-right">-</td>
+                            <td class="text-right">$70,000</td>
+                        </tr>
+                        <tr>
+                            <td>營銷管理模組開發</td>
+                            <td class="text-center">1 式</td>
+                            <td class="text-right">-</td>
+                            <td class="text-right">$80,000</td>
+                        </tr>
+                        <tr>
+                            <td>數據分析與報表模組</td>
+                            <td class="text-center">1 式</td>
+                            <td class="text-right">-</td>
+                            <td class="text-right">$100,000</td>
+                        </tr>
+                        <tr>
+                            <td>系統基礎模組（權限、日誌、配置）</td>
+                            <td class="text-center">1 式</td>
+                            <td class="text-right">-</td>
+                            <td class="text-right">$70,000</td>
+                        </tr>
+                        <tr>
+                            <td>電商平台 API 對接（含 5 個平台）</td>
+                            <td class="text-center">5 式</td>
+                            <td class="text-right">-</td>
+                            <td class="text-right">$200,000</td>
+                        </tr>
+                        <tr>
+                            <td>物流商 API 對接</td>
+                            <td class="text-center">1 式</td>
+                            <td class="text-right">-</td>
+                            <td class="text-right">$50,000</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr style="background: #f8f9fa;">
+                            <td colspan="3" class="text-right"><strong>小計</strong></td>
+                            <td class="text-right"><strong>$1,400,000</strong></td>
+                        </tr>
+                    </tfoot>
+                </table>
+
+                <!-- Price Highlight -->
+                <div class="price-highlight">
+                    <h2>費用總計</h2>
+                    <div class="price-row">
+                        <span>開發費用小計</span>
+                        <span>NT$ 1,400,000</span>
+                    </div>
+                    <div class="price-row">
+                        <span>營業稅 5%（外加）</span>
+                        <span>NT$ 70,000</span>
+                    </div>
+                    <div class="price-row total">
+                        <span>總計（含稅）</span>
+                        <span>NT$ 1,470,000</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 付款方式 -->
+            <div class="section">
+                <h2 class="section-title">八、付款方式（分五期）</h2>
+
+                <div class="payment-schedule">
+                    <div class="payment-item">
+                        <div class="payment-phase">
+                            <span class="num">1</span>
+                            <span class="label">第一期</span>
+                        </div>
+                        <div class="payment-detail">
+                            <h4>簽約訂金</h4>
+                            <p>簽約後 5 個工作日內支付，確認收款後正式啟動專案</p>
+                        </div>
+                        <div class="payment-amount">
+                            <div class="amount">NT$ 294,000</div>
+                            <div class="percent">20%</div>
+                        </div>
+                    </div>
+
+                    <div class="payment-item">
+                        <div class="payment-phase">
+                            <span class="num">2</span>
+                            <span class="label">第二期</span>
+                        </div>
+                        <div class="payment-detail">
+                            <h4>系統設計與 SaaS 核心完成</h4>
+                            <p>完成需求分析、系統架構設計、多租戶架構、訂閱計費系統後支付</p>
+                        </div>
+                        <div class="payment-amount">
+                            <div class="amount">NT$ 294,000</div>
+                            <div class="percent">20%</div>
+                        </div>
+                    </div>
+
+                    <div class="payment-item">
+                        <div class="payment-phase">
+                            <span class="num">3</span>
+                            <span class="label">第三期</span>
+                        </div>
+                        <div class="payment-detail">
+                            <h4>核心業務模組交付</h4>
+                            <p>完成產品、訂單、庫存核心模組開發並部署測試站後支付</p>
+                        </div>
+                        <div class="payment-amount">
+                            <div class="amount">NT$ 294,000</div>
+                            <div class="percent">20%</div>
+                        </div>
+                    </div>
+
+                    <div class="payment-item">
+                        <div class="payment-phase">
+                            <span class="num">4</span>
+                            <span class="label">第四期</span>
+                        </div>
+                        <div class="payment-detail">
+                            <h4>全模組與 API 對接完成</h4>
+                            <p>完成所有功能模組開發與電商平台 API 串接後支付</p>
+                        </div>
+                        <div class="payment-amount">
+                            <div class="amount">NT$ 294,000</div>
+                            <div class="percent">20%</div>
+                        </div>
+                    </div>
+
+                    <div class="payment-item">
+                        <div class="payment-phase">
+                            <span class="num">5</span>
+                            <span class="label">第五期</span>
+                        </div>
+                        <div class="payment-detail">
+                            <h4>驗收上線尾款</h4>
+                            <p>UAT 驗收通過、正式上線、教育訓練完成後支付</p>
+                        </div>
+                        <div class="payment-amount">
+                            <div class="amount">NT$ 294,000</div>
+                            <div class="percent">20%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>期數</th>
+                            <th>付款時機</th>
+                            <th class="text-center">比例</th>
+                            <th class="text-right">金額（含稅）</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>第一期（訂金）</td>
+                            <td>簽約後 5 個工作日內</td>
+                            <td class="text-center">20%</td>
+                            <td class="text-right">NT$ 294,000</td>
+                        </tr>
+                        <tr>
+                            <td>第二期</td>
+                            <td>系統設計與 SaaS 核心完成</td>
+                            <td class="text-center">20%</td>
+                            <td class="text-right">NT$ 294,000</td>
+                        </tr>
+                        <tr>
+                            <td>第三期</td>
+                            <td>核心業務模組交付</td>
+                            <td class="text-center">20%</td>
+                            <td class="text-right">NT$ 294,000</td>
+                        </tr>
+                        <tr>
+                            <td>第四期</td>
+                            <td>全模組與 API 對接完成</td>
+                            <td class="text-center">20%</td>
+                            <td class="text-right">NT$ 294,000</td>
+                        </tr>
+                        <tr>
+                            <td>第五期（尾款）</td>
+                            <td>驗收上線完成</td>
+                            <td class="text-center">20%</td>
+                            <td class="text-right">NT$ 294,000</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr style="background: #f0f0ff; font-weight: bold;">
+                            <td colspan="2">總計</td>
+                            <td class="text-center">100%</td>
+                            <td class="text-right">NT$ 1,470,000</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <!-- 匯款資訊 -->
+            <div class="section">
+                <h2 class="section-title">九、匯款資訊</h2>
+
+                <div class="bank-info">
+                    <h4>銀行匯款資訊</h4>
+                    <p><strong>公司名稱：</strong>渙潮科技有限公司</p>
+                    <p><strong>匯款銀行：</strong>台北富邦銀行 - 中港分行</p>
+                    <p><strong>銀行代碼：</strong>012</p>
+                    <p><strong>匯款帳號：</strong>8212-0000-678958</p>
+                    <p style="margin-top: 15px; color: #856404;">
+                        <strong>⚠️ 匯款後請告知帳號末五碼及匯款公司名稱</strong>
+                    </p>
+                </div>
+            </div>
+
+            <!-- 合作條款 -->
+            <div class="section">
+                <h2 class="section-title">十、合作條款</h2>
+
+                <h4 style="margin-bottom: 15px; color: #667eea;">10.1 保固與維護</h4>
+                <ul style="margin-left: 20px; margin-bottom: 20px;">
+                    <li style="margin-bottom: 8px;">正式上線後提供 <strong>6 個月</strong> 免費保固期</li>
+                    <li style="margin-bottom: 8px;">保固期間提供程式 Bug 修復服務（不含需求變更）</li>
+                    <li style="margin-bottom: 8px;">保固期後可選擇簽訂年度維護合約</li>
+                </ul>
+
+                <h4 style="margin-bottom: 15px; color: #667eea;">10.2 驗收標準</h4>
+                <ul style="margin-left: 20px; margin-bottom: 20px;">
+                    <li style="margin-bottom: 8px;"><strong>功能驗收：</strong>所有功能模組依規格正常運作</li>
+                    <li style="margin-bottom: 8px;"><strong>效能驗收：</strong>系統響應時間符合預期標準</li>
+                    <li style="margin-bottom: 8px;"><strong>安全驗收：</strong>通過基本安全測試，無重大漏洞</li>
+                    <li style="margin-bottom: 8px;"><strong>多租戶驗收：</strong>資料隔離正確，無跨租戶資料洩漏</li>
+                </ul>
+
+                <h4 style="margin-bottom: 15px; color: #667eea;">10.3 排除條款（實報實銷）</h4>
+                <ul style="margin-left: 20px; margin-bottom: 20px;">
+                    <li style="margin-bottom: 8px;">網域 (Domain) 購買與續約費用</li>
+                    <li style="margin-bottom: 8px;">雲端主機月租費（預估 NT$ 5,000-15,000/月，依用量）</li>
+                    <li style="margin-bottom: 8px;">第三方服務 API 費用（如簡訊、金流手續費）</li>
+                    <li style="margin-bottom: 8px;">電商平台 API 申請相關費用（如有）</li>
+                    <li style="margin-bottom: 8px;"><strong>產品採集 API 呼叫費用</strong>（各電商平台 API 費用由客戶自行吸收，如淘寶開放平台、1688 API、蝦皮 Open API 等按官方計費標準收取）</li>
+                    <li style="margin-bottom: 8px;">專業圖庫、字型授權費用</li>
+                </ul>
+
+                <h4 style="margin-bottom: 15px; color: #667eea;">10.4 智慧財產權</h4>
+                <ul style="margin-left: 20px;">
+                    <li style="margin-bottom: 8px;">專案完成並全額付款後，系統原始碼著作權歸甲方所有</li>
+                    <li style="margin-bottom: 8px;">乙方保留使用通用元件與框架於其他專案之權利</li>
+                </ul>
+            </div>
+
+            <!-- 簽約專區 -->
+            <div class="section signature-section">
+                <h2 class="section-title">十一、簽約確認</h2>
+
+                <p style="margin-bottom: 20px;">
+                    本報價單經雙方確認無誤後，即視為正式合約。甲方（客戶）確認已詳閱並同意本報價單之所有條款，乙方（廠商）承諾依據本報價單所載內容執行專案開發。如有未盡事宜，雙方得另行協議並以書面補充之。
+                </p>
+
+                <div class="signature-grid">
+                    <div class="signature-box">
+                        <h4>甲方（客戶）</h4>
+                        <p><strong>公司名稱：</strong>台米大數據有限公司 TAIMI BIGDATA CO., LTD.</p>
+                        <p><strong>統一編號：</strong>83207409</p>
+                        <p><strong>代表人：</strong>曾煥余</p>
+                        <div class="signature-line"></div>
+                        <p>簽章</p>
+                        <p style="margin-top: 20px;"><strong>簽約日期：</strong>_____年_____月_____日</p>
+                    </div>
+
+                    <div class="signature-box">
+                        <h4>乙方（廠商）</h4>
+                        <p><strong>公司名稱：</strong>渙潮科技有限公司</p>
+                        <p><strong>統一編號：</strong>60634762</p>
+                        <p><strong>代表人：</strong>蔡美麗</p>
+                        <div class="signature-line"></div>
+                        <p>簽章</p>
+                        <p style="margin-top: 20px;"><strong>簽約日期：</strong>_____年_____月_____日</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p><strong>渙潮科技有限公司 Waves Technology Co., Ltd.</strong></p>
+            <p>SA 架構師：陳立昇 | 電話：0982-885-485 | Email：tasb00429@gmail.com</p>
+            <p style="margin-top: 10px; opacity: 0.7;">本報價單有效期限為報價日起 30 日內</p>
+        </div>
+    </div>
+
+    <script>
+        function toggleAccordion(header) {
+            const accordion = header.parentElement;
+            accordion.classList.toggle('active');
+        }
+
+        // 預設展開第一個
+        document.addEventListener('DOMContentLoaded', function() {
+            // 可以選擇是否預設展開第一個
+            // document.querySelector('.accordion').classList.add('active');
+        });
+    </script>
+</body>
+</html>

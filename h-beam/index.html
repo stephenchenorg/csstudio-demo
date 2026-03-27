@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>H型鋼排料系統 — SteelCut Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f4f5f7;
+    --surface: #ffffff;
+    --surface2: #f8f9fa;
+    --border: #dde1e7;
+    --border2: #c8cdd6;
+    --accent: #1a56db;
+    --accent-light: #e8f0fe;
+    --accent2: #d44000;
+    --green: #0e7c42;
+    --green-light: #e6f4ec;
+    --yellow: #92610a;
+    --yellow-light: #fef3cd;
+    --red: #b91c1c;
+    --text: #111827;
+    --text2: #4b5563;
+    --text3: #9ca3af;
+    --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.05);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+    --mono: 'Share Tech Mono', monospace;
+    --sans: 'Noto Sans TC', sans-serif;
+    --display: 'Barlow Condensed', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    font-size: 14px;
+  }
+
+  .app { max-width: 1520px; margin: 0 auto; padding: 24px; }
+
+  /* HEADER */
+  .header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 14px 24px;
+    box-shadow: var(--shadow);
+  }
+
+  .logo { display: flex; align-items: center; gap: 14px; }
+
+  .logo-mark {
+    width: 42px; height: 42px;
+    background: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--display); font-weight: 900; font-size: 24px;
+    color: white; letter-spacing: -2px;
+  }
+
+  .logo-text h1 {
+    font-family: var(--display); font-weight: 900; font-size: 22px;
+    color: var(--text); line-height: 1; letter-spacing: 0.5px;
+  }
+  .logo-text p { font-size: 11px; color: var(--text3); letter-spacing: 1px; margin-top: 2px; }
+
+  .header-right { display: flex; gap: 8px; align-items: center; }
+
+  /* LAYOUT */
+  .main-grid {
+    display: grid;
+    grid-template-columns: 480px 1fr;
+    gap: 18px; align-items: start;
+  }
+  @media (max-width: 1100px) { .main-grid { grid-template-columns: 1fr; } }
+
+  /* PANELS */
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    margin-bottom: 16px; overflow: hidden;
+  }
+  .panel:last-child { margin-bottom: 0; }
+
+  .panel-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 11px 18px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface2);
+  }
+
+  .panel-title {
+    font-family: var(--display); font-weight: 700; font-size: 13px;
+    letter-spacing: 1px; color: var(--text);
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .dot { width: 8px; height: 8px; background: var(--accent); border-radius: 1px; transform: rotate(45deg); flex-shrink: 0; }
+  .dot.green { background: var(--green); }
+
+  .panel-body { padding: 16px 18px; }
+
+  /* FORM ROWS */
+  .form-row { display: flex; gap: 10px; margin-bottom: 10px; align-items: end; flex-wrap: wrap; }
+  .form-group { display: flex; flex-direction: column; gap: 4px; }
+  .form-group label { font-size: 10px; font-weight: 600; color: var(--text3); letter-spacing: 0.5px; }
+  .form-group input, .form-group select {
+    background: var(--surface); border: 1px solid var(--border2);
+    color: var(--text); font-family: var(--mono); font-size: 13px;
+    padding: 7px 10px; outline: none; transition: all 0.15s;
+  }
+  .form-group input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(26,86,219,0.1); }
+
+  /* STOCK TAGS */
+  .stock-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+  .stock-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 10px; border: 1px solid var(--accent);
+    background: var(--accent-light); border-radius: 2px;
+    font-family: var(--mono); font-size: 12px; color: var(--accent); font-weight: 700;
+  }
+  .stock-tag-del {
+    background: none; border: none; cursor: pointer;
+    color: var(--accent); font-size: 14px; line-height: 1;
+    padding: 0 2px; opacity: 0.6; transition: opacity 0.15s;
+  }
+  .stock-tag-del:hover { opacity: 1; }
+  .stock-add-row {
+    display: flex; gap: 6px; align-items: center; margin-bottom: 10px;
+  }
+  .stock-add-row input {
+    background: var(--surface); border: 1px solid var(--border2);
+    color: var(--text); font-family: var(--mono); font-size: 12px;
+    padding: 5px 10px; width: 160px; outline: none; transition: all 0.15s;
+  }
+  .stock-add-row input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(26,86,219,0.1); }
+
+  .kerf-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 12px;
+    background: var(--surface2); border: 1px solid var(--border);
+  }
+  .kerf-row label { font-size: 12px; color: var(--text2); flex: 1; }
+  .kerf-row input {
+    background: var(--surface); border: 1px solid var(--border2);
+    color: var(--text); font-family: var(--mono); font-size: 13px;
+    padding: 5px 8px; width: 60px; outline: none; text-align: center;
+  }
+  .kerf-unit { font-size: 11px; color: var(--text3); font-family: var(--mono); }
+
+  /* SPEC GROUP */
+  .spec-group {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    margin-bottom: 12px;
+  }
+  .spec-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 16px;
+    background: var(--accent-light);
+    border-bottom: 1px solid var(--border);
+  }
+  .spec-header-title {
+    font-family: var(--display); font-weight: 700; font-size: 13px;
+    letter-spacing: 1px; color: var(--accent);
+  }
+  .spec-body { padding: 14px 16px; }
+
+  /* PARTS TABLE */
+  table { width: 100%; border-collapse: collapse; }
+
+  thead th {
+    font-size: 9px; font-weight: 600; letter-spacing: 1px;
+    color: var(--text3); text-transform: uppercase;
+    padding: 7px 6px; text-align: left;
+    border-bottom: 2px solid var(--border);
+    background: var(--surface2); white-space: nowrap;
+  }
+
+  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: #fafbff; }
+
+  tbody td { padding: 3px 3px; vertical-align: middle; }
+
+  tbody td input[type="text"],
+  tbody td input[type="number"] {
+    background: transparent; border: 1px solid transparent;
+    color: var(--text); font-family: var(--mono); font-size: 12px;
+    padding: 5px 6px; width: 100%; outline: none; transition: all 0.15s;
+  }
+  tbody td input:focus { background: var(--accent-light); border-color: var(--accent); }
+  tbody td input[type="number"] { text-align: right; }
+
+  .del-btn {
+    background: none; border: none; cursor: pointer;
+    color: var(--text3); padding: 4px 7px; font-size: 15px;
+    transition: color 0.15s; border-radius: 2px;
+  }
+  .del-btn:hover { color: var(--red); background: #fef2f2; }
+
+  /* BUTTONS */
+  .btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  .btn {
+    font-family: var(--sans); font-weight: 500; font-size: 11px;
+    padding: 7px 13px; border: none; cursor: pointer;
+    transition: all 0.15s; display: inline-flex;
+    align-items: center; gap: 5px; border-radius: 2px;
+  }
+
+  .btn-ghost {
+    background: transparent; border: 1px solid var(--border2); color: var(--text2);
+  }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+
+  .btn-sm {
+    font-size: 10px; padding: 5px 10px;
+  }
+
+  .btn-danger {
+    background: transparent; border: 1px solid #fecaca; color: var(--red);
+  }
+  .btn-danger:hover { background: #fef2f2; }
+
+  .btn-primary {
+    background: var(--accent); color: #fff;
+    width: 100%; justify-content: center;
+    padding: 12px 16px; font-size: 14px; font-weight: 700;
+    letter-spacing: 0.5px; margin-top: 12px; border-radius: 2px;
+  }
+  .btn-primary:hover { background: #1447c0; box-shadow: var(--shadow-md); }
+
+  .btn-print {
+    background: transparent; border: 1px solid var(--border2); color: var(--text2);
+  }
+  .btn-print:hover { background: var(--surface2); }
+
+  /* RESULTS EMPTY */
+  .results-empty {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    height: 200px; color: var(--text3); font-size: 13px; gap: 10px;
+  }
+  .results-empty .icon { font-size: 36px; opacity: 0.35; }
+
+  /* STAT CARDS */
+  .summary-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 10px; margin-bottom: 20px;
+  }
+
+  .stat-card {
+    background: var(--surface2); border: 1px solid var(--border);
+    padding: 12px 14px; position: relative; overflow: hidden;
+  }
+  .stat-top { position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+  .stat-top.blue { background: var(--accent); }
+  .stat-top.orange { background: var(--accent2); }
+  .stat-top.green { background: var(--green); }
+  .stat-top.gray { background: var(--text3); }
+
+  .stat-label { font-size: 9px; font-weight: 600; letter-spacing: 1px; color: var(--text3); text-transform: uppercase; margin-bottom: 6px; }
+  .stat-value { font-family: var(--display); font-weight: 900; font-size: 26px; line-height: 1; color: var(--text); }
+  .stat-unit { font-size: 10px; color: var(--text3); margin-top: 4px; }
+
+  /* RESULT TABLES */
+  .result-spec-block { margin-bottom: 28px; }
+
+  .result-spec-header {
+    display: flex; align-items: baseline; gap: 20px; flex-wrap: wrap;
+    padding: 10px 0; margin-bottom: 10px;
+    border-bottom: 2px solid var(--accent);
+  }
+  .result-spec-name {
+    font-family: var(--display); font-weight: 900; font-size: 18px;
+    color: var(--accent);
+  }
+  .result-spec-meta { font-size: 12px; color: var(--text2); }
+
+  .data-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .data-table thead th {
+    background: var(--surface2); font-size: 9px; padding: 7px 10px;
+    font-weight: 600; letter-spacing: 1px; color: var(--text3);
+    text-transform: uppercase; border-bottom: 2px solid var(--border); text-align: right;
+    white-space: nowrap;
+  }
+  .data-table thead th:first-child,
+  .data-table thead th:nth-child(3) { text-align: left; }
+  .data-table thead th:nth-child(2) { text-align: center; }
+
+  .data-table tbody tr { border-bottom: 1px solid var(--border); }
+  .data-table tbody tr:hover { background: var(--surface2); }
+  .data-table tbody td {
+    padding: 8px 10px; font-family: var(--mono); text-align: right;
+  }
+  .data-table tbody td:first-child { text-align: left; font-weight: 700; }
+  .data-table tbody td:nth-child(2) { text-align: center; }
+  .data-table tbody td:nth-child(3) { text-align: left; font-family: var(--sans); font-size: 11px; }
+  .data-table tbody td:nth-child(5) { text-align: center; }
+
+  .data-table tfoot td {
+    padding: 8px 10px; font-family: var(--mono); text-align: right;
+    border-top: 2px solid var(--border); font-weight: 700;
+  }
+
+  .util-pill {
+    display: inline-block; padding: 2px 8px; border-radius: 10px;
+    font-size: 10px; font-weight: 700; font-family: var(--mono);
+  }
+  .util-high { background: var(--green-light); color: var(--green); }
+  .util-mid { background: var(--yellow-light); color: var(--yellow); }
+  .util-low { background: #fef2f2; color: var(--red); }
+
+  /* PROCUREMENT SUMMARY */
+  .procurement-block { margin-top: 24px; padding-top: 16px; border-top: 2px solid var(--border); }
+  .procurement-title {
+    font-family: var(--display); font-weight: 900; font-size: 16px;
+    letter-spacing: 1px; color: var(--text); margin-bottom: 14px;
+  }
+  .procurement-spec {
+    margin-bottom: 12px; padding: 10px 14px;
+    background: var(--surface2); border: 1px solid var(--border);
+  }
+  .procurement-spec-name {
+    font-weight: 700; font-size: 13px; color: var(--accent); margin-bottom: 6px;
+  }
+  .procurement-item {
+    display: flex; gap: 14px; font-family: var(--mono); font-size: 13px;
+    padding: 3px 0;
+  }
+  .procurement-item .stock-label { color: var(--text2); min-width: 50px; }
+  .procurement-item .stock-qty { font-weight: 700; color: var(--text); }
+
+  .procurement-totals {
+    margin-top: 14px; padding: 12px 16px;
+    background: var(--accent-light); border: 1px solid var(--accent);
+    display: flex; gap: 30px; flex-wrap: wrap;
+  }
+  .procurement-total-item { display: flex; flex-direction: column; gap: 2px; }
+  .procurement-total-label { font-size: 10px; font-weight: 600; color: var(--accent); letter-spacing: 0.5px; }
+  .procurement-total-value { font-family: var(--display); font-weight: 900; font-size: 22px; color: var(--text); }
+
+  /* CUT DIAGRAMS */
+  .section-title {
+    font-family: var(--display); font-weight: 700; font-size: 11px;
+    letter-spacing: 2px; text-transform: uppercase; color: var(--text2);
+    margin-bottom: 8px; margin-top: 20px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  .cut-bar {
+    margin-bottom: 6px; border: 1px solid var(--border);
+    overflow: hidden; transition: box-shadow 0.15s;
+  }
+  .cut-bar:hover { box-shadow: var(--shadow-md); }
+
+  .cut-bar-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 7px 12px;
+    background: var(--surface2); border-bottom: 1px solid var(--border);
+  }
+  .cut-bar-id { font-family: var(--mono); font-size: 11px; color: var(--text2); font-weight: 600; }
+  .cut-bar-meta { font-size: 10px; color: var(--text3); }
+
+  .cut-visual { display: flex; height: 34px; width: 100%; overflow: hidden; gap: 1px; }
+
+  .cut-piece {
+    display: flex; align-items: center; justify-content: center;
+    height: 100%; font-family: var(--mono); font-size: 10px;
+    font-weight: 700; overflow: hidden; white-space: nowrap; cursor: default;
+    transition: filter 0.15s;
+  }
+  .cut-piece:hover { filter: brightness(0.9); }
+
+  .cut-waste {
+    background: repeating-linear-gradient(45deg,#e5e7eb,#e5e7eb 3px,#f3f4f6 3px,#f3f4f6 9px);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px; color: var(--text3); font-family: var(--mono);
+    border-left: 1px dashed var(--border2);
+  }
+
+  .color-0 { background: #bfdbfe; color: #1e40af; }
+  .color-1 { background: #bbf7d0; color: #065f46; }
+  .color-2 { background: #fed7aa; color: #92400e; }
+  .color-3 { background: #e9d5ff; color: #5b21b6; }
+  .color-4 { background: #fde68a; color: #78350f; }
+  .color-5 { background: #a5f3fc; color: #0e7490; }
+  .color-6 { background: #fecaca; color: #991b1b; }
+  .color-7 { background: #d1fae5; color: #064e3b; }
+
+  .divider { height: 1px; background: var(--border); margin: 18px 0; }
+  .running { animation: pulse 0.9s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.45} }
+
+  .scroll-area { max-height: 440px; overflow-y: auto; padding-right: 2px; }
+  .scroll-area::-webkit-scrollbar { width: 4px; }
+  .scroll-area::-webkit-scrollbar-track { background: var(--bg); }
+  .scroll-area::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+  @media print {
+    .no-print { display: none !important; }
+    body { background: white; }
+    .panel, .spec-group { box-shadow: none; }
+    .scroll-area { max-height: none; overflow: visible; }
+    .main-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo">
+      <div class="logo-mark">H</div>
+      <div class="logo-text">
+        <h1>SteelCut Pro</h1>
+        <p>H 型鋼排料優化系統</p>
+      </div>
+    </div>
+    <div class="header-right no-print">
+      <button class="btn btn-print" onclick="window.print()">&#x23FB; 列印報告</button>
+    </div>
+  </div>
+
+  <div class="main-grid">
+
+    <!-- LEFT: INPUT -->
+    <div class="no-print">
+
+      <!-- Project Info + Global Settings -->
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title"><span class="dot"></span>專案 / 全域設定</span>
+        </div>
+        <div class="panel-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label>案號</label>
+              <input type="text" id="projectId" value="" placeholder="0321" style="width:90px">
+            </div>
+            <div class="form-group" style="flex:1">
+              <label>工程名稱</label>
+              <input type="text" id="projectName" value="" placeholder="XX新建工程" style="width:100%">
+            </div>
+          </div>
+
+          <div style="font-size:10px;font-weight:600;letter-spacing:1px;color:var(--text3);margin-bottom:8px;margin-top:6px;">可用定尺料 (mm)</div>
+          <div class="stock-tags" id="stockTags"></div>
+          <div class="stock-add-row">
+            <input type="number" id="stockAddInput" placeholder="輸入長度，如 12000" step="1" min="1">
+            <button class="btn btn-ghost btn-sm" onclick="addStockFromInput()">+ 新增</button>
+          </div>
+
+          <div class="kerf-row">
+            <label>切割損耗（每刀）</label>
+            <input type="number" id="kerfInput" value="3" step="1" min="0">
+            <span class="kerf-unit">mm</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Spec Groups -->
+      <div id="specGroups"></div>
+
+      <div class="btn-row" style="margin-bottom:12px">
+        <button class="btn btn-ghost" onclick="addSpec()">+ 新增型鋼規格</button>
+        <button class="btn btn-ghost" onclick="loadCustomerDemo()">載入客人範例</button>
+      </div>
+
+      <button class="btn btn-primary" id="calcBtn" onclick="runOptimize()">
+        &#x25B6; 計算最省排料方案
+      </button>
+    </div>
+
+    <!-- RIGHT: RESULTS -->
+    <div>
+      <div class="panel">
+        <div class="panel-header">
+          <span class="panel-title"><span class="dot green"></span>排料優化結果</span>
+          <span id="resultMeta" style="font-size:10px;color:var(--text3)">等待計算</span>
+        </div>
+        <div class="panel-body" id="resultsPanel">
+          <div class="results-empty">
+            <div class="icon">&#x1F4D0;</div>
+            <div>輸入零件資料後按下計算</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// =====================================================
+//  DATA MODEL
+// =====================================================
+
+let stockLengths = [9000, 10000, 12000];
+
+let specs = [];
+let specIdCounter = 0;
+let partIdCounter = 0;
+
+const COLORS = ['color-0','color-1','color-2','color-3','color-4','color-5','color-6','color-7'];
+
+// =====================================================
+//  STOCK TAGS (user can add/remove freely)
+// =====================================================
+
+function renderStockTags() {
+  const container = document.getElementById('stockTags');
+  container.innerHTML = '';
+  stockLengths.sort((a, b) => a - b).forEach(s => {
+    const tag = document.createElement('span');
+    tag.className = 'stock-tag';
+    tag.innerHTML = `${s.toLocaleString()}<button class="stock-tag-del" onclick="removeStock(${s})" title="移除">&times;</button>`;
+    container.appendChild(tag);
+  });
+  if (!stockLengths.length) {
+    container.innerHTML = '<span style="font-size:11px;color:var(--text3)">尚未新增定尺料</span>';
+  }
+}
+
+function addStock(len) {
+  if (len > 0 && !stockLengths.includes(len)) {
+    stockLengths.push(len);
+    renderStockTags();
+  }
+}
+
+function removeStock(len) {
+  stockLengths = stockLengths.filter(s => s !== len);
+  renderStockTags();
+}
+
+function addStockFromInput() {
+  const input = document.getElementById('stockAddInput');
+  const val = parseInt(input.value);
+  if (!val || val <= 0) return;
+  addStock(val);
+  input.value = '';
+  input.focus();
+}
+
+// Allow Enter key to add stock
+document.addEventListener('DOMContentLoaded', () => {
+  const input = document.getElementById('stockAddInput');
+  if (input) input.addEventListener('keydown', e => { if (e.key === 'Enter') addStockFromInput(); });
+});
+
+// =====================================================
+//  SPEC GROUP UI
+// =====================================================
+
+function addSpec(name = '', unitWeight = '', material = 'SN', parts = []) {
+  const id = ++specIdCounter;
+  specs.push({ id, name, unitWeight, material, parts: [] });
+  if (parts.length) {
+    parts.forEach(p => addPart(id, p.name, p.length, p.qty));
+  } else {
+    addPart(id);
+  }
+  renderSpecs();
+}
+
+function removeSpec(specId) {
+  specs = specs.filter(s => s.id !== specId);
+  renderSpecs();
+}
+
+function updateSpec(specId, field, value) {
+  const s = specs.find(s => s.id === specId);
+  if (s) s[field] = value;
+}
+
+function addPart(specId, name = '', length = '', qty = '') {
+  const s = specs.find(s => s.id === specId);
+  if (s) {
+    s.parts.push({ id: ++partIdCounter, name, length, qty });
+    renderSpecs();
+  }
+}
+
+function removePart(specId, partId) {
+  const s = specs.find(s => s.id === specId);
+  if (s) {
+    s.parts = s.parts.filter(p => p.id !== partId);
+    renderSpecs();
+  }
+}
+
+function updatePart(specId, partId, field, value) {
+  const s = specs.find(s => s.id === specId);
+  if (s) {
+    const p = s.parts.find(p => p.id === partId);
+    if (p) p[field] = value;
+  }
+}
+
+function renderSpecs() {
+  const container = document.getElementById('specGroups');
+  container.innerHTML = '';
+
+  specs.forEach((spec, si) => {
+    const div = document.createElement('div');
+    div.className = 'spec-group';
+    div.innerHTML = `
+      <div class="spec-header">
+        <span class="spec-header-title">型鋼規格 #${si + 1}</span>
+        <button class="btn btn-danger btn-sm" onclick="removeSpec(${spec.id})">移除</button>
+      </div>
+      <div class="spec-body">
+        <div class="form-row">
+          <div class="form-group" style="flex:1">
+            <label>規格名稱</label>
+            <input type="text" value="${spec.name}" placeholder="H300*300*10*15" style="width:100%"
+              onchange="updateSpec(${spec.id},'name',this.value)">
+          </div>
+          <div class="form-group">
+            <label>單位重 (kg/m)</label>
+            <input type="number" value="${spec.unitWeight}" placeholder="93" step="0.1" style="width:90px;text-align:right"
+              onchange="updateSpec(${spec.id},'unitWeight',this.value)">
+          </div>
+          <div class="form-group">
+            <label>材質</label>
+            <input type="text" value="${spec.material}" placeholder="SN" style="width:60px;text-align:center"
+              onchange="updateSpec(${spec.id},'material',this.value)">
+          </div>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th width="26">#</th>
+              <th>代號</th>
+              <th style="text-align:right">長度 (mm)</th>
+              <th style="text-align:right">數量</th>
+              <th width="28"></th>
+            </tr>
+          </thead>
+          <tbody>
+            ${spec.parts.map((p, pi) => `
+              <tr>
+                <td><span style="font-family:var(--mono);color:var(--text3);font-size:10px">${String(pi + 1).padStart(2, '0')}</span></td>
+                <td><input type="text" value="${p.name}" placeholder="A1"
+                  onchange="updatePart(${spec.id},${p.id},'name',this.value)"></td>
+                <td><input type="number" value="${p.length}" placeholder="3815" step="1" min="0"
+                  onchange="updatePart(${spec.id},${p.id},'length',this.value)" style="text-align:right"></td>
+                <td><input type="number" value="${p.qty}" placeholder="1" step="1" min="1"
+                  onchange="updatePart(${spec.id},${p.id},'qty',this.value)" style="text-align:right;width:50px"></td>
+                <td><button class="del-btn" onclick="removePart(${spec.id},${p.id})">&#xD7;</button></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+        <div style="margin-top:8px">
+          <button class="btn btn-ghost btn-sm" onclick="addPart(${spec.id})">+ 新增零件</button>
+        </div>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+// =====================================================
+//  DEMO DATA (matches customer Excel)
+// =====================================================
+
+function loadCustomerDemo() {
+  specs = [];
+  specIdCounter = 0;
+  partIdCounter = 0;
+  stockLengths = [9000, 10000, 12000];
+  renderStockTags();
+
+  document.getElementById('projectId').value = '0321';
+  document.getElementById('projectName').value = 'XX新建工程';
+  document.getElementById('kerfInput').value = '3';
+
+  addSpec('H194*150*6*9', '29.9', 'SN', [
+    { name: 'A1', length: '3815', qty: '6' },
+    { name: 'A2', length: '4850', qty: '1' },
+    { name: 'A3', length: '1320', qty: '1' },
+    { name: 'A4', length: '352',  qty: '2' },
+  ]);
+
+  addSpec('H300*300*10*15', '93', 'SN', [
+    { name: 'B1', length: '4055', qty: '2' },
+    { name: 'B2', length: '3870', qty: '1' },
+    { name: 'B3', length: '2809', qty: '4' },
+    { name: 'B4', length: '7883', qty: '2' },
+    { name: 'B5', length: '1260', qty: '2' },
+    { name: 'B6', length: '312',  qty: '2' },
+  ]);
+}
+
+// =====================================================
+//  ALGORITHM (multi-start search for minimum total stock)
+// =====================================================
+
+function generatePatterns(sizes, stockLen, kerf) {
+  const results = [];
+  function recurse(idx, rem, cur) {
+    if (idx === sizes.length) {
+      if (cur.some(c => c > 0)) results.push([...cur]);
+      return;
+    }
+    const s = sizes[idx];
+    const maxN = Math.floor(rem / (s + kerf));
+    for (let n = 0; n <= maxN; n++) {
+      cur[idx] = n;
+      recurse(idx + 1, rem - n * (s + kerf), cur);
+    }
+    cur[idx] = 0;
+  }
+  recurse(0, stockLen, new Array(sizes.length).fill(0));
+  return results;
+}
+
+function patternUsed(pattern, sizes, kerf) {
+  let total = 0, cnt = 0;
+  for (let i = 0; i < pattern.length; i++) {
+    if (pattern[i] > 0) {
+      total += pattern[i] * sizes[i];
+      cnt += pattern[i];
+    }
+  }
+  total += cnt * kerf;
+  return total;
+}
+
+function optimizeSpec(parts, stockLengths, kerf) {
+  const demand = {};
+  parts.forEach(p => {
+    const len = parseFloat(p.length);
+    const qty = parseInt(p.qty) || 0;
+    if (len > 0 && qty > 0) demand[len] = (demand[len] || 0) + qty;
+  });
+
+  const distinctLens = Object.keys(demand).map(Number).sort((a, b) => b - a);
+  if (!distinctLens.length) return [];
+
+  const stocks = [...stockLengths].sort((a, b) => b - a);
+
+  // Generate all patterns for all stock lengths
+  const allPatterns = [];
+  for (const stock of stocks) {
+    const patterns = generatePatterns(distinctLens, stock, kerf);
+    for (const counts of patterns) {
+      const used = patternUsed(counts, distinctLens, kerf);
+      if (used <= stock) {
+        allPatterns.push({
+          stock, counts, used,
+          waste: stock - used,
+          totalPieces: counts.reduce((s, v) => s + v, 0),
+          util: used / stock,
+        });
+      }
+    }
+  }
+  allPatterns.sort((a, b) => b.util - a.util || b.totalPieces - a.totalPieces);
+
+  // --- Helpers ---
+  function getMaxTimes(pat, dem) {
+    let t = Infinity;
+    for (let i = 0; i < distinctLens.length; i++) {
+      if (pat.counts[i] > 0) {
+        const avail = dem[distinctLens[i]] || 0;
+        if (avail < pat.counts[i]) return 0;
+        t = Math.min(t, Math.floor(avail / pat.counts[i]));
+      }
+    }
+    return t === Infinity ? 0 : t;
+  }
+
+  function applyN(pat, dem, n) {
+    const d = { ...dem };
+    for (let i = 0; i < distinctLens.length; i++)
+      d[distinctLens[i]] = (d[distinctLens[i]] || 0) - pat.counts[i] * n;
+    return d;
+  }
+
+  function demandEmpty(dem) {
+    return distinctLens.every(l => (dem[l] || 0) <= 0);
+  }
+
+  function makeBins(pat, n) {
+    return Array.from({ length: n }, () => ({
+      stock: pat.stock, counts: [...pat.counts], waste: pat.waste, usedLength: pat.used,
+    }));
+  }
+
+  // --- Greedy solver ---
+  function runGreedy(dem) {
+    const bins = [];
+    const rem = { ...dem };
+    while (!demandEmpty(rem)) {
+      let applied = false;
+      for (const ap of allPatterns) {
+        const mt = getMaxTimes(ap, rem);
+        if (mt > 0) {
+          bins.push(...makeBins(ap, mt));
+          for (let i = 0; i < distinctLens.length; i++)
+            rem[distinctLens[i]] -= ap.counts[i] * mt;
+          applied = true;
+          break;
+        }
+      }
+      if (!applied) {
+        // Fallback: greedy fill from largest stock
+        for (const stock of stocks) {
+          const bin = { stock, counts: new Array(distinctLens.length).fill(0), waste: 0, usedLength: 0 };
+          let r = stock;
+          for (let i = 0; i < distinctLens.length; i++) {
+            while ((rem[distinctLens[i]] || 0) > 0 && r >= distinctLens[i] + kerf) {
+              bin.counts[i]++;
+              rem[distinctLens[i]]--;
+              r -= (distinctLens[i] + kerf);
+            }
+          }
+          if (bin.counts.some(c => c > 0)) {
+            bin.usedLength = stock - r;
+            bin.waste = r;
+            bins.push(bin);
+            applied = true;
+            break;
+          }
+        }
+        if (!applied) break;
+      }
+    }
+    return bins;
+  }
+
+  function totalStock(bins) { return bins.reduce((s, b) => s + b.stock, 0); }
+
+  // --- Multi-start search: try different first/second picks ---
+  let bestTotal = Infinity;
+  let bestBins = null;
+
+  function tryCandidate(bins) {
+    const t = totalStock(bins);
+    if (t < bestTotal) { bestTotal = t; bestBins = bins; }
+  }
+
+  // 1. Pure greedy
+  tryCandidate(runGreedy({ ...demand }));
+
+  // 2. Single-level: force each top pattern as first pick, then greedy
+  const TOP1 = Math.min(allPatterns.length, 30);
+  for (let i = 0; i < TOP1; i++) {
+    const fp = allPatterns[i];
+    const mt = getMaxTimes(fp, demand);
+    if (mt <= 0) continue;
+    const dem1 = applyN(fp, demand, mt);
+    tryCandidate([...makeBins(fp, mt), ...runGreedy(dem1)]);
+  }
+
+  // 3. Two-level: force first pick (1 time) + second pick, then greedy
+  for (let i = 0; i < TOP1; i++) {
+    const fp = allPatterns[i];
+    if (getMaxTimes(fp, demand) < 1) continue;
+    const dem1 = applyN(fp, demand, 1);
+
+    const TOP2 = Math.min(allPatterns.length, 15);
+    for (let j = 0; j < TOP2; j++) {
+      const sp = allPatterns[j];
+      const mt2 = getMaxTimes(sp, dem1);
+      if (mt2 <= 0) continue;
+      const dem2 = applyN(sp, dem1, mt2);
+      tryCandidate([...makeBins(fp, 1), ...makeBins(sp, mt2), ...runGreedy(dem2)]);
+    }
+  }
+
+  // --- Post-process: assign part names and build cut combos ---
+  const namePool = {};
+  parts.forEach(p => {
+    const len = parseFloat(p.length);
+    const qty = parseInt(p.qty) || 0;
+    if (len > 0 && qty > 0) {
+      if (!namePool[len]) namePool[len] = [];
+      for (let i = 0; i < qty; i++) namePool[len].push(p.name);
+    }
+  });
+
+  bestBins.forEach(bin => {
+    // Expand counts to pieceLengths
+    bin.pieces = [];
+    for (let i = 0; i < distinctLens.length; i++) {
+      for (let k = 0; k < bin.counts[i]; k++) {
+        const name = (namePool[distinctLens[i]] && namePool[distinctLens[i]].length)
+          ? namePool[distinctLens[i]].shift() : '?';
+        bin.pieces.push({ name, length: distinctLens[i] });
+      }
+    }
+
+    const lengthGroups = {};
+    bin.pieces.forEach(p => { lengthGroups[p.length] = (lengthGroups[p.length] || 0) + 1; });
+    const sortedLens = Object.keys(lengthGroups).map(Number).sort((a, b) => b - a);
+    bin.cutCombo = sortedLens.map(l => {
+      const cnt = lengthGroups[l];
+      return cnt > 1 ? `${l}*${cnt}` : String(l);
+    }).join(' + ');
+
+    bin.cutCount = bin.pieces.length;
+    delete bin.counts;
+  });
+
+  bestBins.sort((a, b) => b.stock - a.stock || b.usedLength - a.usedLength);
+  return bestBins;
+}
+
+function optimizeAll() {
+  const sl = [...stockLengths].sort((a, b) => a - b);
+  const kerf = parseFloat(document.getElementById('kerfInput').value) || 3;
+
+  if (!sl.length) { alert('請至少新增一種定尺料長度'); return null; }
+
+  const results = [];
+
+  for (const spec of specs) {
+    const validParts = spec.parts.filter(p => parseFloat(p.length) > 0 && parseInt(p.qty) > 0);
+    if (!validParts.length) continue;
+
+    const unitWeight = parseFloat(spec.unitWeight) || 0;
+    const bins = optimizeSpec(validParts, sl, kerf);
+
+    // Calculate weights
+    let cutWeightTotal = 0;
+    let purchaseWeightTotal = 0;
+
+    bins.forEach(bin => {
+      const stockM = bin.stock / 1000;
+      const usedM = bin.usedLength / 1000;
+      const wasteM = bin.waste / 1000;
+      bin.purchaseWeight = stockM * unitWeight;
+      bin.cutWeight = usedM * unitWeight;
+      bin.wasteWeight = wasteM * unitWeight;
+      bin.wastePercent = bin.stock > 0 ? (bin.waste / bin.stock * 100) : 0;
+      cutWeightTotal += bin.cutWeight;
+      purchaseWeightTotal += bin.purchaseWeight;
+    });
+
+    // Procurement count by stock length
+    const procurement = {};
+    bins.forEach(bin => {
+      procurement[bin.stock] = (procurement[bin.stock] || 0) + 1;
+    });
+
+    results.push({
+      spec: {
+        name: spec.name || `規格 #${spec.id}`,
+        unitWeight,
+        material: spec.material || 'SN',
+      },
+      bins,
+      cutWeightTotal,
+      purchaseWeightTotal,
+      procurement,
+    });
+  }
+
+  return results;
+}
+
+// =====================================================
+//  RUN & RENDER
+// =====================================================
+
+function runOptimize() {
+  const results = optimizeAll();
+  if (!results || !results.length) {
+    document.getElementById('resultsPanel').innerHTML =
+      '<div class="results-empty"><div class="icon">&#x26A0;&#xFE0F;</div><div>請至少輸入一組型鋼規格及零件</div></div>';
+    return;
+  }
+  renderResults(results);
+}
+
+function utilClass(pct) {
+  return pct >= 90 ? 'util-high' : pct >= 75 ? 'util-mid' : 'util-low';
+}
+
+function renderResults(results) {
+  const projectId = document.getElementById('projectId').value || '';
+  const projectName = document.getElementById('projectName').value || '';
+  const kerf = document.getElementById('kerfInput').value || '3';
+
+  let totalCutWeight = 0;
+  let totalPurchaseWeight = 0;
+  let totalBars = 0;
+
+  let html = '';
+
+  // Project header
+  if (projectId || projectName) {
+    html += `<div style="margin-bottom:16px;font-size:13px;color:var(--text2)">
+      <strong>型鋼採購建議單</strong>
+      ${projectId ? `&emsp;案號: <strong>${projectId}</strong>` : ''}
+      ${projectName ? `&emsp;工程名稱: <strong>${projectName}</strong>` : ''}
+      &emsp;切割損耗: <strong>${kerf} mm</strong>
+    </div>`;
+  }
+
+  // Per-spec results
+  results.forEach((r, ri) => {
+    totalCutWeight += r.cutWeightTotal;
+    totalPurchaseWeight += r.purchaseWeightTotal;
+    totalBars += r.bins.length;
+
+    html += `<div class="result-spec-block">`;
+
+    // Spec header
+    html += `<div class="result-spec-header">
+      <span class="result-spec-name">${r.spec.name}</span>
+      <span class="result-spec-meta">單位重: ${r.spec.unitWeight} kg/m</span>
+    </div>`;
+
+    // Main data table (Excel-style)
+    html += `<table class="data-table">
+      <thead><tr>
+        <th style="text-align:left">定尺料(mm)</th>
+        <th>數量</th>
+        <th style="text-align:left">切割長度組合(mm)</th>
+        <th>切割總支數</th>
+        <th>材質</th>
+        <th>長度(mm)</th>
+        <th>重量(kg)</th>
+        <th>損耗(kg)</th>
+        <th>%</th>
+        <th>剩餘長度(mm)</th>
+      </tr></thead>
+      <tbody>`;
+
+    r.bins.forEach(bin => {
+      const utilPct = 100 - bin.wastePercent;
+      html += `<tr>
+        <td style="font-weight:700">${bin.stock.toLocaleString()}</td>
+        <td style="text-align:center">1</td>
+        <td style="text-align:left;font-family:var(--sans);font-size:11px">${bin.cutCombo}</td>
+        <td>${bin.cutCount}</td>
+        <td style="text-align:center">${r.spec.material}</td>
+        <td>${bin.usedLength.toLocaleString()}</td>
+        <td>${bin.purchaseWeight.toFixed(1)}</td>
+        <td>${bin.wasteWeight.toFixed(4)}</td>
+        <td><span class="util-pill ${utilClass(utilPct)}">${bin.wastePercent.toFixed(2)}</span></td>
+        <td>${bin.waste.toLocaleString()}</td>
+      </tr>`;
+    });
+
+    html += `</tbody>
+      <tfoot>
+        <tr>
+          <td colspan="5"></td>
+          <td style="text-align:right;font-size:11px;color:var(--text2)">切割重量:</td>
+          <td>${r.cutWeightTotal.toFixed(4)} kg</td>
+          <td colspan="3"></td>
+        </tr>
+        <tr>
+          <td colspan="5"></td>
+          <td style="text-align:right;font-size:11px;color:var(--text2)">購買重量:</td>
+          <td>${r.purchaseWeightTotal.toFixed(1)} kg</td>
+          <td colspan="3"></td>
+        </tr>
+      </tfoot>
+    </table>`;
+
+    // Cut diagrams
+    html += `<div class="section-title">切割示意圖</div>`;
+    html += `<div class="scroll-area">`;
+
+    // Build color map for this spec
+    const specParts = specs[ri] ? specs[ri].parts : [];
+    const allLens = [...new Set(r.bins.flatMap(b => b.pieces.map(p => p.length)))].sort((a, b) => b - a);
+    const colorMap = {};
+    allLens.forEach((l, i) => { colorMap[l] = COLORS[i % COLORS.length]; });
+
+    r.bins.forEach((bin, idx) => {
+      html += `<div class="cut-bar">
+        <div class="cut-bar-header">
+          <span class="cut-bar-id">母材 #${String(idx + 1).padStart(3, '0')} - ${bin.stock.toLocaleString()}mm</span>
+          <span class="cut-bar-meta">${bin.cutCount} 支 | 廢料 ${bin.waste}mm</span>
+        </div>
+        <div class="cut-visual">`;
+
+      bin.pieces.forEach(piece => {
+        const pct = (piece.length / bin.stock * 100).toFixed(2);
+        const cls = colorMap[piece.length] || 'color-0';
+        html += `<div class="cut-piece ${cls}" style="width:${pct}%" title="${piece.name} ${piece.length}mm">
+          ${parseFloat(pct) > 7 ? piece.length : ''}
+        </div>`;
+      });
+
+      if (bin.waste > 0) {
+        const wPct = (bin.waste / bin.stock * 100).toFixed(2);
+        html += `<div class="cut-waste" style="width:${wPct}%">
+          ${parseFloat(wPct) > 4 ? bin.waste + 'mm' : ''}
+        </div>`;
+      }
+
+      html += `</div></div>`;
+    });
+
+    html += `</div>`;
+    html += `</div>`;
+  });
+
+  // Procurement summary
+  html += `<div class="procurement-block">
+    <div class="procurement-title">購買總數量</div>`;
+
+  results.forEach(r => {
+    html += `<div class="procurement-spec">
+      <div class="procurement-spec-name">${r.spec.name}</div>`;
+
+    const sortedStocks = Object.keys(r.procurement).map(Number).sort((a, b) => b - a);
+    sortedStocks.forEach(stock => {
+      const label = stock >= 1000 ? (stock / 1000) + 'M' : stock + 'mm';
+      html += `<div class="procurement-item">
+        <span class="stock-label">${label}</span>
+        <span class="stock-qty">${r.procurement[stock]} 支</span>
+      </div>`;
+    });
+
+    html += `</div>`;
+  });
+
+  html += `<div class="procurement-totals">
+    <div class="procurement-total-item">
+      <span class="procurement-total-label">切割總重量</span>
+      <span class="procurement-total-value">${totalCutWeight.toFixed(4)} <span style="font-size:12px;font-weight:400">kg</span></span>
+    </div>
+    <div class="procurement-total-item">
+      <span class="procurement-total-label">購買總重量</span>
+      <span class="procurement-total-value">${totalPurchaseWeight.toFixed(1)} <span style="font-size:12px;font-weight:400">kg</span></span>
+    </div>
+    <div class="procurement-total-item">
+      <span class="procurement-total-label">購買總支數</span>
+      <span class="procurement-total-value">${totalBars} <span style="font-size:12px;font-weight:400">支</span></span>
+    </div>
+  </div>`;
+
+  html += `</div>`;
+
+  document.getElementById('resultsPanel').innerHTML = html;
+  document.getElementById('resultMeta').textContent = `共 ${results.length} 組規格，${totalBars} 支`;
+}
+
+// =====================================================
+//  INIT
+// =====================================================
+
+renderStockTags();
+loadCustomerDemo();
+</script>
+</body>
+</html>

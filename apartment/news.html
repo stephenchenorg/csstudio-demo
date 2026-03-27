@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>訊息公告｜Demo DEVELOPMENT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav class="nav nav-light" id="nav">
+  <a href="index.html" class="nav-logo">
+    <span class="nav-logo-main">Demo</span>
+    <span class="nav-logo-sub">Development</span>
+  </a>
+  <div class="nav-center">
+    <a href="about.html" class="nav-link"><span class="zh">關於我們</span><span class="en">About</span></a>
+    <a href="projects.html" class="nav-link"><span class="zh">建案作品</span><span class="en">Projects</span></a>
+    <a href="sustainability.html" class="nav-link"><span class="zh">永續發展</span><span class="en">Sustainability</span></a>
+    <a href="news.html" class="nav-link"><span class="zh">訊息公告</span><span class="en">News</span></a>
+    <a href="contact.html" class="nav-link"><span class="zh">聯絡我們</span><span class="en">Contact</span></a>
+  </div>
+  <div class="nav-right">
+    <button class="lang-btn active" data-lang="zh">中</button>
+    <button class="lang-btn" data-lang="en">EN</button>
+    <button class="nav-hamburger" id="hamburgerBtn" aria-label="選單"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" id="mobileClose">&times;</button>
+  <a href="about.html"><span class="zh">關於我們</span><span class="en">About</span></a>
+  <a href="projects.html"><span class="zh">建案作品</span><span class="en">Projects</span></a>
+  <a href="sustainability.html"><span class="zh">永續發展</span><span class="en">Sustainability</span></a>
+  <a href="news.html"><span class="zh">訊息公告</span><span class="en">News</span></a>
+  <a href="contact.html"><span class="zh">聯絡我們</span><span class="en">Contact</span></a>
+</div>
+
+<div class="page-hero">
+  <div class="page-hero-bg" style="background-image:url('https://images.unsplash.com/photo-1504297050568-910d24c426d3?w=1920&q=80')"></div>
+  <div class="page-hero-overlay"></div>
+  <div class="page-hero-content">
+    <p class="page-hero-label">News</p>
+    <h1 class="page-hero-title"><span class="zh">訊息公告</span><span class="en">News</span></h1>
+    <p class="page-hero-en">Latest Updates</p>
+  </div>
+</div>
+
+<section class="section news-section">
+  <div class="news-tabs reveal">
+    <button class="news-tab active" data-target="news-latest"><span class="zh">最新消息</span><span class="en">Latest</span></button>
+    <button class="news-tab" data-target="news-media"><span class="zh">媒體報導</span><span class="en">Media</span></button>
+  </div>
+
+  <div class="news-list" id="news-latest">
+    <div class="news-item reveal">
+      <div class="news-date">
+        <div class="news-date-day">15</div>
+        <div class="news-date-ym">2026 . 03</div>
+      </div>
+      <div class="news-body">
+        <h4><span class="zh">Demo 建設「馥寓」正式公開，預約鑑賞啟動</span><span class="en">Demo Development "Fu Yu" officially launched, reservations open</span></h4>
+        <p><span class="zh">位於台北市大安區的全新力作「馥寓」即日起開放預約鑑賞，以國際級建材與當代美學設計，重新定義都心居住體驗。歡迎蒞臨接待中心親身感受空間的質感與溫度。</span><span class="en">Our latest masterpiece "Fu Yu" in Da'an District, Taipei is now open for preview reservations. Experience the texture and warmth of our spaces at the reception center.</span></p>
+      </div>
+    </div>
+    <div class="news-item reveal">
+      <div class="news-date">
+        <div class="news-date-day">02</div>
+        <div class="news-date-ym">2026 . 03</div>
+      </div>
+      <div class="news-body">
+        <h4><span class="zh">Demo 建設榮獲 2026 台灣建築金質獎</span><span class="en">Demo Development wins 2026 Taiwan Architecture Gold Award</span></h4>
+        <p><span class="zh">本公司以「弈璟」建案榮獲第十八屆台灣建築金質獎「最佳規劃設計類」殊榮，感謝評審團的肯定與全體團隊的努力。這份榮耀屬於每一位參與者。</span><span class="en">Our "Yi Jing" project won the 18th Taiwan Architecture Gold Award for "Best Planning Design." This honor belongs to every team member involved.</span></p>
+      </div>
+    </div>
+    <div class="news-item reveal">
+      <div class="news-date">
+        <div class="news-date-day">18</div>
+        <div class="news-date-ym">2026 . 02</div>
+      </div>
+      <div class="news-body">
+        <h4><span class="zh">永續發展報告書正式發布</span><span class="en">Sustainability Report officially published</span></h4>
+        <p><span class="zh">Demo 建設 2025 年度永續發展報告書已正式出版，詳載碳足跡減量成果與綠建築推動策略，歡迎線上瀏覽下載。</span><span class="en">Our 2025 Sustainability Report is now available, detailing carbon footprint reduction achievements and green building strategies.</span></p>
+      </div>
+    </div>
+    <div class="news-item reveal">
+      <div class="news-date">
+        <div class="news-date-day">28</div>
+        <div class="news-date-ym">2026 . 01</div>
+      </div>
+      <div class="news-body">
+        <h4><span class="zh">春節期間接待中心營業時間調整公告</span><span class="en">Lunar New Year reception center hours adjustment</span></h4>
+        <p><span class="zh">因應農曆春節連假，各接待中心將於 1 月 28 日至 2 月 2 日暫停服務，2 月 3 日恢復正常營業，造成不便敬請見諒。</span><span class="en">Due to the Lunar New Year holiday, all reception centers will be closed from Jan 28 to Feb 2, resuming normal operations on Feb 3.</span></p>
+      </div>
+    </div>
+    <div class="news-item reveal">
+      <div class="news-date">
+        <div class="news-date-day">10</div>
+        <div class="news-date-ym">2026 . 01</div>
+      </div>
+      <div class="news-body">
+        <h4><span class="zh">「崇岳」建案動工典禮圓滿舉行</span><span class="en">"Chong Yue" groundbreaking ceremony successfully held</span></h4>
+        <p><span class="zh">新竹竹北旗艦建案「崇岳」於 1 月 10 日舉行動工典禮，預計 2028 年完工交屋。感謝各界貴賓蒞臨見證。</span><span class="en">The flagship Zhubei project "Chong Yue" held its groundbreaking ceremony on January 10, with completion expected in 2028.</span></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="news-list hidden" id="news-media">
+    <div class="news-item reveal">
+      <div class="news-date">
+        <div class="news-date-day">10</div>
+        <div class="news-date-ym">2026 . 03</div>
+      </div>
+      <div class="news-body">
+        <h4><span class="zh">《經濟日報》專訪：Demo 建設如何以美學突圍豪宅市場</span><span class="en">Economic Daily interview: How Demo Development breaks through the luxury market</span></h4>
+        <p><span class="zh">面對競爭激烈的高端住宅市場，Demo 建設堅持以國際美學標準與永續理念，走出差異化的品牌之路。董事長在專訪中分享了品牌二十五年來的心路歷程。</span><span class="en">Facing fierce competition, Demo Development persists with international aesthetics and sustainability. The Chairman shared the brand's 25-year journey in this exclusive interview.</span></p>
+      </div>
+    </div>
+    <div class="news-item reveal">
+      <div class="news-date">
+        <div class="news-date-day">25</div>
+        <div class="news-date-ym">2026 . 02</div>
+      </div>
+      <div class="news-body">
+        <h4><span class="zh">《商業周刊》報導：新竹「崇岳」引領低密度住宅新潮流</span><span class="en">BusinessWeekly: "Chong Yue" leads new low-density housing trend</span></h4>
+        <p><span class="zh">在高樓林立的竹北地區，Demo 建設反其道而行，以低密度景觀住宅創造稀缺性，獲得高資產族群青睞，預約參觀量已突破千組。</span><span class="en">In high-rise Zhubei, Demo Development takes a contrarian approach with low-density landscape residences, attracting over a thousand preview reservations.</span></p>
+      </div>
+    </div>
+    <div class="news-item reveal">
+      <div class="news-date">
+        <div class="news-date-day">05</div>
+        <div class="news-date-ym">2026 . 01</div>
+      </div>
+      <div class="news-body">
+        <h4><span class="zh">《天下雜誌》年度專題：台灣建設業的永續革命</span><span class="en">CommonWealth Magazine: Taiwan's construction sustainability revolution</span></h4>
+        <p><span class="zh">Demo 建設作為台灣建設業永續轉型的代表企業之一，受邀參與天下雜誌年度專題報導，分享綠建築推動經驗與未來願景。</span><span class="en">As a representative of Taiwan's construction sustainability transformation, Demo Development was invited to participate in CommonWealth Magazine's annual feature.</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="footer-brand-name">Demo</div>
+      <div class="footer-brand-sub">Development</div>
+      <p><span class="zh">深耕台灣 25 年<br>以國際美學標準打造精緻住宅</span><span class="en">25 years in Taiwan<br>Crafting refined residences with international aesthetics</span></p>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title"><span class="zh">導覽</span><span class="en">Navigation</span></div>
+      <a href="about.html"><span class="zh">關於我們</span><span class="en">About</span></a>
+      <a href="projects.html"><span class="zh">建案作品</span><span class="en">Projects</span></a>
+      <a href="sustainability.html"><span class="zh">永續發展</span><span class="en">Sustainability</span></a>
+      <a href="news.html"><span class="zh">訊息公告</span><span class="en">News</span></a>
+      <a href="contact.html"><span class="zh">聯絡我們</span><span class="en">Contact</span></a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title"><span class="zh">關係企業</span><span class="en">Affiliates</span></div>
+      <a href="#">Demo <span class="zh">營造工程</span><span class="en">Construction</span></a>
+      <a href="#">Demo <span class="zh">物業管理</span><span class="en">Property Mgmt</span></a>
+      <a href="#">Demo <span class="zh">設計顧問</span><span class="en">Design Consulting</span></a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title"><span class="zh">聯繫</span><span class="en">Contact</span></div>
+      <a href="tel:0223456789">(02) 2345-6789</a>
+      <a href="mailto:info@demo-development.com.tw">info@demo-development.com.tw</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 Demo DEVELOPMENT. All Rights Reserved.</span>
+    <span><span class="zh">隱私權政策 ｜ 使用條款</span><span class="en">Privacy Policy ｜ Terms of Use</span></span>
+  </div>
+</footer>
+<script src="js/main.js"></script>
+</body>
+</html>

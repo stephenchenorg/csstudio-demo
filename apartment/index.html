@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo DEVELOPMENT｜深耕台灣精緻住宅</title>
+<meta name="description" content="Demo 建設開發，深耕台灣25年，以國際美學標準打造精緻住宅。服務範圍涵蓋台北、台中、新竹。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <a href="index.html" class="nav-logo">
+    <span class="nav-logo-main">Demo</span>
+    <span class="nav-logo-sub">Development</span>
+  </a>
+  <div class="nav-center">
+    <a href="about.html" class="nav-link"><span class="zh">關於我們</span><span class="en">About</span></a>
+    <a href="projects.html" class="nav-link"><span class="zh">建案作品</span><span class="en">Projects</span></a>
+    <a href="sustainability.html" class="nav-link"><span class="zh">永續發展</span><span class="en">Sustainability</span></a>
+    <a href="news.html" class="nav-link"><span class="zh">訊息公告</span><span class="en">News</span></a>
+    <a href="contact.html" class="nav-link"><span class="zh">聯絡我們</span><span class="en">Contact</span></a>
+  </div>
+  <div class="nav-right">
+    <button class="lang-btn active" data-lang="zh">中</button>
+    <button class="lang-btn" data-lang="en">EN</button>
+    <button class="nav-hamburger" id="hamburgerBtn" aria-label="選單">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-close" id="mobileClose">&times;</button>
+  <a href="about.html"><span class="zh">關於我們</span><span class="en">About</span></a>
+  <a href="projects.html"><span class="zh">建案作品</span><span class="en">Projects</span></a>
+  <a href="sustainability.html"><span class="zh">永續發展</span><span class="en">Sustainability</span></a>
+  <a href="news.html"><span class="zh">訊息公告</span><span class="en">News</span></a>
+  <a href="contact.html"><span class="zh">聯絡我們</span><span class="en">Contact</span></a>
+</div>
+
+<!-- HERO CAROUSEL -->
+<section class="hero">
+  <div class="hero-slide active">
+    <div class="hero-bg" style="background-image:url('https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1920&q=80')"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-city">Taipei</p>
+      <h2 class="hero-title">馥寓</h2>
+      <p class="hero-subtitle"><span class="zh">城心之上，靜謐而生的居所</span><span class="en">A serene sanctuary above the city heart</span></p>
+      <a href="project-fuyu.html" class="hero-btn"><span class="zh">了解更多</span><span class="en">Learn More</span></a>
+    </div>
+  </div>
+  <div class="hero-slide">
+    <div class="hero-bg" style="background-image:url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1920&q=80')"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-city">Taichung</p>
+      <h2 class="hero-title">弈璟</h2>
+      <p class="hero-subtitle"><span class="zh">以光影佈局，重新定義生活美學</span><span class="en">Redefining living aesthetics through light and shadow</span></p>
+      <a href="project-yijing.html" class="hero-btn"><span class="zh">了解更多</span><span class="en">Learn More</span></a>
+    </div>
+  </div>
+  <div class="hero-slide">
+    <div class="hero-bg" style="background-image:url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80')"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-city">Hsinchu</p>
+      <h2 class="hero-title">崇岳</h2>
+      <p class="hero-subtitle"><span class="zh">與山林共生，擁抱自然的居住哲學</span><span class="en">Living in harmony with nature's philosophy</span></p>
+      <a href="project-chongyue.html" class="hero-btn"><span class="zh">了解更多</span><span class="en">Learn More</span></a>
+    </div>
+  </div>
+  <div class="hero-dots">
+    <button class="hero-dot active" data-slide="0"></button>
+    <button class="hero-dot" data-slide="1"></button>
+    <button class="hero-dot" data-slide="2"></button>
+  </div>
+</section>
+
+<!-- BRAND NARRATIVE -->
+<section class="section narrative">
+  <div class="narrative-grid">
+    <div class="narrative-card reveal">
+      <div class="narrative-card-bg"></div>
+      <div class="narrative-card-img" style="background-image:url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80')"></div>
+      <span class="narrative-num">01</span>
+      <h3 class="narrative-title"><span class="zh">使 命</span><span class="en">Mission</span></h3>
+      <p class="narrative-en">MISSION</p>
+      <p class="narrative-desc">
+        <span class="zh">以建築詮釋生活美學。我們相信，居住空間不僅是庇護，更是品味與態度的延伸。每一處細節，皆為生活而設計。</span>
+        <span class="en">Interpreting the art of living through architecture. We believe that living spaces are not merely shelters, but extensions of taste and attitude. Every detail is designed for life.</span>
+      </p>
+    </div>
+    <div class="narrative-card reveal">
+      <div class="narrative-card-bg"></div>
+      <div class="narrative-card-img" style="background-image:url('https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&q=80')"></div>
+      <span class="narrative-num">02</span>
+      <h3 class="narrative-title"><span class="zh">城 市</span><span class="en">City</span></h3>
+      <p class="narrative-en">CITY</p>
+      <p class="narrative-desc">
+        <span class="zh">以作品定義城市天際線。深耕台北、台中、新竹三大核心都會，我們的建築成為城市風景不可或缺的一部分。</span>
+        <span class="en">Defining city skylines through our work. Rooted in Taipei, Taichung, and Hsinchu, our architecture has become an integral part of the urban landscape.</span>
+      </p>
+    </div>
+    <div class="narrative-card reveal">
+      <div class="narrative-card-bg"></div>
+      <div class="narrative-card-img" style="background-image:url('https://images.unsplash.com/photo-1518005020951-eccb494ad742?w=800&q=80')"></div>
+      <span class="narrative-num">03</span>
+      <h3 class="narrative-title"><span class="zh">永 續</span><span class="en">Sustain</span></h3>
+      <p class="narrative-en">SUSTAINABILITY</p>
+      <p class="narrative-desc">
+        <span class="zh">以責任守護自然共生。從綠建築設計到節能工法，我們致力於在開發與環境之間取得平衡，為下一代留住美好。</span>
+        <span class="en">Guarding nature through responsibility. From green architecture to energy-saving construction, we strive to balance development with the environment.</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section class="section projects">
+  <p class="section-label reveal">Projects</p>
+  <h2 class="section-title reveal"><span class="zh">建案作品</span><span class="en">Featured Projects</span></h2>
+  <p class="section-title-en reveal">Featured Projects</p>
+  <div class="projects-grid">
+    <a href="project-fuyu.html" class="project-card reveal">
+      <div class="project-card-bg" style="background-image:url('https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80')"></div>
+      <div class="project-card-overlay"></div>
+      <div class="project-card-content">
+        <span class="project-tag"><span class="zh">台北市大安區</span><span class="en">Da'an, Taipei</span></span>
+        <span class="project-badge"><span class="zh">銷售中</span><span class="en">On Sale</span></span>
+        <h3 class="project-name">馥寓</h3>
+        <p class="project-desc"><span class="zh">信義計畫區旁，以國際規格打造的都心靜謐宅邸</span><span class="en">A tranquil urban residence near Xinyi, built to international standards</span></p>
+      </div>
+    </a>
+    <a href="project-yijing.html" class="project-card reveal">
+      <div class="project-card-bg" style="background-image:url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&q=80')"></div>
+      <div class="project-card-overlay"></div>
+      <div class="project-card-content">
+        <span class="project-tag"><span class="zh">台中市西屯區</span><span class="en">Xitun, Taichung</span></span>
+        <span class="project-badge"><span class="zh">銷售中</span><span class="en">On Sale</span></span>
+        <h3 class="project-name">弈璟</h3>
+        <p class="project-desc"><span class="zh">七期重劃區核心，融合光影與綠意的當代居所</span><span class="en">Contemporary living blending light and greenery in the 7th Redevelopment Zone</span></p>
+      </div>
+    </a>
+    <a href="project-chongyue.html" class="project-card reveal">
+      <div class="project-card-bg" style="background-image:url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80')"></div>
+      <div class="project-card-overlay"></div>
+      <div class="project-card-content">
+        <span class="project-tag"><span class="zh">新竹縣竹北市</span><span class="en">Zhubei, Hsinchu</span></span>
+        <span class="project-badge"><span class="zh">銷售中</span><span class="en">On Sale</span></span>
+        <h3 class="project-name">崇岳</h3>
+        <p class="project-desc"><span class="zh">依山而築，與自然共生的低密度景觀住宅</span><span class="en">Low-density landscape residences built alongside the mountains</span></p>
+      </div>
+    </a>
+    <a href="project-hanyu.html" class="project-card reveal">
+      <div class="project-card-bg" style="background-image:url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80')"></div>
+      <div class="project-card-overlay"></div>
+      <div class="project-card-content">
+        <span class="project-tag"><span class="zh">台北市中山區</span><span class="en">Zhongshan, Taipei</span></span>
+        <span class="project-badge"><span class="zh">銷售中</span><span class="en">On Sale</span></span>
+        <h3 class="project-name">瀚宇</h3>
+        <p class="project-desc"><span class="zh">中山北路二段精華地段，頂級商辦複合住宅</span><span class="en">Premium mixed-use complex on Zhongshan North Road</span></p>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- NEWS -->
+<section class="section news-section">
+  <p class="section-label reveal">News</p>
+  <h2 class="section-title reveal"><span class="zh">訊息公告</span><span class="en">Latest News</span></h2>
+  <p class="section-title-en reveal">Latest Updates</p>
+  <div class="news-tabs reveal">
+    <button class="news-tab active" data-target="news-latest"><span class="zh">最新消息</span><span class="en">Latest</span></button>
+    <button class="news-tab" data-target="news-media"><span class="zh">媒體報導</span><span class="en">Media</span></button>
+  </div>
+  <div class="news-list" id="news-latest">
+    <div class="news-item reveal">
+      <div class="news-date">
+        <div class="news-date-day">15</div>
+        <div class="news-date-ym">2026 . 03</div>
+      </div>
+      <div class="news-body">
+        <h4><span class="zh">Demo 建設「馥寓」正式公開，預約鑑賞啟動</span><span class="en">Demo Development "Fu Yu" officially launched, reservations open</span></h4>
+        <p><span class="zh">位於台北市大安區的全新力作「馥寓」即日起開放預約鑑賞，以國際級建材與當代美學設計，重新定義都心居住體驗。</span><span class="en">Our latest masterpiece "Fu Yu" in Da'an District, Taipei is now open for preview reservations, redefining urban living with international-grade materials and contemporary design.</span></p>
+      </div>
+    </div>
+    <div class="news-item reveal">
+      <div class="news-date">
+        <div class="news-date-day">02</div>
+        <div class="news-date-ym">2026 . 03</div>
+      </div>
+      <div class="news-body">
+        <h4><span class="zh">Demo 建設榮獲 2026 台灣建築金質獎</span><span class="en">Demo Development wins 2026 Taiwan Architecture Gold Award</span></h4>
+        <p><span class="zh">本公司以「弈璟」建案榮獲第十八屆台灣建築金質獎「最佳規劃設計類」殊榮，感謝評審團的肯定與全體團隊的努力。</span><span class="en">Our "Yi Jing" project won the 18th Taiwan Architecture Gold Award for "Best Planning Design," recognizing the dedication of our entire team.</span></p>
+      </div>
+    </div>
+    <div class="news-item reveal">
+      <div class="news-date">
+        <div class="news-date-day">18</div>
+        <div class="news-date-ym">2026 . 02</div>
+      </div>
+      <div class="news-body">
+        <h4><span class="zh">永續發展報告書正式發布</span><span class="en">Sustainability Report officially published</span></h4>
+        <p><span class="zh">Demo 建設 2025 年度永續發展報告書已正式出版，詳載碳足跡減量成果與綠建築推動策略，歡迎線上瀏覽下載。</span><span class="en">Our 2025 Sustainability Report is now available, detailing carbon footprint reduction achievements and green building strategies.</span></p>
+      </div>
+    </div>
+  </div>
+  <div class="news-list hidden" id="news-media">
+    <div class="news-item reveal">
+      <div class="news-date">
+        <div class="news-date-day">10</div>
+        <div class="news-date-ym">2026 . 03</div>
+      </div>
+      <div class="news-body">
+        <h4><span class="zh">《經濟日報》專訪：Demo 建設如何以美學突圍豪宅市場</span><span class="en">Economic Daily interview: How Demo Development breaks through the luxury market with aesthetics</span></h4>
+        <p><span class="zh">面對競爭激烈的高端住宅市場，Demo 建設堅持以國際美學標準與永續理念，走出差異化的品牌之路。</span><span class="en">Facing fierce competition in the premium housing market, Demo Development persists with international aesthetics and sustainability to forge a unique brand path.</span></p>
+      </div>
+    </div>
+    <div class="news-item reveal">
+      <div class="news-date">
+        <div class="news-date-day">25</div>
+        <div class="news-date-ym">2026 . 02</div>
+      </div>
+      <div class="news-body">
+        <h4><span class="zh">《商業周刊》報導：新竹「崇岳」引領低密度住宅新潮流</span><span class="en">BusinessWeekly: Hsinchu "Chong Yue" leads new trend in low-density housing</span></h4>
+        <p><span class="zh">在高樓林立的竹北地區，Demo 建設反其道而行，以低密度景觀住宅創造稀缺性，獲得高資產族群青睞。</span><span class="en">In the high-rise Zhubei area, Demo Development takes a contrarian approach with low-density landscape residences, attracting high-net-worth clientele.</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ACHIEVEMENTS -->
+<section class="section achievements">
+  <p class="section-label reveal">Achievements</p>
+  <h2 class="section-title reveal" style="color:#fff"><span class="zh">數字成就</span><span class="en">Our Milestones</span></h2>
+  <p class="section-title-en reveal">Our Milestones</p>
+  <div class="achievements-grid reveal">
+    <div class="achievement-item">
+      <div class="achievement-number"><span class="counter" data-target="1998">0</span></div>
+      <div class="achievement-label"><span class="zh">成立年份</span><span class="en">Founded</span></div>
+    </div>
+    <div class="achievement-item">
+      <div class="achievement-number"><span class="counter" data-target="3200">0</span><span class="achievement-suffix">+</span></div>
+      <div class="achievement-label"><span class="zh">完工戶數</span><span class="en">Units Completed</span></div>
+    </div>
+    <div class="achievement-item">
+      <div class="achievement-number"><span class="counter" data-target="120">0</span><span class="achievement-suffix"><span class="zh"> 萬坪</span><span class="en"> M ft²</span></span></div>
+      <div class="achievement-label"><span class="zh">開發坪數</span><span class="en">Developed Area</span></div>
+    </div>
+    <div class="achievement-item">
+      <div class="achievement-number"><span class="counter" data-target="98">0</span><span class="achievement-suffix">%</span></div>
+      <div class="achievement-label"><span class="zh">客戶滿意度</span><span class="en">Client Satisfaction</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section contact-section">
+  <p class="section-label reveal">Contact</p>
+  <h2 class="section-title reveal"><span class="zh">聯絡我們</span><span class="en">Contact Us</span></h2>
+  <p class="section-title-en reveal">Get in Touch</p>
+  <div class="contact-grid">
+    <div class="contact-info reveal">
+      <h3>Demo DEVELOPMENT</h3>
+      <div class="contact-detail">
+        <p class="contact-detail-label">Address</p>
+        <p class="contact-detail-value"><span class="zh">台北市信義區松仁路 100 號 18 樓</span><span class="en">18F, No. 100, Songren Rd., Xinyi Dist., Taipei</span></p>
+      </div>
+      <div class="contact-detail">
+        <p class="contact-detail-label">Phone</p>
+        <p class="contact-detail-value">(02) 2345-6789</p>
+      </div>
+      <div class="contact-detail">
+        <p class="contact-detail-label">Email</p>
+        <p class="contact-detail-value">info@demo-development.com.tw</p>
+      </div>
+      <div class="contact-detail">
+        <p class="contact-detail-label"><span class="zh">Office Hours</span><span class="en">Office Hours</span></p>
+        <p class="contact-detail-value"><span class="zh">週一至週五 09:00 - 18:00</span><span class="en">Mon - Fri, 09:00 - 18:00</span></p>
+      </div>
+    </div>
+    <div class="contact-form reveal">
+      <h3><span class="zh">預約諮詢</span><span class="en">Consultation</span></h3>
+      <form onsubmit="handleSubmit(event)">
+        <div class="form-group">
+          <label><span class="zh">姓名</span><span class="en">Name</span></label>
+          <input type="text" required>
+        </div>
+        <div class="form-group">
+          <label><span class="zh">聯絡電話</span><span class="en">Phone</span></label>
+          <input type="tel" required>
+        </div>
+        <div class="form-group">
+          <label><span class="zh">諮詢需求</span><span class="en">Message</span></label>
+          <textarea></textarea>
+        </div>
+        <button type="submit" class="form-submit"><span class="zh">送出諮詢</span><span class="en">Submit</span></button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="footer-brand-name">Demo</div>
+      <div class="footer-brand-sub">Development</div>
+      <p><span class="zh">深耕台灣 25 年<br>以國際美學標準打造精緻住宅</span><span class="en">25 years in Taiwan<br>Crafting refined residences with international aesthetics</span></p>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title"><span class="zh">導覽</span><span class="en">Navigation</span></div>
+      <a href="about.html"><span class="zh">關於我們</span><span class="en">About</span></a>
+      <a href="projects.html"><span class="zh">建案作品</span><span class="en">Projects</span></a>
+      <a href="sustainability.html"><span class="zh">永續發展</span><span class="en">Sustainability</span></a>
+      <a href="news.html"><span class="zh">訊息公告</span><span class="en">News</span></a>
+      <a href="contact.html"><span class="zh">聯絡我們</span><span class="en">Contact</span></a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title"><span class="zh">關係企業</span><span class="en">Affiliates</span></div>
+      <a href="#">Demo <span class="zh">營造工程</span><span class="en">Construction</span></a>
+      <a href="#">Demo <span class="zh">物業管理</span><span class="en">Property Mgmt</span></a>
+      <a href="#">Demo <span class="zh">設計顧問</span><span class="en">Design Consulting</span></a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-col-title"><span class="zh">聯繫</span><span class="en">Contact</span></div>
+      <a href="tel:0223456789">(02) 2345-6789</a>
+      <a href="mailto:info@demo-development.com.tw">info@demo-development.com.tw</a>
+      <a href="contact.html"><span class="zh">台北市信義區松仁路 100 號 18 樓</span><span class="en">18F, No.100 Songren Rd, Taipei</span></a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 Demo DEVELOPMENT. All Rights Reserved.</span>
+    <span><span class="zh">隱私權政策 ｜ 使用條款</span><span class="en">Privacy Policy ｜ Terms of Use</span></span>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

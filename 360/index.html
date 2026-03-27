@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LED 漁業用燈 - 360° 互動展示</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: #0a0e1a;
+    color: #c8d0e0;
+    font-family: 'Segoe UI', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+    line-height: 1.75;
+  }
+
+  /* ── Navigation ── */
+  .top-nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 28px;
+    height: 56px;
+    background: rgba(10,14,26,0.92);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .nav-brand {
+    font-size: 17px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 1px;
+  }
+  .nav-brand span { color: #00e5ff; }
+  .nav-links {
+    display: flex;
+    gap: 4px;
+  }
+  .nav-links a {
+    padding: 6px 16px;
+    border-radius: 8px;
+    color: #7a8aaa;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+  }
+  .nav-links a:hover, .nav-links a.active {
+    color: #00e5ff;
+    background: rgba(0,229,255,0.08);
+  }
+  .hamburger {
+    display: none;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 22px;
+    cursor: pointer;
+  }
+
+  /* ── Hero / 3D Section ── */
+  .hero {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    min-height: 600px;
+    overflow: hidden;
+  }
+  #canvas-container {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    cursor: grab;
+  }
+  #canvas-container:active { cursor: grabbing; }
+  #canvas-container canvas { display: block; }
+
+  .hero-title {
+    position: absolute;
+    top: 80px; left: 30px;
+    z-index: 10;
+    pointer-events: none;
+  }
+  .hero-title h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 2px;
+  }
+  .hero-title h1 span { color: #00e5ff; }
+  .hero-title .sub {
+    font-size: 13px;
+    color: #5a6a8a;
+    margin-top: 4px;
+    letter-spacing: 1px;
+  }
+
+  .drag-hint {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 20;
+    color: rgba(255,255,255,0.45);
+    font-size: 14px;
+    letter-spacing: 1px;
+    pointer-events: none;
+    animation: hintFade 4s ease-out forwards;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .drag-hint svg { animation: hintDrag 1.5s ease-in-out infinite; }
+  @keyframes hintFade { 0%,60%{opacity:1} 100%{opacity:0;visibility:hidden} }
+  @keyframes hintDrag { 0%,100%{transform:translateX(-8px)} 50%{transform:translateX(8px)} }
+
+  /* 3D Controls */
+  .d3-controls {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .ctrl-btn {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(15,20,35,0.8);
+    backdrop-filter: blur(12px);
+    color: #7a8aaa;
+    font-size: 17px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.25s;
+  }
+  .ctrl-btn:hover { border-color: #00e5ff; color: #00e5ff; }
+  .ctrl-btn.active { border-color: #00e5ff; color: #00e5ff; box-shadow: 0 0 12px rgba(0,229,255,0.15); }
+
+  .color-panel {
+    position: absolute;
+    left: 20px; top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    display: flex; flex-direction: column; gap: 7px;
+    padding: 12px;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.05);
+    background: rgba(15,20,35,0.8);
+    backdrop-filter: blur(12px);
+  }
+  .color-panel label {
+    font-size: 10px; color: #5a6a8a;
+    text-align: center; margin-bottom: 2px; letter-spacing: 1px;
+  }
+  .color-dot {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .color-dot:hover { transform: scale(1.12); }
+  .color-dot.active { border-color: #fff; box-shadow: 0 0 16px var(--glow); }
+  .color-dot[data-color="green"]  { background: #00ff88; --glow: rgba(0,255,136,0.4); }
+  .color-dot[data-color="blue"]   { background: #0088ff; --glow: rgba(0,136,255,0.4); }
+  .color-dot[data-color="white"]  { background: #ffffff; --glow: rgba(255,255,255,0.4); }
+  .color-dot[data-color="yellow"] { background: #ffcc00; --glow: rgba(255,204,0,0.4); }
+  .color-dot[data-color="red"]    { background: #ff3344; --glow: rgba(255,51,68,0.4); }
+
+  .intensity-wrap {
+    position: absolute;
+    left: 20px; bottom: 20px;
+    z-index: 10;
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.05);
+    background: rgba(15,20,35,0.8);
+    backdrop-filter: blur(12px);
+  }
+  .intensity-wrap label { font-size: 10px; color: #5a6a8a; letter-spacing: 1px; }
+  .intensity-wrap input[type=range] {
+    -webkit-appearance: none; width: 100px; height: 3px;
+    border-radius: 2px; background: #1a2540; outline: none;
+  }
+  .intensity-wrap input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 14px; height: 14px;
+    border-radius: 50%; background: #00e5ff; cursor: pointer;
+    box-shadow: 0 0 6px rgba(0,229,255,0.4);
+  }
+  .intensity-value { font-size: 13px; color: #00e5ff; font-weight: 600; }
+
+  /* Bottom Spec Bar */
+  .spec-bar {
+    position: absolute;
+    bottom: 20px;
+    left: 50%; transform: translateX(-50%);
+    z-index: 10;
+    display: flex; gap: 28px;
+    padding: 14px 32px;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.05);
+    background: rgba(15,20,35,0.8);
+    backdrop-filter: blur(12px);
+  }
+  .spec-bar .si { text-align: center; }
+  .spec-bar .si .v { font-size: 18px; font-weight: 700; color: #00e5ff; }
+  .spec-bar .si .l { font-size: 10px; color: #5a6a8a; margin-top: 2px; letter-spacing: 0.5px; }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 85px;
+    left: 50%; transform: translateX(-50%);
+    z-index: 10;
+    color: rgba(255,255,255,0.3);
+    font-size: 12px;
+    text-align: center;
+    animation: scrollBounce 2s ease-in-out infinite;
+    pointer-events: none;
+  }
+  .scroll-hint::after { content: '\\25BC'; display: block; margin-top: 2px; }
+  @keyframes scrollBounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(6px)} }
+
+  /* ── Section Common ── */
+  .section {
+    padding: 80px 28px;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  .section-label {
+    font-size: 11px; color: #00e5ff; letter-spacing: 3px;
+    text-transform: uppercase; font-weight: 600; margin-bottom: 8px;
+  }
+  .section h2 {
+    font-size: 30px; font-weight: 800; color: #fff; margin-bottom: 12px;
+  }
+  .section h2 span { color: #00e5ff; }
+  .section-desc {
+    font-size: 15px; color: #6a7a9b; margin-bottom: 40px; max-width: 600px;
+  }
+
+  /* ── Product Section ── */
+  .highlight-box {
+    background: rgba(0,229,255,0.04);
+    border: 1px solid rgba(0,229,255,0.12);
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin: 20px 0;
+    font-size: 15px;
+    color: #a0b0c8;
+    line-height: 1.9;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 24px 0;
+  }
+  .feat-card {
+    padding: 20px;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.05);
+    background: rgba(255,255,255,0.015);
+    transition: border-color 0.2s;
+  }
+  .feat-card:hover { border-color: rgba(0,229,255,0.2); }
+  .feat-icon { font-size: 24px; margin-bottom: 10px; }
+  .feat-card h4 { font-size: 15px; color: #fff; margin-bottom: 6px; font-weight: 600; }
+  .feat-card p { font-size: 13px; color: #7a8aaa; line-height: 1.7; }
+
+  .spec-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+  }
+  .spec-table th, .spec-table td {
+    padding: 11px 16px;
+    text-align: left;
+    font-size: 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .spec-table th { color: #5a6a8a; font-weight: 500; width: 150px; }
+  .spec-table td { color: #d0d8e8; }
+
+  .compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 20px 0;
+  }
+  .cmp-card {
+    padding: 20px;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.05);
+    background: rgba(255,255,255,0.01);
+  }
+  .cmp-card.ours {
+    border-color: rgba(0,229,255,0.25);
+    background: rgba(0,229,255,0.03);
+  }
+  .cmp-card h4 { font-size: 14px; color: #5a6a8a; margin-bottom: 10px; font-weight: 600; }
+  .cmp-card.ours h4 { color: #00e5ff; }
+  .cmp-card ul { padding-left: 18px; }
+  .cmp-card li { font-size: 13px; color: #8a9ab0; margin-bottom: 4px; }
+
+  .sub-heading {
+    font-size: 18px; color: #00e5ff; font-weight: 600;
+    margin: 36px 0 14px;
+    padding-left: 14px;
+    border-left: 3px solid #00e5ff;
+  }
+
+  .text-list { padding-left: 20px; }
+  .text-list li { font-size: 14.5px; color: #a0aec0; margin-bottom: 6px; }
+  .text-list li strong { color: #e0e8f4; }
+
+  /* ── 360 Guide Section ── */
+  .method-card {
+    background: rgba(255,255,255,0.015);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 16px;
+    padding: 28px 28px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .method-card::before {
+    content: attr(data-num);
+    position: absolute;
+    top: -24px; right: -8px;
+    font-size: 110px; font-weight: 900;
+    color: rgba(0,229,255,0.03);
+    pointer-events: none;
+  }
+  .method-head {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 14px;
+  }
+  .method-icon {
+    width: 42px; height: 42px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; flex-shrink: 0;
+  }
+  .method-card h3 {
+    font-size: 20px; color: #fff; font-weight: 700;
+  }
+  .method-card h3 small {
+    display: block; font-size: 11px; color: #00e5ff;
+    font-weight: 500; letter-spacing: 1px; margin-top: 2px;
+  }
+  .badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 6px;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.5px;
+    margin-left: 6px; vertical-align: middle;
+  }
+  .badge-rec { background: rgba(0,229,255,0.12); color: #00e5ff; }
+  .badge-easy { background: rgba(0,255,136,0.1); color: #00ff88; }
+  .badge-pro { background: rgba(255,170,0,0.1); color: #ffaa00; }
+
+  .method-card h4 {
+    font-size: 15px; color: #00e5ff; font-weight: 600;
+    margin: 20px 0 10px;
+    padding-left: 12px;
+    border-left: 3px solid rgba(0,229,255,0.4);
+  }
+  .method-card p { font-size: 14px; color: #8a9ab0; }
+  .method-card > ul, .method-card > ol { padding-left: 20px; }
+  .method-card li { font-size: 14px; color: #8a9ab0; margin-bottom: 5px; }
+  .method-card li strong { color: #d0d8e8; }
+
+  .step-box {
+    background: rgba(0,229,255,0.03);
+    border: 1px solid rgba(0,229,255,0.08);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin: 10px 0;
+  }
+  .step-box .st { font-size: 12px; font-weight: 700; color: #00e5ff; margin-bottom: 4px; }
+  .step-box p { margin: 0; }
+
+  .diagram {
+    background: #080c18;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 10px;
+    padding: 18px;
+    margin: 12px 0;
+    font-family: 'Courier New', monospace;
+    font-size: 12.5px;
+    color: #5a7a9a;
+    white-space: pre;
+    overflow-x: auto;
+    line-height: 1.5;
+  }
+
+  .pros-cons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 14px 0;
+  }
+  .pros-box, .cons-box {
+    padding: 14px 16px;
+    border-radius: 10px;
+    font-size: 13px;
+  }
+  .pros-box { background: rgba(0,255,136,0.03); border: 1px solid rgba(0,255,136,0.08); }
+  .cons-box { background: rgba(255,51,68,0.03); border: 1px solid rgba(255,51,68,0.08); }
+  .pros-box h5 { color: #00ff88; font-size: 12px; margin-bottom: 6px; letter-spacing: 1px; }
+  .cons-box h5 { color: #ff5566; font-size: 12px; margin-bottom: 6px; letter-spacing: 1px; }
+  .pros-box li, .cons-box li { font-size: 13px; margin-bottom: 3px; }
+
+  .tool-tags {
+    display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0;
+  }
+  .tool-tag {
+    padding: 4px 10px; border-radius: 6px;
+    font-size: 12px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    color: #7a8aaa;
+  }
+
+  .cost-line {
+    font-size: 13px; color: #5a6a8a; margin: 10px 0;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .cost-bar-inner {
+    height: 5px; border-radius: 3px;
+    background: linear-gradient(90deg, #00e5ff, #00ff88);
+  }
+
+  /* Summary Table */
+  .sum-table {
+    width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 13px;
+  }
+  .sum-table th, .sum-table td {
+    padding: 10px 12px; text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .sum-table th { color: #5a6a8a; font-weight: 600; font-size: 11px; letter-spacing: 1px; }
+  .sum-table td { color: #a0b0c8; }
+  .sum-table tr:hover { background: rgba(0,229,255,0.02); }
+  .stars { color: #ffcc00; letter-spacing: 2px; }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    padding: 40px 20px;
+    border-top: 1px solid rgba(255,255,255,0.04);
+    font-size: 12px; color: #3a4a6a;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .top-nav { padding: 0 16px; }
+    .nav-links { display: none; }
+    .nav-links.open {
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      top: 56px; left: 0; right: 0;
+      background: rgba(10,14,26,0.98);
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .hamburger { display: block; }
+    .features-grid, .compare-grid, .pros-cons { grid-template-columns: 1fr; }
+    .spec-bar { gap: 14px; padding: 10px 18px; }
+    .spec-bar .si .v { font-size: 14px; }
+    .hero-title h1 { font-size: 22px; }
+    .section h2 { font-size: 24px; }
+    .diagram { font-size: 11px; }
+    .d3-controls { right: 10px; }
+    .color-panel { left: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- NAV -->
+<!-- ══════════════════════════════════════════ -->
+<nav class="top-nav">
+  <div class="nav-brand"><span>LED</span> 漁業用燈</div>
+  <div class="nav-links" id="nav-links">
+    <a href="#hero" class="active">3D 展示</a>
+    <a href="#product">產品介紹</a>
+    <a href="#roi">投資分析</a>
+    <a href="#guide">360° 方案指南</a>
+  </div>
+  <button class="hamburger" onclick="document.getElementById('nav-links').classList.toggle('open')">&#9776;</button>
+</nav>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- HERO / 3D DEMO -->
+<!-- ══════════════════════════════════════════ -->
+<section class="hero" id="hero">
+  <div id="canvas-container"></div>
+
+  <div class="hero-title">
+    <h1><span>LED</span> 高效能漁業集魚燈</h1>
+    <div class="sub">360° 互動產品展示 · 拖曳旋轉 · 滾輪縮放</div>
+  </div>
+
+  <div class="drag-hint">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    拖曳旋轉 · 滾輪縮放
+  </div>
+
+  <!-- Color -->
+  <div class="color-panel">
+    <label>燈色</label>
+    <div class="color-dot active" data-color="green" onclick="setLightColor('green')"></div>
+    <div class="color-dot" data-color="blue" onclick="setLightColor('blue')"></div>
+    <div class="color-dot" data-color="white" onclick="setLightColor('white')"></div>
+    <div class="color-dot" data-color="yellow" onclick="setLightColor('yellow')"></div>
+    <div class="color-dot" data-color="red" onclick="setLightColor('red')"></div>
+  </div>
+
+  <!-- Controls -->
+  <div class="d3-controls">
+    <button class="ctrl-btn active" id="btn-rotate" onclick="toggleAutoRotate()" title="自動旋轉">&#10227;</button>
+    <button class="ctrl-btn" id="btn-light" onclick="toggleLight()" title="開關燈">&#128161;</button>
+    <button class="ctrl-btn" id="btn-water" onclick="toggleWater()" title="水面效果">&#127754;</button>
+    <button class="ctrl-btn" id="btn-xray" onclick="toggleXray()" title="透視模式">&#128065;</button>
+  </div>
+
+  <!-- Intensity -->
+  <div class="intensity-wrap">
+    <label>亮度</label>
+    <input type="range" id="intensity" min="0" max="100" value="80" oninput="setIntensity(this.value)">
+    <div class="intensity-value" id="intensity-val">80%</div>
+  </div>
+
+  <!-- Spec Bar -->
+  <div class="spec-bar">
+    <div class="si"><div class="v">2400W</div><div class="l">功率</div></div>
+    <div class="si"><div class="v">IP68</div><div class="l">防水等級</div></div>
+    <div class="si"><div class="v">360°</div><div class="l">照射角度</div></div>
+    <div class="si"><div class="v">50,000h</div><div class="l">壽命</div></div>
+    <div class="si"><div class="v">-20~60°C</div><div class="l">工作溫度</div></div>
+  </div>
+
+  <div class="scroll-hint">往下滑動看更多</div>
+</section>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- PRODUCT INFO -->
+<!-- ══════════════════════════════════════════ -->
+<section class="section" id="product">
+  <div class="section-label">Product Overview</div>
+  <h2>產品<span>介紹</span></h2>
+  <p class="section-desc">專為遠洋 / 近海漁業設計的新一代 LED 集魚燈，節能高效、持久耐用。</p>
+
+  <div class="highlight-box">
+    全新一代 LED 集魚燈，採用<strong>航太級鋁合金外殼</strong>搭配高密度 LED 晶片陣列，提供 360° 全方位均勻照射。相比傳統金鹵燈<strong>省電 60% 以上</strong>，使用壽命長達 <strong>50,000 小時</strong>，一次安裝、多年無憂。
+  </div>
+
+  <h3 class="sub-heading">核心優勢</h3>
+  <div class="features-grid">
+    <div class="feat-card">
+      <div class="feat-icon">&#128308;</div>
+      <h4>360° 全方位照射</h4>
+      <p>8 面 LED 面板環繞配置，無暗角死角，水下光場均勻分佈，有效擴大集魚範圍。</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">&#9889;</div>
+      <h4>超高光效 160lm/W</h4>
+      <p>進口高亮度 LED 晶片，光效達 160lm/W 以上，相同功率下亮度提升 40%。</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">&#128167;</div>
+      <h4>IP68 全密封防水</h4>
+      <p>通過 IP68 等級認證，可在水下 30 米長時間工作，適應各種惡劣海況。</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">&#127752;</div>
+      <h4>五色可選</h4>
+      <p>綠光、藍光、白光、黃光、紅光五種選擇，滿足不同魚種趨光特性。</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">&#10052;</div>
+      <h4>智能散熱系統</h4>
+      <p>底部精密散熱鰭片，搭配海水自然冷卻，確保長時間穩定運行。</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-icon">&#127807;</div>
+      <h4>節能環保</h4>
+      <p>比傳統金鹵燈省電 60%，大幅降低發電機燃油成本，減少碳排放。</p>
+    </div>
+  </div>
+
+  <h3 class="sub-heading">詳細規格</h3>
+  <table class="spec-table">
+    <tr><th>產品型號</th><td>FL-LED-2400</td></tr>
+    <tr><th>額定功率</th><td>2,400W（可調光 10%~100%）</td></tr>
+    <tr><th>光通量</th><td>384,000 lm（綠光）</td></tr>
+    <tr><th>光效</th><td>≥ 160 lm/W</td></tr>
+    <tr><th>照射角度</th><td>360°（水平）× 150°（垂直）</td></tr>
+    <tr><th>有效集魚半徑</th><td>水下 800m ~ 1,200m</td></tr>
+    <tr><th>防護等級</th><td>IP68（水下 30m 持續工作）</td></tr>
+    <tr><th>工作電壓</th><td>DC 24V / AC 220V（可選）</td></tr>
+    <tr><th>LED 壽命</th><td>≥ 50,000 小時</td></tr>
+    <tr><th>工作溫度</th><td>-20°C ~ 60°C</td></tr>
+    <tr><th>外殼材質</th><td>航太級 6063 鋁合金 + 陽極氧化處理</td></tr>
+    <tr><th>安裝方式</th><td>頂部吊環 + 電纜垂吊</td></tr>
+    <tr><th>尺寸</th><td>直徑 120mm × 長度 550mm</td></tr>
+    <tr><th>重量</th><td>約 4.8 kg</td></tr>
+    <tr><th>可選顏色</th><td>綠 / 藍 / 白 / 黃 / 紅</td></tr>
+  </table>
+
+  <h3 class="sub-heading">傳統燈具 vs LED 漁業用燈</h3>
+  <div class="compare-grid">
+    <div class="cmp-card">
+      <h4>傳統金鹵燈 / 鎢絲燈</h4>
+      <ul>
+        <li>功率高、發熱大</li>
+        <li>壽命僅 2,000~5,000 小時</li>
+        <li>易碎、不耐震動</li>
+        <li>需頻繁更換燈管</li>
+        <li>燃油成本高</li>
+        <li>光線分佈不均</li>
+      </ul>
+    </div>
+    <div class="cmp-card ours">
+      <h4>LED 漁業用燈（本產品）</h4>
+      <ul>
+        <li>同等亮度省電 60%</li>
+        <li>壽命 50,000 小時以上</li>
+        <li>全鋁合金、抗震耐腐蝕</li>
+        <li>幾乎免維護</li>
+        <li>大幅降低燃油開支</li>
+        <li>360° 均勻光場</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3 class="sub-heading">適用場景</h3>
+  <ul class="text-list">
+    <li><strong>秋刀魚漁業</strong> — 綠光/白光，高穿透力，深水域集魚效果佳</li>
+    <li><strong>魷魚漁業</strong> — 藍光/白光，針對魷魚趨光特性優化波長</li>
+    <li><strong>鰹魚一本釣</strong> — 白光照明，兼顧作業照明與集魚</li>
+    <li><strong>養殖漁業</strong> — 可調光設計，適合定置網及箱網養殖補光</li>
+    <li><strong>近海漁筏</strong> — 低功率模式即可滿足近海作業需求</li>
+  </ul>
+</section>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- ROI -->
+<!-- ══════════════════════════════════════════ -->
+<section class="section" id="roi" style="border-top: 1px solid rgba(255,255,255,0.04);">
+  <div class="section-label">Return on Investment</div>
+  <h2>投資<span>回報分析</span></h2>
+  <p class="section-desc">以實際數據讓您了解 LED 漁業用燈的經濟效益。</p>
+
+  <div class="highlight-box">
+    以一艘配備 <strong>20 盞燈</strong>的秋刀魚船為例：<br><br>
+    <strong>傳統金鹵燈方案：</strong>每盞 3,000W × 20 盞 = 60kW → 每晚燃油約 NT$6,000<br>
+    <strong>LED 方案：</strong>每盞 2,400W × 20 盞 = 48kW → 每晚燃油約 NT$3,600<br><br>
+    每晚節省 <strong style="color:#00e5ff">NT$2,400</strong>，一個漁季（約 120 天）可節省 <strong style="color:#00e5ff">NT$288,000</strong><br>
+    加上免更換燈管的維護費用，通常 <strong style="color:#00ff88">1~2 個漁季即可回本</strong>。
+  </div>
+
+  <h3 class="sub-heading">品質保證</h3>
+  <ul class="text-list">
+    <li>通過 <strong>CE / FCC / RoHS</strong> 國際認證</li>
+    <li>出廠前逐盞水壓測試，確保 IP68 防水性能</li>
+    <li><strong>LED 模組保固 3 年</strong>，整燈保固 2 年</li>
+    <li>提供專業安裝指導與售後技術支援</li>
+  </ul>
+
+  <h3 class="sub-heading">客戶案例</h3>
+  <ul class="text-list">
+    <li><strong>台灣遠洋秋刀魚船隊</strong> — 整船換裝 LED，燃油成本下降 45%</li>
+    <li><strong>日本近海魷釣漁船</strong> — 使用藍光 LED 後，單位捕獲量提升 20%</li>
+    <li><strong>東南亞養殖場</strong> — 採用可調光模式，降低電費並提升養殖效率</li>
+  </ul>
+</section>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- 360° GUIDE -->
+<!-- ══════════════════════════════════════════ -->
+<section class="section" id="guide" style="border-top: 1px solid rgba(255,255,255,0.04);">
+  <div class="section-label">360° Implementation Guide</div>
+  <h2>360° 展示<span>方案指南</span></h2>
+  <p class="section-desc">從拍攝、製作到網頁呈現——所有方法完整整理，選擇最適合你的方案。</p>
+
+  <!-- ── Method 1 ── -->
+  <div class="method-card" data-num="01">
+    <div class="method-head">
+      <div class="method-icon" style="background:rgba(0,229,255,0.08);">&#128248;</div>
+      <h3>方法一：多角度拍照旋轉 <span class="badge badge-rec">最推薦</span>
+        <small>MULTI-ANGLE PHOTOGRAPHY SPIN</small>
+      </h3>
+    </div>
+    <p>將產品放在轉盤上，固定相機，每隔固定角度拍一張照片（24~72 張），用 JS 串成可拖曳旋轉的互動效果。<strong>業界最常用</strong>的產品 360° 展示方式。</p>
+
+    <h4>拍攝設備需求</h4>
+    <ul>
+      <li><strong>相機</strong> — 任何可手動曝光的相機（手機也行，單眼更佳）</li>
+      <li><strong>電動轉盤</strong> — 網拍轉盤 NT$500~3,000 或專業級 NT$5,000~30,000</li>
+      <li><strong>三腳架</strong> — 固定相機位置，確保每張高度一致</li>
+      <li><strong>燈光</strong> — 柔光箱 ×2 或環形燈，確保均勻打光</li>
+      <li><strong>背景</strong> — 白色 / 黑色背景布或背景紙</li>
+    </ul>
+
+    <h4>場地佈置</h4>
+    <div class="diagram">
+        柔光箱                      柔光箱
+         \  ┌─────────────────┐  /
+          \ │                 │ /
+           \│   白色背景紙     │/
+            │                 │
+            │   ┌─────────┐   │
+            │   │  轉盤    │   │     ← 每次旋轉 5°~15°
+            │   │ ┌─────┐ │   │
+            │   │ │ 產品 │ │   │
+            │   │ └─────┘ │   │
+            │   └─────────┘   │
+            │                 │
+            └────────┬────────┘
+                     │
+                 📷 相機（三腳架固定）</div>
+
+    <h4>拍攝步驟</h4>
+    <div class="step-box">
+      <div class="st">Step 1：相機設定</div>
+      <p>手動模式（M mode），光圈 f/8~f/11、ISO 100、快門依測光調整。<strong>關閉自動白平衡</strong>，手動設定固定色溫。對焦後切到手動對焦（MF）鎖定。</p>
+    </div>
+    <div class="step-box">
+      <div class="st">Step 2：拍攝方式</div>
+      <p>
+        <strong>A. 電動轉盤：</strong>設定自動旋轉，每轉 10° 停一下拍一張 → 共 36 張<br>
+        <strong>B. 手動轉盤：</strong>每次手轉固定角度，拍一張<br>
+        <strong>C. 人繞著拍：</strong>產品固定，人繞著走，每隔固定距離拍（精度較低）
+      </p>
+    </div>
+    <div class="step-box">
+      <div class="st">Step 3：建議張數</div>
+      <p>
+        24 張 = 每 15° 一張（最低限度，有跳動感）<br>
+        <strong>36 張 = 每 10° 一張（推薦，流暢度與檔案大小平衡）</strong><br>
+        72 張 = 每 5° 一張（絲滑流暢，但檔案多）
+      </p>
+    </div>
+    <div class="step-box">
+      <div class="st">Step 4：後製</div>
+      <p>
+        1. Lightroom 批次調整：白平衡統一、曝光微調<br>
+        2. Photoshop 批次去背（或用 remove.bg 線上去背）<br>
+        3. 統一裁切正方形（建議 1000×1000 px）<br>
+        4. 輸出 JPG（品質 80%），命名 001.jpg ~ 036.jpg
+      </p>
+    </div>
+    <div class="step-box">
+      <div class="st">Step 5：網頁串接</div>
+      <p>用 JS 套件或自己寫程式碼，把照片串成可拖曳旋轉的互動效果。</p>
+    </div>
+
+    <h4>推薦 JS 套件</h4>
+    <div class="tool-tags">
+      <span class="tool-tag">js-cloudimage-360-view（免費）</span>
+      <span class="tool-tag">360-image-viewer</span>
+      <span class="tool-tag">SpriteSpin（jQuery）</span>
+      <span class="tool-tag">Sirv 360 Viewer（SaaS）</span>
+      <span class="tool-tag">自己寫 JS</span>
+    </div>
+
+    <h4>自己寫 JS 的程式碼範例</h4>
+    <div class="diagram">
+&lt;div id="viewer" style="width:600px;height:600px;cursor:grab;"&gt;
+  &lt;img id="spin-img" src="images/001.jpg"
+       style="width:100%;height:100%;object-fit:contain;"&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+const total = 36;           // 你有幾張照片
+const folder = 'images/';   // 照片資料夾
+let current = 1, dragging = false, startX = 0;
+const img = document.getElementById('spin-img');
+const viewer = document.getElementById('viewer');
+
+// 預載所有圖片
+for (let i = 1; i &lt;= total; i++) {
+  new Image().src = folder + String(i).padStart(3,'0') + '.jpg';
+}
+
+viewer.addEventListener('pointerdown', e =&gt; {
+  dragging = true; startX = e.clientX;
+});
+window.addEventListener('pointerup', () =&gt; dragging = false);
+window.addEventListener('pointermove', e =&gt; {
+  if (!dragging) return;
+  const d = e.clientX - startX;
+  if (Math.abs(d) &gt; 5) {
+    current += d &gt; 0 ? 1 : -1;
+    if (current &gt; total) current = 1;
+    if (current &lt; 1) current = total;
+    img.src = folder + String(current).padStart(3,'0') + '.jpg';
+    startX = e.clientX;
+  }
+});
+&lt;/script&gt;</div>
+
+    <h4>多排拍攝（上下也能轉）</h4>
+    <div class="diagram">
+  拍攝 5 排 × 36 張 = 180 張照片
+
+  排1：相機在上方 60° 俯視  → 拍 36 張
+  排2：相機在上方 30° 俯視  → 拍 36 張
+  排3：相機平視 0°          → 拍 36 張（主要排）
+  排4：相機在下方 -30° 仰視 → 拍 36 張
+  排5：相機在下方 -60° 仰視 → 拍 36 張
+
+  拖曳左右 → 水平旋轉（切換同排不同張）
+  拖曳上下 → 垂直旋轉（切換不同排同角度）</div>
+
+    <div class="pros-cons">
+      <div class="pros-box"><h5>優點</h5><ul>
+        <li>畫質最高（真實照片）</li><li>客戶信任度最高</li>
+        <li>設備門檻低</li><li>手機相容好</li>
+      </ul></div>
+      <div class="cons-box"><h5>缺點</h5><ul>
+        <li>拍攝耗時 1~2hr/產品</li><li>後製去背耗時</li>
+        <li>每個產品要重拍</li><li>多排設置複雜</li>
+      </ul></div>
+    </div>
+    <div class="cost-line">
+      成本：<div class="cost-bar-inner" style="width:80px;"></div>
+      NT$500~5,000（自拍）/ NT$3,000~15,000（外包）
+    </div>
+  </div>
+
+  <!-- ── Method 2 ── -->
+  <div class="method-card" data-num="02">
+    <div class="method-head">
+      <div class="method-icon" style="background:rgba(255,170,0,0.08);">&#129527;</div>
+      <h3>方法二：3D 建模渲染 <span class="badge badge-pro">專業級</span>
+        <small>3D MODEL + WEBGL (THREE.JS)</small>
+      </h3>
+    </div>
+    <p>用 3D 軟體建立產品模型，匯出為 glTF/GLB，用 Three.js 即時渲染。使用者可<strong>真正自由旋轉</strong>任意角度，還能加動態光效。</p>
+
+    <h4>建模方式</h4>
+    <ul>
+      <li><strong>手動建模</strong> — Blender（免費）/ 3ds Max / SolidWorks</li>
+      <li><strong>3D 掃描</strong> — 用 3D 掃描器掃描實體產品</li>
+      <li><strong>照片建模（Photogrammetry）</strong> — 拍 50~200 張照片，軟體重建 3D</li>
+      <li><strong>AI 生成</strong> — Meshy / Tripo3D / CSM 等 AI 從照片生成</li>
+    </ul>
+
+    <h4>照片建模拍攝方法</h4>
+    <div class="step-box">
+      <div class="st">拍攝要點</div>
+      <p>
+        1. 拍 <strong>50~200 張</strong>照片，涵蓋所有角度<br>
+        2. 相鄰照片重疊率 &gt; 60%<br>
+        3. 繞產品拍 3 圈：平視、俯視 45°、俯視 75°<br>
+        4. 光線均勻，避免強反光（金屬產品要噴霧消光）<br>
+        5. 背景簡單不雜亂
+      </p>
+    </div>
+    <div class="diagram">
+  俯視 75° 圈 ──→  ○ ○ ○ ○ ○ ○ ○ ○ ○    （15~20 張）
+                     \               /
+  俯視 45° 圈 ──→  ○ ○ ○ ○ ○ ○ ○ ○ ○ ○  （20~30 張）
+                     \               /
+  平視 0° 圈  ──→  ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ （25~40 張）
+                           │
+                       ┌───────┐
+                       │ 產  品 │
+                       └───────┘</div>
+
+    <h4>建模軟體</h4>
+    <div class="tool-tags">
+      <span class="tool-tag">Meshroom（免費開源）</span>
+      <span class="tool-tag">Agisoft Metashape</span>
+      <span class="tool-tag">RealityCapture</span>
+      <span class="tool-tag">Polycam（手機 App）</span>
+      <span class="tool-tag">KIRI Engine（手機 App）</span>
+      <span class="tool-tag">Luma AI（雲端）</span>
+    </div>
+
+    <h4>網頁呈現流程</h4>
+    <div class="diagram">
+  3D 模型（.blend / .obj / .fbx）
+       │
+       ▼
+  匯出 glTF / GLB 格式（Blender 直接匯出）
+       │
+       ▼
+  壓縮優化（gltf-transform），目標 &lt; 5MB
+       │
+       ▼
+  Three.js + GLTFLoader + OrbitControls
+       │
+       ▼
+  部署到網站</div>
+
+    <div class="pros-cons">
+      <div class="pros-box"><h5>優點</h5><ul>
+        <li>真正任意角度旋轉</li><li>可加動態光效</li>
+        <li>可展示內部結構</li><li>一模型多用途</li>
+      </ul></div>
+      <div class="cons-box"><h5>缺點</h5><ul>
+        <li>建模技術門檻高</li><li>外包費用高</li>
+        <li>金屬質感難還原</li><li>手機效能可能不足</li>
+      </ul></div>
+    </div>
+    <div class="cost-line">
+      成本：<div class="cost-bar-inner" style="width:160px;background:linear-gradient(90deg,#ffaa00,#ff5566);"></div>
+      NT$10,000~80,000（外包）/ 免費（自學 Blender）
+    </div>
+  </div>
+
+  <!-- ── Method 3 ── -->
+  <div class="method-card" data-num="03">
+    <div class="method-head">
+      <div class="method-icon" style="background:rgba(0,136,255,0.08);">&#127909;</div>
+      <h3>方法三：360° 環景影片/照片 <span class="badge badge-easy">場景展示</span>
+        <small>360° VIDEO / PANORAMA</small>
+      </h3>
+    </div>
+    <p>用 360° 全景相機拍攝，讓使用者在網頁上自由轉動視角。這是<strong>「環境 360°」</strong>（觀看者向外看），適合展示<strong>使用場景</strong>，不適合展示產品細節。</p>
+
+    <h4>拍攝設備</h4>
+    <ul>
+      <li><strong>Insta360 X4 / X3</strong> — NT$12,000~18,000</li>
+      <li><strong>Ricoh Theta Z1</strong> — NT$28,000，畫質極好</li>
+      <li><strong>GoPro MAX</strong> — NT$15,000，防水耐操</li>
+      <li><strong>手機全景模式</strong> — 免費但品質有限</li>
+    </ul>
+
+    <h4>建議拍攝場景</h4>
+    <div class="step-box">
+      <div class="st">場景 A：甲板夜間照明</div>
+      <p>360° 相機放在漁船甲板中央，LED 燈全開，展示夜間照明範圍與身歷其境感。</p>
+    </div>
+    <div class="step-box">
+      <div class="st">場景 B：水面集魚效果</div>
+      <p>相機架在船舷邊，拍攝 LED 燈垂入水中的光照效果和魚群聚集。</p>
+    </div>
+    <div class="step-box">
+      <div class="st">場景 C：安裝現場</div>
+      <p>在港口或船上展示安裝位置、佈線方式、多盞燈排列效果。</p>
+    </div>
+
+    <h4>網頁播放套件</h4>
+    <div class="tool-tags">
+      <span class="tool-tag">Pannellum（免費開源）</span>
+      <span class="tool-tag">A-Frame（WebXR）</span>
+      <span class="tool-tag">Photo Sphere Viewer</span>
+      <span class="tool-tag">Kuula（SaaS）</span>
+      <span class="tool-tag">Momento360</span>
+    </div>
+
+    <h4>Pannellum 使用範例</h4>
+    <div class="diagram">
+&lt;link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/pannellum/build/pannellum.css"&gt;
+&lt;script src="https://cdn.jsdelivr.net/npm/pannellum/build/pannellum.js"&gt;
+&lt;/script&gt;
+
+&lt;div id="panorama" style="width:100%;height:500px;"&gt;&lt;/div&gt;
+
+&lt;script&gt;
+pannellum.viewer('panorama', {
+  type: 'equirectangular',
+  panorama: 'boat-night-360.jpg',
+  autoLoad: true,
+  autoRotate: -2,
+  hotSpots: [{
+    pitch: -10, yaw: 120,
+    type: 'info',
+    text: 'LED 漁業用燈安裝位置'
+  }]
+});
+&lt;/script&gt;</div>
+
+    <div class="pros-cons">
+      <div class="pros-box"><h5>優點</h5><ul>
+        <li>臨場感極強</li><li>拍攝簡單（一鍵拍）</li>
+        <li>展示場景最佳</li><li>可加熱點說明</li>
+      </ul></div>
+      <div class="cons-box"><h5>缺點</h5><ul>
+        <li>不能仔細看產品細節</li><li>需購買 360° 相機</li>
+        <li>影片檔案大</li><li>夜間畫質可能差</li>
+      </ul></div>
+    </div>
+    <div class="cost-line">
+      成本：<div class="cost-bar-inner" style="width:120px;background:linear-gradient(90deg,#0088ff,#00e5ff);"></div>
+      NT$12,000~28,000（相機）+ 軟體免費
+    </div>
+  </div>
+
+  <!-- ── Method 4 ── -->
+  <div class="method-card" data-num="04">
+    <div class="method-head">
+      <div class="method-icon" style="background:rgba(0,255,136,0.08);">&#128187;</div>
+      <h3>方法四：CSS/JS 3D 模擬 <span class="badge badge-easy">零素材</span>
+        <small>PROGRAMMATIC 3D SIMULATION</small>
+      </h3>
+    </div>
+    <p>不需任何照片或模型，用程式碼直接建構產品的 3D 示意模型。就像本頁上方的 3D 展示。適合 <strong>prototype / demo / 提案</strong>階段。</p>
+
+    <h4>適合情境</h4>
+    <ul>
+      <li>產品還沒做好，需先給客戶看概念</li>
+      <li>沒有拍攝條件，先模擬展示</li>
+      <li>需展示光效、散熱、結構等抽象概念</li>
+      <li>Demo / 提案 / 概念驗證階段</li>
+    </ul>
+
+    <h4>技術方案</h4>
+    <div class="tool-tags">
+      <span class="tool-tag">Three.js（本頁使用）</span>
+      <span class="tool-tag">Babylon.js</span>
+      <span class="tool-tag">CSS 3D Transform</span>
+      <span class="tool-tag">p5.js / WebGL</span>
+    </div>
+
+    <div class="pros-cons">
+      <div class="pros-box"><h5>優點</h5><ul>
+        <li>完全免費、零素材</li><li>馬上做出來</li>
+        <li>可互動（開關燈、換色）</li><li>改動快速</li>
+      </ul></div>
+      <div class="cons-box"><h5>缺點</h5><ul>
+        <li>非真實產品外觀</li><li>只適合概念展示</li>
+        <li>細節有限</li><li>正式場合略不足</li>
+      </ul></div>
+    </div>
+    <div class="cost-line">
+      成本：<div class="cost-bar-inner" style="width:30px;"></div>
+      免費（需寫程式）
+    </div>
+  </div>
+
+  <!-- ── Method 5 ── -->
+  <div class="method-card" data-num="05">
+    <div class="method-head">
+      <div class="method-icon" style="background:rgba(255,204,0,0.08);">&#128279;</div>
+      <h3>方法五：混合方案 <span class="badge badge-rec">商用推薦</span>
+        <small>HYBRID APPROACH</small>
+      </h3>
+    </div>
+    <p>實務上最好的做法是<strong>組合多種方式</strong>，在同一個產品頁面提供完整體驗。</p>
+
+    <h4>建議組合</h4>
+    <div class="diagram">
+  ┌──────────────────────────────────────────┐
+  │              產品頁面                      │
+  │                                            │
+  │  區塊 1：多角度拍照旋轉（36 張照片）       │
+  │  → 讓客戶看清楚外觀、質感、做工            │
+  │                                            │
+  │  區塊 2：3D 互動展示（Three.js）           │
+  │  → 開關燈、換色、透視、爆炸圖             │
+  │                                            │
+  │  區塊 3：360° 場景體驗（全景照片）          │
+  │  → 漁船上的實際使用情境                    │
+  │                                            │
+  │  區塊 4：產品規格 + 比較表 + CTA           │
+  └──────────────────────────────────────────┘</div>
+
+    <div class="pros-cons">
+      <div class="pros-box"><h5>為什麼混合最好</h5><ul>
+        <li>照片 → 真實感和信任</li><li>3D → 功能亮點展示</li>
+        <li>場景 → 臨場感</li><li>涵蓋所有需求</li>
+      </ul></div>
+      <div class="cons-box"><h5>考量</h5><ul>
+        <li>製作時間較長</li><li>需多種素材</li>
+        <li>網頁較重</li><li>維護成本高</li>
+      </ul></div>
+    </div>
+  </div>
+
+  <!-- ── Summary ── -->
+  <h3 class="sub-heading" style="margin-top:48px;">總比較表</h3>
+  <table class="sum-table">
+    <thead><tr>
+      <th>方案</th><th>真實感</th><th>互動性</th><th>成本</th><th>難度</th><th>適合</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>多角度拍照</strong></td>
+        <td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></td>
+        <td><span class="stars">&#9733;&#9733;&#9733;&#9734;&#9734;</span></td>
+        <td>低</td><td>低</td><td>產品細節</td>
+      </tr>
+      <tr>
+        <td><strong>3D 建模</strong></td>
+        <td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9734;</span></td>
+        <td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></td>
+        <td>高</td><td>高</td><td>功能展示</td>
+      </tr>
+      <tr>
+        <td><strong>360° 影片</strong></td>
+        <td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></td>
+        <td><span class="stars">&#9733;&#9733;&#9734;&#9734;&#9734;</span></td>
+        <td>中</td><td>低</td><td>場景展示</td>
+      </tr>
+      <tr>
+        <td><strong>JS 模擬</strong></td>
+        <td><span class="stars">&#9733;&#9733;&#9734;&#9734;&#9734;</span></td>
+        <td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></td>
+        <td>免費</td><td>中</td><td>概念 Demo</td>
+      </tr>
+      <tr>
+        <td><strong>混合方案</strong></td>
+        <td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></td>
+        <td><span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></td>
+        <td>中高</td><td>中高</td><td>正式商用</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub-heading">結論建議</h3>
+  <div class="step-box">
+    <div class="st">今天 Demo 用</div>
+    <p>直接用本頁上方的 3D 互動展示（JS 模擬），已包含完整產品文案、互動功能。</p>
+  </div>
+  <div class="step-box">
+    <div class="st">正式上線用</div>
+    <p>拍 36 張多角度照片 + 360° 使用場景影片 → 最佳性價比組合。</p>
+  </div>
+  <div class="step-box">
+    <div class="st">預算充足</div>
+    <p>混合方案全上：多角度照片 + 3D 互動 + 360° 場景 → 最完整的展示體驗。</p>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- FOOTER -->
+<!-- ══════════════════════════════════════════ -->
+<div class="footer">
+  LED 漁業用燈 360° 互動展示 &copy; 2026 &mdash; 規格數據為參考值，請依實際產品調整
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- THREE.JS -->
+<!-- ══════════════════════════════════════════ -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.163.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.163.0/examples/jsm/"
+  }
+}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+const container = document.getElementById('canvas-container');
+const scene = new THREE.Scene();
+scene.fog = new THREE.FogExp2(0x0a0e1a, 0.012);
+
+const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+camera.position.set(6, 4, 8);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.2;
+container.appendChild(renderer.domElement);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.06;
+controls.autoRotate = true;
+controls.autoRotateSpeed = 1.5;
+controls.minDistance = 4;
+controls.maxDistance = 18;
+controls.maxPolarAngle = Math.PI * 0.85;
+
+const colorMap = {
+  green:  { hex: 0x00ff88 },
+  blue:   { hex: 0x0088ff },
+  white:  { hex: 0xffffff },
+  yellow: { hex: 0xffcc00 },
+  red:    { hex: 0xff3344 },
+};
+
+let currentColor = 'green';
+let lightOn = true;
+let intensity = 0.8;
+let waterVisible = false;
+let xrayMode = false;
+
+const ambientLight = new THREE.AmbientLight(0x1a2a4a, 0.6);
+scene.add(ambientLight);
+const dirLight = new THREE.DirectionalLight(0x4466aa, 0.4);
+dirLight.position.set(5, 10, 5);
+scene.add(dirLight);
+
+const lightGroup = new THREE.Group();
+
+// Body
+const bodyGeo = new THREE.CylinderGeometry(0.55, 0.55, 5, 32);
+const bodyMat = new THREE.MeshPhysicalMaterial({ color: 0x2a2a2a, metalness: 0.85, roughness: 0.25, clearcoat: 0.6 });
+const body = new THREE.Mesh(bodyGeo, bodyMat);
+lightGroup.add(body);
+
+// Top cap
+const topCapGeo = new THREE.CylinderGeometry(0.62, 0.58, 0.3, 32);
+const topCapMat = new THREE.MeshPhysicalMaterial({ color: 0x333333, metalness: 0.9, roughness: 0.2 });
+const topCap = new THREE.Mesh(topCapGeo, topCapMat);
+topCap.position.y = 2.65;
+lightGroup.add(topCap);
+
+// Bottom cap
+const bottomCapGeo = new THREE.CylinderGeometry(0.58, 0.48, 0.4, 32);
+const bottomCap = new THREE.Mesh(bottomCapGeo, topCapMat.clone());
+bottomCap.position.y = -2.7;
+lightGroup.add(bottomCap);
+
+// Hook
+const ringGeo = new THREE.TorusGeometry(0.3, 0.05, 16, 32);
+const ringMat = new THREE.MeshStandardMaterial({ color: 0x888888, metalness: 0.9, roughness: 0.3 });
+const ring = new THREE.Mesh(ringGeo, ringMat);
+ring.position.y = 2.95;
+ring.rotation.x = Math.PI / 2;
+lightGroup.add(ring);
+
+// Cable
+const cablePath = new THREE.CatmullRomCurve3([
+  new THREE.Vector3(0, 2.95, 0),
+  new THREE.Vector3(0.2, 3.5, 0.1),
+  new THREE.Vector3(-0.1, 4.2, -0.1),
+  new THREE.Vector3(0.3, 5.0, 0.2),
+  new THREE.Vector3(0, 5.8, 0),
+]);
+const cableGeo = new THREE.TubeGeometry(cablePath, 30, 0.04, 8, false);
+lightGroup.add(new THREE.Mesh(cableGeo, new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.8 })));
+
+// LED Panels
+const ledColor = colorMap[currentColor];
+const ledPanels = [];
+for (let i = 0; i < 8; i++) {
+  const angle = (i / 8) * Math.PI * 2;
+  const panelGeo = new THREE.BoxGeometry(0.28, 4.2, 0.06);
+  const mat = new THREE.MeshPhysicalMaterial({
+    color: ledColor.hex, emissive: ledColor.hex, emissiveIntensity: 2.5,
+    transparent: true, opacity: 0.95, roughness: 0.1, transmission: 0.3,
+  });
+  const panel = new THREE.Mesh(panelGeo, mat);
+  panel.position.set(Math.cos(angle) * 0.56, 0, Math.sin(angle) * 0.56);
+  panel.rotation.y = -angle;
+  ledPanels.push(panel);
+  lightGroup.add(panel);
+}
+
+// Glow Rings
+const glowRings = [];
+for (let j = -3; j <= 3; j++) {
+  const rGeo = new THREE.TorusGeometry(0.7, 0.04, 8, 48);
+  const rMat = new THREE.MeshBasicMaterial({ color: ledColor.hex, transparent: true, opacity: 0.3 });
+  const r = new THREE.Mesh(rGeo, rMat);
+  r.position.y = j * 0.6;
+  r.rotation.x = Math.PI / 2;
+  glowRings.push(r);
+  lightGroup.add(r);
+}
+
+// Heatsink
+for (let i = 0; i < 16; i++) {
+  const angle = (i / 16) * Math.PI * 2;
+  const fin = new THREE.Mesh(
+    new THREE.BoxGeometry(0.02, 0.6, 0.18),
+    new THREE.MeshStandardMaterial({ color: 0x3a3a3a, metalness: 0.9, roughness: 0.3 })
+  );
+  fin.position.set(Math.cos(angle) * 0.63, -2.2, Math.sin(angle) * 0.63);
+  fin.rotation.y = -angle;
+  lightGroup.add(fin);
+}
+
+// Point Lights
+const pointLights = [];
+for (let i = 0; i < 4; i++) {
+  const angle = (i / 4) * Math.PI * 2;
+  const pl = new THREE.PointLight(ledColor.hex, 3 * intensity, 12);
+  pl.position.set(Math.cos(angle) * 1.2, 0, Math.sin(angle) * 1.2);
+  pointLights.push(pl);
+  lightGroup.add(pl);
+}
+const centralLight = new THREE.PointLight(ledColor.hex, 2 * intensity, 15);
+lightGroup.add(centralLight);
+
+scene.add(lightGroup);
+
+// Water
+const waterGeo = new THREE.PlaneGeometry(60, 60, 128, 128);
+const waterMat = new THREE.MeshPhysicalMaterial({
+  color: 0x001a33, transparent: true, opacity: 0.6, roughness: 0.1, metalness: 0.1, transmission: 0.4, thickness: 2,
+});
+const water = new THREE.Mesh(waterGeo, waterMat);
+water.rotation.x = -Math.PI / 2;
+water.position.y = -4;
+water.visible = false;
+scene.add(water);
+
+// Particles
+const pCount = 200;
+const pGeo = new THREE.BufferGeometry();
+const pPos = new Float32Array(pCount * 3);
+for (let i = 0; i < pCount; i++) {
+  pPos[i*3] = (Math.random()-0.5)*20;
+  pPos[i*3+1] = -4-Math.random()*10;
+  pPos[i*3+2] = (Math.random()-0.5)*20;
+}
+pGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+const pMat = new THREE.PointsMaterial({ color: ledColor.hex, size: 0.08, transparent: true, opacity: 0.4 });
+const particles = new THREE.Points(pGeo, pMat);
+particles.visible = false;
+scene.add(particles);
+
+// Stars
+const sGeo = new THREE.BufferGeometry();
+const sPos = new Float32Array(500 * 3);
+for (let i = 0; i < 500; i++) {
+  sPos[i*3] = (Math.random()-0.5)*100;
+  sPos[i*3+1] = Math.random()*50+5;
+  sPos[i*3+2] = (Math.random()-0.5)*100;
+}
+sGeo.setAttribute('position', new THREE.BufferAttribute(sPos, 3));
+scene.add(new THREE.Points(sGeo, new THREE.PointsMaterial({ color: 0xffffff, size: 0.12, transparent: true, opacity: 0.6 })));
+
+// Animate
+const clock = new THREE.Clock();
+function animate() {
+  requestAnimationFrame(animate);
+  const t = clock.getElapsedTime();
+  if (lightOn) {
+    const pulse = 0.85 + Math.sin(t*2)*0.15;
+    ledPanels.forEach(p => { p.material.emissiveIntensity = 2.5*intensity*pulse; });
+    glowRings.forEach((r,i) => { r.material.opacity = 0.3*intensity*(0.7+Math.sin(t*2+i*0.3)*0.3); });
+    pointLights.forEach(pl => { pl.intensity = 3*intensity*pulse; });
+    centralLight.intensity = 2*intensity*pulse;
+  }
+  if (water.visible) {
+    const wPos = water.geometry.attributes.position;
+    for (let i = 0; i < wPos.count; i++) {
+      wPos.setY(i, Math.sin(wPos.getX(i)*0.3+t)*0.15+Math.cos(wPos.getZ(i)*0.2+t*0.8)*0.1);
+    }
+    wPos.needsUpdate = true;
+    const pp = particles.geometry.attributes.position;
+    for (let i = 0; i < pCount; i++) {
+      let y = pp.getY(i); y += 0.005; if(y>-4) y=-14; pp.setY(i,y);
+      pp.setX(i, pp.getX(i)+Math.sin(t+i)*0.001);
+    }
+    pp.needsUpdate = true;
+  }
+  controls.update();
+  renderer.render(scene, camera);
+}
+animate();
+
+// Resize — fit hero only
+function onResize() {
+  const hero = document.querySelector('.hero');
+  const w = hero.offsetWidth;
+  const h = hero.offsetHeight;
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+  renderer.setSize(w, h);
+}
+window.addEventListener('resize', onResize);
+onResize();
+
+// ── Globals ──
+window.setLightColor = function(name) {
+  currentColor = name;
+  const c = colorMap[name];
+  document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
+  document.querySelector(`[data-color="${name}"]`).classList.add('active');
+  ledPanels.forEach(p => { p.material.color.set(c.hex); p.material.emissive.set(c.hex); });
+  glowRings.forEach(r => r.material.color.set(c.hex));
+  pointLights.forEach(pl => pl.color.set(c.hex));
+  centralLight.color.set(c.hex);
+  pMat.color.set(c.hex);
+};
+window.toggleAutoRotate = function() {
+  controls.autoRotate = !controls.autoRotate;
+  document.getElementById('btn-rotate').classList.toggle('active', controls.autoRotate);
+};
+window.toggleLight = function() {
+  lightOn = !lightOn;
+  document.getElementById('btn-light').classList.toggle('active', lightOn);
+  ledPanels.forEach(p => { p.material.emissiveIntensity = lightOn?2.5*intensity:0; p.material.opacity = lightOn?0.95:0.2; });
+  glowRings.forEach(r => { r.material.opacity = lightOn?0.3*intensity:0; });
+  pointLights.forEach(pl => { pl.intensity = lightOn?3*intensity:0; });
+  centralLight.intensity = lightOn?2*intensity:0;
+};
+window.toggleWater = function() {
+  waterVisible = !waterVisible;
+  water.visible = waterVisible;
+  particles.visible = waterVisible;
+  document.getElementById('btn-water').classList.toggle('active', waterVisible);
+};
+window.toggleXray = function() {
+  xrayMode = !xrayMode;
+  document.getElementById('btn-xray').classList.toggle('active', xrayMode);
+  bodyMat.transparent = xrayMode; bodyMat.opacity = xrayMode?0.15:1; bodyMat.wireframe = xrayMode;
+  topCapMat.transparent = xrayMode; topCapMat.opacity = xrayMode?0.15:1; topCapMat.wireframe = xrayMode;
+  bottomCap.material.transparent = xrayMode; bottomCap.material.opacity = xrayMode?0.15:1; bottomCap.material.wireframe = xrayMode;
+};
+window.setIntensity = function(val) {
+  intensity = val/100;
+  document.getElementById('intensity-val').textContent = val+'%';
+  if (lightOn) { pointLights.forEach(pl=>{pl.intensity=3*intensity;}); centralLight.intensity=2*intensity; }
+};
+
+// Nav active state on scroll
+const sections = document.querySelectorAll('section, .section');
+const navAs = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 100) current = s.id;
+  });
+  navAs.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+});
+</script>
+</body>
+</html>
