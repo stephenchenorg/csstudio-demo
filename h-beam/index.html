@@ -474,7 +474,6 @@
 
       <div class="btn-row" style="margin-bottom:12px">
         <button class="btn btn-ghost" onclick="addSpec()">+ 新增型鋼規格</button>
-        <button class="btn btn-ghost" onclick="loadCustomerDemo()">載入客人範例</button>
       </div>
 
       <button class="btn btn-primary" id="calcBtn" onclick="runOptimize()">
@@ -755,33 +754,6 @@ function renderSpecs() {
 //  DEMO DATA (matches customer Excel)
 // =====================================================
 
-function loadCustomerDemo() {
-  specs = [];
-  specIdCounter = 0;
-  partIdCounter = 0;
-  stockLengths = [9000, 10000, 12000];
-  renderStockTags();
-
-  document.getElementById('projectId').value = '0321';
-  document.getElementById('projectName').value = 'XX新建工程';
-  document.getElementById('kerfInput').value = '3';
-
-  addSpec('H194*150*6*9', '29.9', 'SN', [
-    { name: 'A1', length: '3815', qty: '6' },
-    { name: 'A2', length: '4850', qty: '1' },
-    { name: 'A3', length: '1320', qty: '1' },
-    { name: 'A4', length: '352',  qty: '2' },
-  ]);
-
-  addSpec('H300*300*10*15', '93', 'SN', [
-    { name: 'B1', length: '4055', qty: '2' },
-    { name: 'B2', length: '3870', qty: '1' },
-    { name: 'B3', length: '2809', qty: '4' },
-    { name: 'B4', length: '7883', qty: '2' },
-    { name: 'B5', length: '1260', qty: '2' },
-    { name: 'B6', length: '312',  qty: '2' },
-  ]);
-}
 
 // =====================================================
 //  ALGORITHM (multi-start search for minimum total stock)
