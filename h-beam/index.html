@@ -718,6 +718,37 @@ function renderSpecs() {
     `;
     container.appendChild(div);
   });
+
+  // Excel-style keyboard navigation for parts table
+  container.addEventListener('keydown', function(e) {
+    const input = e.target;
+    if (input.tagName !== 'INPUT') return;
+    const td = input.closest('td');
+    const tr = input.closest('tr');
+    if (!td || !tr) return;
+    const tbody = tr.closest('tbody');
+    if (!tbody) return;
+
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const colIdx = Array.from(tr.children).indexOf(td);
+      const rows = Array.from(tbody.rows);
+      const rowIdx = rows.indexOf(tr);
+      if (rowIdx < rows.length - 1) {
+        const nextInput = rows[rowIdx + 1].children[colIdx]?.querySelector('input');
+        if (nextInput) nextInput.focus();
+      }
+    } else if (e.key === 'Tab') {
+      e.preventDefault();
+      const cells = Array.from(tr.querySelectorAll('td input'));
+      const idx = cells.indexOf(input);
+      if (e.shiftKey) {
+        if (idx > 0) cells[idx - 1].focus();
+      } else {
+        if (idx < cells.length - 1) cells[idx + 1].focus();
+      }
+    }
+  });
 }
 
 // =====================================================
