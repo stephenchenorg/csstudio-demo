@@ -608,6 +608,50 @@ function updatePart(specId, partId, field, value) {
   }
 }
 
+function exportSpec(specId) {
+  const s = specs.find(s => s.id === specId);
+  if (!s) return;
+  const data = { name: s.name, unitWeight: s.unitWeight, material: s.material, parts: s.parts.map(p => ({ name: p.name, length: p.length, qty: p.qty })) };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `${s.name || '型鋼規格'}.json`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function importSpec(specId, file) {
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      const s = specs.find(s => s.id === specId);
+      if (!s) return;
+      s.name = data.name || '';
+      s.unitWeight = data.unitWeight || '';
+      s.material = data.material || 'SN';
+      s.parts = [];
+      if (data.parts && data.parts.length) {
+        data.parts.forEach(p => {
+          s.parts.push({ id: ++partIdCounter, name: p.name || '', length: p.length || '', qty: p.qty || '' });
+        });
+      }
+      renderSpecs();
+    } catch (err) {
+      alert('匯入失敗：檔案格式不正確');
+    }
+  };
+  reader.readAsText(file);
+}
+
+function triggerImportSpec(specId) {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.json';
+  input.onchange = () => { if (input.files[0]) importSpec(specId, input.files[0]); };
+  input.click();
+}
+
 function renderSpecs() {
   const container = document.getElementById('specGroups');
   container.innerHTML = '';
@@ -618,7 +662,11 @@ function renderSpecs() {
     div.innerHTML = `
       <div class="spec-header">
         <span class="spec-header-title">型鋼規格 #${si + 1}</span>
-        <button class="btn btn-danger btn-sm" onclick="removeSpec(${spec.id})">移除</button>
+        <div style="display:flex;gap:6px">
+          <button class="btn btn-ghost btn-sm" onclick="triggerImportSpec(${spec.id})">單筆匯入</button>
+          <button class="btn btn-ghost btn-sm" onclick="exportSpec(${spec.id})">單筆匯出</button>
+          <button class="btn btn-danger btn-sm" onclick="removeSpec(${spec.id})">移除</button>
+        </div>
       </div>
       <div class="spec-body">
         <div class="form-row">
