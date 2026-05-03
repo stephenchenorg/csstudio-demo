@@ -1,0 +1,19 @@
+{
+  "name": "300*150",
+  "unitWeight": "36.7",
+  "material": "SN",
+  "parts": [
+    { "name": "A1", "length": "5450", "qty": "1" },
+    { "name": "A1", "length": "8480", "qty": "1" },
+    { "name": "A1", "length": "6840", "qty": "1" },
+    { "name": "A1", "length": "6780", "qty": "1" },
+    { "name": "A1", "length": "5310", "qty": "1" },
+    { "name": "A1", "length": "5330", "qty": "1" },
+    { "name": "A1", "length": "8700", "qty": "1" },
+    { "name": "A1", "length": "3290", "qty": "1" },
+    { "name": "A1", "length": "5790", "qty": "1" },
+    { "name": "A1", "length": "5790", "qty": "1" },
+    { "name": "A1", "length": "5760", "qty": "1" },
+    { "name": "A1", "length": "3950", "qty": "1" }
+  ]
+}
