@@ -494,6 +494,7 @@
 
       <div class="btn-row" style="margin-bottom:12px">
         <button class="btn btn-ghost" onclick="addSpec()">+ 新增型鋼規格</button>
+        <button class="btn btn-ghost" onclick="loadDemoData()">&#x1F4C4; 載入示範資料</button>
       </div>
 
       <button class="btn btn-primary" id="calcBtn" onclick="runOptimize()">
@@ -591,6 +592,23 @@ function addSpec(name = '', unitWeight = '', material = 'SN', parts = []) {
     addPart(id);
   }
   renderSpecs();
+}
+
+function loadDemoData() {
+  specs = [];
+  specIdCounter = 0;
+  addSpec('H194*150*6*9', '36.7', 'SN', [
+    { name: 'A1', length: '8700', qty: '1' },
+    { name: 'A1', length: '8940', qty: '1' },
+    { name: 'A1', length: '2150', qty: '1' },
+    { name: 'A1', length: '1240', qty: '1' },
+    { name: 'A1', length: '9360', qty: '1' },
+    { name: 'A1', length: '2540', qty: '2' },
+    { name: 'A1', length: '6910', qty: '1' },
+    { name: 'A1', length: '2160', qty: '1' },
+    { name: 'A1', length: '2530', qty: '1' },
+    { name: 'A1', length: '2560', qty: '9' },
+  ]);
 }
 
 function removeSpec(specId) {
