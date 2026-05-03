@@ -272,18 +272,38 @@
   .stat-unit { font-size: 12px; color: var(--text3); margin-top: 4px; }
 
   /* RESULT TABLES */
-  .result-spec-block { margin-bottom: 28px; }
+  .result-spec-section {
+    margin-bottom: 20px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    box-shadow: var(--shadow);
+  }
+  .result-spec-section summary {
+    cursor: pointer; list-style: none;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 20px;
+    background: var(--accent); color: #fff;
+    user-select: none;
+  }
+  .result-spec-section summary::-webkit-details-marker { display: none; }
+  .result-spec-section summary::after {
+    content: '▾'; font-size: 18px; transition: transform .2s;
+  }
+  .result-spec-section:not([open]) summary::after { transform: rotate(-90deg); }
+  .result-spec-section-body { padding: 16px 20px; }
+
+  .result-spec-block { margin-bottom: 0; }
 
   .result-spec-header {
     display: flex; align-items: baseline; gap: 20px; flex-wrap: wrap;
-    padding: 10px 0; margin-bottom: 10px;
-    border-bottom: 2px solid var(--accent);
+    padding: 0; margin-bottom: 10px;
+    border-bottom: none;
   }
   .result-spec-name {
-    font-family: var(--display); font-weight: 900; font-size: 20px;
-    color: var(--accent);
+    font-family: var(--display); font-weight: 900; font-size: 22px;
+    color: #fff;
   }
-  .result-spec-meta { font-size: 14px; color: var(--text2); }
+  .result-spec-meta { font-size: 14px; color: rgba(255,255,255,0.8); }
 
   .data-table { width: 100%; border-collapse: collapse; font-size: 14px; }
   .data-table thead th {
@@ -1069,13 +1089,15 @@ function renderResults(results) {
     totalPurchaseWeight += r.purchaseWeightTotal;
     totalBars += r.bins.length;
 
-    html += `<div class="result-spec-block">`;
-
-    // Spec header
-    html += `<div class="result-spec-header">
-      <span class="result-spec-name">${r.spec.name}</span>
-      <span class="result-spec-meta">單位重: ${r.spec.unitWeight} kg/m</span>
-    </div>`;
+    html += `<details class="result-spec-section" open>
+    <summary>
+      <div class="result-spec-header">
+        <span class="result-spec-name">${r.spec.name}</span>
+        <span class="result-spec-meta">單位重: ${r.spec.unitWeight} kg/m &emsp;|&emsp; ${r.bins.length} 支母材</span>
+      </div>
+    </summary>
+    <div class="result-spec-section-body">
+    <div class="result-spec-block">`;
 
     // Main data table (Excel-style)
     html += `<table class="data-table">
@@ -1163,16 +1185,12 @@ function renderResults(results) {
     });
 
     html += `</div>`;
-    html += `</div>`;
-  });
 
-  // Procurement summary
-  html += `<div class="procurement-block">
-    <div class="procurement-title">購買總數量</div>`;
-
-  results.forEach(r => {
-    html += `<div class="procurement-spec">
-      <div class="procurement-spec-name">${r.spec.name}</div>`;
+    // Per-spec procurement
+    html += `<div class="procurement-block">
+      <div class="procurement-title">購買數量</div>
+      <div class="procurement-spec">
+        <div class="procurement-spec-name">${r.spec.name}</div>`;
 
     const sortedStocks = Object.keys(r.procurement).map(Number).sort((a, b) => b - a);
     sortedStocks.forEach(stock => {
@@ -1183,10 +1201,45 @@ function renderResults(results) {
       </div>`;
     });
 
+    html += `</div></div>`;
+
+    html += `</div></div></details>`;
+  });
+
+  // Grand totals
+  html += `<div class="procurement-block" style="margin-top:24px;">
+    <div class="procurement-title" style="font-size:18px;">購買總數量</div>`;
+
+  results.forEach(r => {
+    const specBars = r.bins.length;
+    html += `<div class="procurement-spec">
+      <div class="procurement-spec-name">${r.spec.name}</div>`;
+    const sortedStocks = Object.keys(r.procurement).map(Number).sort((a, b) => b - a);
+    sortedStocks.forEach(stock => {
+      const label = stock >= 1000 ? (stock / 1000) + 'M' : stock + 'mm';
+      html += `<div class="procurement-item">
+        <span class="stock-label">${label}</span>
+        <span class="stock-qty">${r.procurement[stock]} 支</span>
+      </div>`;
+    });
+    html += `<div class="procurement-totals" style="margin-top:8px;padding-top:8px;border-top:1px dashed var(--border);">
+      <div class="procurement-total-item">
+        <span class="procurement-total-label">切割重量</span>
+        <span class="procurement-total-value">${r.cutWeightTotal.toFixed(1)} <span style="font-size:14px;font-weight:400">kg</span></span>
+      </div>
+      <div class="procurement-total-item">
+        <span class="procurement-total-label">購買重量</span>
+        <span class="procurement-total-value">${r.purchaseWeightTotal.toFixed(1)} <span style="font-size:14px;font-weight:400">kg</span></span>
+      </div>
+      <div class="procurement-total-item">
+        <span class="procurement-total-label">購買支數</span>
+        <span class="procurement-total-value">${specBars} <span style="font-size:14px;font-weight:400">支</span></span>
+      </div>
+    </div>`;
     html += `</div>`;
   });
 
-  html += `<div class="procurement-totals">
+  html += `<div class="procurement-totals" style="margin-top:16px;padding-top:16px;border-top:2px solid var(--border);">
     <div class="procurement-total-item">
       <span class="procurement-total-label">切割總重量</span>
       <span class="procurement-total-value">${totalCutWeight.toFixed(1)} <span style="font-size:14px;font-weight:400">kg</span></span>
@@ -1212,7 +1265,6 @@ function renderResults(results) {
 // =====================================================
 
 renderStockTags();
-loadCustomerDemo();
 </script>
 </body>
 </html>
