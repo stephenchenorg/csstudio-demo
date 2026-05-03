@@ -434,6 +434,7 @@
     .main-grid { grid-template-columns: 1fr; }
   }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/javascript-lp-solver@1.0.3/dist/solver.global.js"></script>
 </head>
 <body>
 <div class="app">
@@ -828,24 +829,49 @@ function patternUsed(pattern, sizes, kerf) {
   return total;
 }
 
-function optimizeSpec(parts, stockLengths, kerf) {
-  const demand = {};
-  parts.forEach(p => {
-    const len = parseFloat(p.length);
-    const qty = parseInt(p.qty) || 0;
-    if (len > 0 && qty > 0) demand[len] = (demand[len] || 0) + qty;
-  });
+// Exact solver: integer linear programming via javascript-lp-solver.
+function solveILP(distinctLens, demand, stocks, kerf) {
+  if (typeof solver === 'undefined') return null;
 
-  const distinctLens = Object.keys(demand).map(Number).sort((a, b) => b - a);
-  if (!distinctLens.length) return [];
-
-  const stocks = [...stockLengths].sort((a, b) => b - a);
-
-  // Generate all patterns for all stock lengths
   const allPatterns = [];
   for (const stock of stocks) {
-    const patterns = generatePatterns(distinctLens, stock, kerf);
-    for (const counts of patterns) {
+    for (const counts of generatePatterns(distinctLens, stock, kerf)) {
+      const used = patternUsed(counts, distinctLens, kerf);
+      if (used <= stock) allPatterns.push({ stock, counts, used });
+    }
+  }
+  if (!allPatterns.length || allPatterns.length > 20000) return null;
+
+  const model = { optimize: 'cost', opType: 'min', constraints: {}, variables: {}, ints: {} };
+  distinctLens.forEach(len => { model.constraints['L' + len] = { min: demand[len] }; });
+  allPatterns.forEach((p, i) => {
+    const v = { cost: p.stock };
+    distinctLens.forEach((len, j) => { if (p.counts[j] > 0) v['L' + len] = p.counts[j]; });
+    model.variables['p' + i] = v;
+    model.ints['p' + i] = 1;
+  });
+
+  let res;
+  try { res = solver.Solve(model); }
+  catch (e) { console.warn('ILP error, falling back to heuristic:', e); return null; }
+  if (!res || !res.feasible) return null;
+
+  const bins = [];
+  allPatterns.forEach((p, i) => {
+    const n = Math.round(res['p' + i] || 0);
+    for (let k = 0; k < n; k++) {
+      bins.push({ stock: p.stock, counts: [...p.counts], usedLength: p.used, waste: p.stock - p.used });
+    }
+  });
+  return bins.length ? bins : null;
+}
+
+// Fallback: multi-start heuristic search (used when solver is unavailable
+// or pattern explosion exceeds the ILP cap).
+function solveHeuristic(distinctLens, demand, stocks, kerf) {
+  const allPatterns = [];
+  for (const stock of stocks) {
+    for (const counts of generatePatterns(distinctLens, stock, kerf)) {
       const used = patternUsed(counts, distinctLens, kerf);
       if (used <= stock) {
         allPatterns.push({
@@ -859,7 +885,6 @@ function optimizeSpec(parts, stockLengths, kerf) {
   }
   allPatterns.sort((a, b) => b.util - a.util || b.totalPieces - a.totalPieces);
 
-  // --- Helpers ---
   function getMaxTimes(pat, dem) {
     let t = Infinity;
     for (let i = 0; i < distinctLens.length; i++) {
@@ -871,25 +896,18 @@ function optimizeSpec(parts, stockLengths, kerf) {
     }
     return t === Infinity ? 0 : t;
   }
-
   function applyN(pat, dem, n) {
     const d = { ...dem };
     for (let i = 0; i < distinctLens.length; i++)
       d[distinctLens[i]] = (d[distinctLens[i]] || 0) - pat.counts[i] * n;
     return d;
   }
-
-  function demandEmpty(dem) {
-    return distinctLens.every(l => (dem[l] || 0) <= 0);
-  }
-
+  function demandEmpty(dem) { return distinctLens.every(l => (dem[l] || 0) <= 0); }
   function makeBins(pat, n) {
     return Array.from({ length: n }, () => ({
       stock: pat.stock, counts: [...pat.counts], waste: pat.waste, usedLength: pat.used,
     }));
   }
-
-  // --- Greedy solver ---
   function runGreedy(dem) {
     const bins = [];
     const rem = { ...dem };
@@ -906,7 +924,6 @@ function optimizeSpec(parts, stockLengths, kerf) {
         }
       }
       if (!applied) {
-        // Fallback: greedy fill from largest stock
         for (const stock of stocks) {
           const bin = { stock, counts: new Array(distinctLens.length).fill(0), waste: 0, usedLength: 0 };
           let r = stock;
@@ -930,22 +947,17 @@ function optimizeSpec(parts, stockLengths, kerf) {
     }
     return bins;
   }
-
   function totalStock(bins) { return bins.reduce((s, b) => s + b.stock, 0); }
 
-  // --- Multi-start search: try different first/second picks ---
   let bestTotal = Infinity;
   let bestBins = null;
-
   function tryCandidate(bins) {
     const t = totalStock(bins);
     if (t < bestTotal) { bestTotal = t; bestBins = bins; }
   }
 
-  // 1. Pure greedy
   tryCandidate(runGreedy({ ...demand }));
 
-  // 2. Single-level: force each top pattern as first pick, then greedy
   const TOP1 = Math.min(allPatterns.length, 30);
   for (let i = 0; i < TOP1; i++) {
     const fp = allPatterns[i];
@@ -955,12 +967,10 @@ function optimizeSpec(parts, stockLengths, kerf) {
     tryCandidate([...makeBins(fp, mt), ...runGreedy(dem1)]);
   }
 
-  // 3. Two-level: force first pick (1 time) + second pick, then greedy
   for (let i = 0; i < TOP1; i++) {
     const fp = allPatterns[i];
     if (getMaxTimes(fp, demand) < 1) continue;
     const dem1 = applyN(fp, demand, 1);
-
     const TOP2 = Math.min(allPatterns.length, 15);
     for (let j = 0; j < TOP2; j++) {
       const sp = allPatterns[j];
@@ -970,8 +980,26 @@ function optimizeSpec(parts, stockLengths, kerf) {
       tryCandidate([...makeBins(fp, 1), ...makeBins(sp, mt2), ...runGreedy(dem2)]);
     }
   }
+  return bestBins;
+}
 
-  // --- Post-process: assign part names and build cut combos ---
+function optimizeSpec(parts, stockLengths, kerf) {
+  const demand = {};
+  parts.forEach(p => {
+    const len = parseFloat(p.length);
+    const qty = parseInt(p.qty) || 0;
+    if (len > 0 && qty > 0) demand[len] = (demand[len] || 0) + qty;
+  });
+
+  const distinctLens = Object.keys(demand).map(Number).sort((a, b) => b - a);
+  if (!distinctLens.length) return [];
+
+  const stocks = [...stockLengths].sort((a, b) => b - a);
+
+  const bestBins = solveILP(distinctLens, demand, stocks, kerf)
+                || solveHeuristic(distinctLens, demand, stocks, kerf);
+
+  // Post-process: assign part names and build cut combos
   const namePool = {};
   parts.forEach(p => {
     const len = parseFloat(p.length);
@@ -983,7 +1011,6 @@ function optimizeSpec(parts, stockLengths, kerf) {
   });
 
   bestBins.forEach(bin => {
-    // Expand counts to pieceLengths
     bin.pieces = [];
     for (let i = 0; i < distinctLens.length; i++) {
       for (let k = 0; k < bin.counts[i]; k++) {
@@ -992,7 +1019,6 @@ function optimizeSpec(parts, stockLengths, kerf) {
         bin.pieces.push({ name, length: distinctLens[i] });
       }
     }
-
     const lengthGroups = {};
     bin.pieces.forEach(p => { lengthGroups[p.length] = (lengthGroups[p.length] || 0) + 1; });
     const sortedLens = Object.keys(lengthGroups).map(Number).sort((a, b) => b - a);
@@ -1000,7 +1026,6 @@ function optimizeSpec(parts, stockLengths, kerf) {
       const cnt = lengthGroups[l];
       return cnt > 1 ? `${l}*${cnt}` : String(l);
     }).join(' + ');
-
     bin.cutCount = bin.pieces.length;
     delete bin.counts;
   });
