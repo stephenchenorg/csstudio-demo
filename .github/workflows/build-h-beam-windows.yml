@@ -2,11 +2,6 @@ name: Build h-beam Windows MSI
 
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - 'h-beam/index.html'
-      - 'h-beam/vendor/**'
-      - '.github/workflows/build-h-beam-windows.yml'
 
 jobs:
   build:
