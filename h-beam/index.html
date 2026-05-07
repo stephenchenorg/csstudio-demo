@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>H型鋼排料系統 — SteelCut Pro</title>
-<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link href="./vendor/fonts/fonts.css" rel="stylesheet">
 <style>
   :root {
     --bg: #f4f5f7;
@@ -434,7 +434,7 @@
     .main-grid { grid-template-columns: 1fr; }
   }
 </style>
-<script src="https://cdn.jsdelivr.net/npm/javascript-lp-solver@1.0.3/dist/solver.global.js"></script>
+<script src="./vendor/solver.global.js"></script>
 </head>
 <body>
 <div class="app">
@@ -817,6 +817,29 @@ function generatePatterns(sizes, stockLen, kerf) {
   return results;
 }
 
+// Maximal patterns only: those where no remaining length can still fit.
+// Used by the ILP path because non-maximal patterns are dominated and
+// only inflate the integer search space.
+function generateMaximalPatterns(sizes, stockLen, kerf) {
+  const results = [];
+  const minSize = Math.min(...sizes);
+  function recurse(idx, rem, cur) {
+    if (idx === sizes.length) {
+      if (cur.some(c => c > 0) && rem < minSize + kerf) results.push([...cur]);
+      return;
+    }
+    const s = sizes[idx];
+    const maxN = Math.floor(rem / (s + kerf));
+    for (let n = 0; n <= maxN; n++) {
+      cur[idx] = n;
+      recurse(idx + 1, rem - n * (s + kerf), cur);
+    }
+    cur[idx] = 0;
+  }
+  recurse(0, stockLen, new Array(sizes.length).fill(0));
+  return results;
+}
+
 function patternUsed(pattern, sizes, kerf) {
   let total = 0, cnt = 0;
   for (let i = 0; i < pattern.length; i++) {
@@ -830,17 +853,24 @@ function patternUsed(pattern, sizes, kerf) {
 }
 
 // Exact solver: integer linear programming via javascript-lp-solver.
+// Skip when problem structure is known to blow up branch-and-bound:
+//  - More than 10 distinct lengths: search tree depth explodes regardless of
+//    pattern count (observed: 11 lengths + short stock = 90s+ hang).
+//  - More than 1500 maximal patterns: too many integer variables.
+// Maximal patterns dominate non-maximal ones for min-cost cutting stock,
+// so we only enumerate those — typically ~25% of the full pattern set.
 function solveILP(distinctLens, demand, stocks, kerf) {
   if (typeof solver === 'undefined') return null;
+  if (distinctLens.length > 10) return null;
 
   const allPatterns = [];
   for (const stock of stocks) {
-    for (const counts of generatePatterns(distinctLens, stock, kerf)) {
+    for (const counts of generateMaximalPatterns(distinctLens, stock, kerf)) {
       const used = patternUsed(counts, distinctLens, kerf);
       if (used <= stock) allPatterns.push({ stock, counts, used });
     }
   }
-  if (!allPatterns.length || allPatterns.length > 20000) return null;
+  if (!allPatterns.length || allPatterns.length > 1500) return null;
 
   const model = { optimize: 'cost', opType: 'min', constraints: {}, variables: {}, ints: {} };
   distinctLens.forEach(len => { model.constraints['L' + len] = { min: demand[len] }; });
@@ -1092,13 +1122,24 @@ function optimizeAll() {
 // =====================================================
 
 function runOptimize() {
-  const results = optimizeAll();
-  if (!results || !results.length) {
-    document.getElementById('resultsPanel').innerHTML =
-      '<div class="results-empty"><div class="icon">&#x26A0;&#xFE0F;</div><div>請至少輸入一組型鋼規格及零件</div></div>';
-    return;
-  }
-  renderResults(results);
+  const panel = document.getElementById('resultsPanel');
+  const meta = document.getElementById('resultMeta');
+  panel.innerHTML =
+    '<div class="results-empty"><div class="icon running">&#x2699;&#xFE0F;</div><div>計算中…</div></div>';
+  meta.textContent = '計算中…';
+
+  // Double rAF so the "計算中" message actually paints before the
+  // synchronous solver locks the main thread.
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    const results = optimizeAll();
+    if (!results || !results.length) {
+      panel.innerHTML =
+        '<div class="results-empty"><div class="icon">&#x26A0;&#xFE0F;</div><div>請至少輸入一組型鋼規格及零件</div></div>';
+      meta.textContent = '等待計算';
+      return;
+    }
+    renderResults(results);
+  }));
 }
 
 function utilClass(pct) {
