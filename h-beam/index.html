@@ -435,6 +435,7 @@
   }
 </style>
 <script src="./vendor/solver.global.js"></script>
+<script src="./vendor/xlsx.bundle.min.js"></script>
 </head>
 <body>
 <div class="app">
@@ -508,7 +509,10 @@
       <div class="panel">
         <div class="panel-header">
           <span class="panel-title"><span class="dot green"></span>排料優化結果</span>
-          <span id="resultMeta" style="font-size:12px;color:var(--text3)">等待計算</span>
+          <div style="display:flex;align-items:center;gap:12px">
+            <span id="resultMeta" style="font-size:12px;color:var(--text3)">等待計算</span>
+            <button class="btn btn-ghost btn-sm" id="exportBtn" onclick="exportToExcel()" disabled style="opacity:0.5;cursor:not-allowed">&#x2B07;&#xFE0F; 匯出 Excel</button>
+          </div>
         </div>
         <div class="panel-body" id="resultsPanel">
           <div class="results-empty">
@@ -532,6 +536,7 @@ let stockLengths = [9000, 10000, 12000];
 let specs = [];
 let specIdCounter = 0;
 let partIdCounter = 0;
+let latestResults = null;
 
 const COLORS = ['color-0','color-1','color-2','color-3','color-4','color-5','color-6','color-7'];
 
@@ -1132,18 +1137,205 @@ function runOptimize() {
   // synchronous solver locks the main thread.
   requestAnimationFrame(() => requestAnimationFrame(() => {
     const results = optimizeAll();
+    const btn = document.getElementById('exportBtn');
     if (!results || !results.length) {
       panel.innerHTML =
         '<div class="results-empty"><div class="icon">&#x26A0;&#xFE0F;</div><div>請至少輸入一組型鋼規格及零件</div></div>';
       meta.textContent = '等待計算';
+      latestResults = null;
+      btn.disabled = true;
+      btn.style.opacity = '0.5';
+      btn.style.cursor = 'not-allowed';
       return;
     }
+    latestResults = results;
+    btn.disabled = false;
+    btn.style.opacity = '1';
+    btn.style.cursor = 'pointer';
     renderResults(results);
   }));
 }
 
 function utilClass(pct) {
   return pct >= 90 ? 'util-high' : pct >= 75 ? 'util-mid' : 'util-low';
+}
+
+// =====================================================
+//  EXCEL EXPORT
+// =====================================================
+
+function exportToExcel() {
+  if (!latestResults || !latestResults.length) {
+    alert('請先計算後再匯出');
+    return;
+  }
+  if (typeof XLSX === 'undefined') {
+    alert('xlsx 函式庫載入失敗，請確認 vendor/xlsx.bundle.min.js 存在');
+    return;
+  }
+
+  const projectId = document.getElementById('projectId').value || '';
+  const projectName = document.getElementById('projectName').value || '';
+  const kerf = parseFloat(document.getElementById('kerfInput').value) || 3;
+  const results = latestResults;
+
+  const thinBorder = { style: 'thin', color: { rgb: '808080' } };
+  const fullBorder = { top: thinBorder, bottom: thinBorder, left: thinBorder, right: thinBorder };
+
+  const aoa = [];
+  const cellStyles = {};
+  const merges = [];
+  const colLetter = (i) => String.fromCharCode(65 + i);
+  const ref = (r0, c0) => `${colLetter(c0)}${r0 + 1}`;
+
+  // Row 1: title at D1, merged D1:G1
+  aoa.push(['', '', '', '型鋼採購建議單', '', '', '']);
+  cellStyles['D1'] = {
+    font: { bold: true, sz: 18 },
+    alignment: { horizontal: 'center', vertical: 'center' },
+  };
+  merges.push({ s: { r: 0, c: 3 }, e: { r: 0, c: 6 } });
+
+  // Row 2: empty
+  aoa.push([]);
+
+  // Row 3: project + kerf
+  aoa.push(['案號:', projectId, '工程名稱:', projectName, '', '', '', '', '切割損耗:', kerf, 'mm']);
+  ['A3', 'C3', 'I3'].forEach(r => { cellStyles[r] = { font: { bold: true }, alignment: { horizontal: 'right' } }; });
+  cellStyles['B3'] = { font: { bold: true } };
+  cellStyles['D3'] = { font: { bold: true } };
+  cellStyles['J3'] = { alignment: { horizontal: 'center' } };
+
+  // Row 4: empty
+  aoa.push([]);
+
+  // Row 5: header (merge C5:G5 for cutCombo)
+  aoa.push(['定尺料規格(mm)', '數量', '切割長度組合(mm)', '', '', '', '', '切割總支數', '材質', '長度(mm)', '重量(kg)', '損耗(kg)', '%', '剩餘長度(mm)']);
+  ['A', 'B', 'C', 'H', 'I', 'J', 'K', 'L', 'M', 'N'].forEach(c => {
+    cellStyles[`${c}5`] = {
+      font: { bold: true },
+      fill: { fgColor: { rgb: 'F2F2F2' } },
+      alignment: { horizontal: 'center', vertical: 'center', wrapText: true },
+      border: fullBorder,
+    };
+  });
+  merges.push({ s: { r: 4, c: 2 }, e: { r: 4, c: 6 } });
+
+  // Row 6: empty
+  aoa.push([]);
+
+  let r = 6; // current 0-indexed row
+
+  results.forEach(spec => {
+    // Spec header row
+    aoa.push(['＊型鋼規格:', spec.spec.name, '單位重:', spec.spec.unitWeight, 'kg/m']);
+    cellStyles[ref(r, 0)] = { font: { bold: true }, alignment: { horizontal: 'right' } };
+    cellStyles[ref(r, 1)] = { font: { bold: true, color: { rgb: '1A56DB' } } };
+    cellStyles[ref(r, 2)] = { font: { bold: true }, alignment: { horizontal: 'right' } };
+    cellStyles[ref(r, 3)] = { alignment: { horizontal: 'center' } };
+    r++;
+
+    // Bin rows
+    spec.bins.forEach(bin => {
+      aoa.push([
+        bin.stock, 1, bin.cutCombo, '', '', '', '',
+        bin.cutCount, spec.spec.material, bin.usedLength,
+        +bin.purchaseWeight.toFixed(1), +bin.wasteWeight.toFixed(1),
+        +bin.wastePercent.toFixed(2), bin.waste,
+      ]);
+      const align = { A: 'right', B: 'center', C: 'left', H: 'center', I: 'center', J: 'right', K: 'right', L: 'right', M: 'center', N: 'right' };
+      Object.keys(align).forEach(c => {
+        cellStyles[`${c}${r + 1}`] = { border: fullBorder, alignment: { horizontal: align[c], vertical: 'center' } };
+      });
+      merges.push({ s: { r, c: 2 }, e: { r, c: 6 } });
+      r++;
+    });
+
+    // Cut weight summary
+    aoa.push(['', '', '', '', '', '', '', '', '', '切割重量:', +spec.cutWeightTotal.toFixed(1), 'kg']);
+    cellStyles[ref(r, 9)] = { font: { bold: true }, alignment: { horizontal: 'right' } };
+    cellStyles[ref(r, 10)] = { font: { bold: true }, alignment: { horizontal: 'right' } };
+    r++;
+
+    // Purchase weight summary
+    aoa.push(['', '', '', '', '', '', '', '', '', '購買重量:', +spec.purchaseWeightTotal.toFixed(1), 'kg']);
+    cellStyles[ref(r, 9)] = { font: { bold: true }, alignment: { horizontal: 'right' } };
+    cellStyles[ref(r, 10)] = { font: { bold: true }, alignment: { horizontal: 'right' } };
+    r++;
+
+    // Spacer
+    aoa.push([]);
+    r++;
+  });
+
+  // Procurement totals header
+  aoa.push(['購買總數量']);
+  cellStyles[ref(r, 0)] = { font: { bold: true, sz: 14 } };
+  r++;
+
+  let totalCutWeight = 0, totalPurchaseWeight = 0, totalBars = 0;
+  results.forEach(spec => {
+    totalCutWeight += spec.cutWeightTotal;
+    totalPurchaseWeight += spec.purchaseWeightTotal;
+    totalBars += spec.bins.length;
+
+    aoa.push([spec.spec.name]);
+    cellStyles[ref(r, 0)] = { font: { bold: true, color: { rgb: '1A56DB' } } };
+    r++;
+
+    const sortedStocks = Object.keys(spec.procurement).map(Number).sort((a, b) => b - a);
+    sortedStocks.forEach(stock => {
+      const label = stock >= 1000 ? (stock / 1000) + 'M' : stock + 'mm';
+      aoa.push([label, spec.procurement[stock], '支']);
+      cellStyles[ref(r, 0)] = { alignment: { horizontal: 'center' } };
+      cellStyles[ref(r, 1)] = { alignment: { horizontal: 'right' } };
+      r++;
+    });
+  });
+
+  // Spacer
+  aoa.push([]);
+  r++;
+
+  // Grand totals
+  const grandTotals = [
+    ['切割總重量:', +totalCutWeight.toFixed(1), 'kg'],
+    ['購買總重量:', +totalPurchaseWeight.toFixed(1), 'kg'],
+    ['購買總支數:', totalBars, '支'],
+  ];
+  grandTotals.forEach(row => {
+    aoa.push(['', '', '', row[0], '', row[1], row[2]]);
+    cellStyles[ref(r, 3)] = { font: { bold: true }, alignment: { horizontal: 'right' } };
+    cellStyles[ref(r, 5)] = { font: { bold: true, sz: 13 }, alignment: { horizontal: 'right' } };
+    cellStyles[ref(r, 6)] = { font: { bold: true } };
+    r++;
+  });
+
+  // Build worksheet
+  const ws = XLSX.utils.aoa_to_sheet(aoa);
+  ws['!merges'] = merges;
+  ws['!cols'] = [
+    { wch: 16 }, { wch: 8 }, { wch: 12 }, { wch: 12 }, { wch: 12 }, { wch: 12 }, { wch: 12 },
+    { wch: 12 }, { wch: 8 }, { wch: 12 }, { wch: 12 }, { wch: 12 }, { wch: 8 }, { wch: 14 },
+  ];
+  ws['!rows'] = [{ hpx: 32 }];
+
+  Object.keys(cellStyles).forEach(addr => {
+    if (ws[addr]) ws[addr].s = cellStyles[addr];
+  });
+
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, '採購建議單');
+
+  const today = new Date();
+  const ymd = today.getFullYear() +
+    String(today.getMonth() + 1).padStart(2, '0') +
+    String(today.getDate()).padStart(2, '0');
+  const filename = projectId
+    ? `型鋼採購建議單_${projectId}_${ymd}.xlsx`
+    : `型鋼採購建議單_${ymd}.xlsx`;
+
+  XLSX.writeFile(wb, filename);
 }
 
 function renderResults(results) {
