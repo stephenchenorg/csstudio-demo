@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MISS DIOR — 2025 Summer Collection</title>
+<meta name="description" content="MISS DIOR 精品女裝選物 — 黑白極簡套裝系列">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Noto+Serif+TC:wght@300;400;500;600&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="home">
+
+<!-- Header -->
+<header>
+  <div class="nav">
+    <button class="icon-btn menu-toggle" aria-label="選單">
+      <svg viewBox="0 0 24 24"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg>
+    </button>
+    <nav class="nav-links">
+      <a href="#collection">系列</a>
+      <a href="#about">關於</a>
+      <a href="#footer">聯絡</a>
+    </nav>
+    <a href="index.html" class="logo">MISS DIOR</a>
+    <div class="nav-right">
+      <button class="icon-btn" aria-label="搜尋">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
+      </button>
+      <button class="icon-btn" id="cartBtn" aria-label="購物車">
+        <svg viewBox="0 0 24 24"><path d="M6 7h12l-1 13H7L6 7z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="eyebrow">2025 Summer Collection</div>
+  <h1>MISS DIOR</h1>
+  <p class="sub">純白與經典黑的兩款套裝，極簡剪裁與綁帶細節，演繹優雅的日常法式風格。</p>
+  <div class="cta"><a href="#collection" class="btn">探索系列</a></div>
+  <div class="scroll-hint">Scroll</div>
+</section>
+
+<!-- Collection -->
+<section class="section" id="collection">
+  <div class="section-head">
+    <div class="eyebrow">The Collection</div>
+    <h2>夏季套裝系列</h2>
+    <p>兩款一衣一裙的精緻套裝，黑白雙色任你選擇。點擊查看商品詳情。</p>
+  </div>
+  <div class="products" id="productGrid"></div>
+</section>
+
+<!-- Brand strip -->
+<section class="strip" id="about">
+  <h2>「優雅，是一種對細節的堅持。」</h2>
+  <div class="feats">
+    <div class="feat"><div class="n">Premium</div><p>精選柔軟棉質與細緻織帶，親膚透氣。</p></div>
+    <div class="feat"><div class="n">Detail</div><p>口袋立體繡字與腰頭織帶，盡顯品牌標誌。</p></div>
+    <div class="feat"><div class="n">Versatile</div><p>綁帶設計可調節版型，日常與度假皆宜。</p></div>
+  </div>
+</section>
+
+<!-- Cart drawer -->
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<aside class="drawer" id="drawer" aria-label="購物車">
+  <div class="drawer-head">
+    <h3>購物車</h3>
+    <button id="drawerClose" aria-label="關閉">&times;</button>
+  </div>
+  <div class="drawer-body" id="drawerBody"></div>
+  <div class="drawer-foot">
+    <div class="total"><span class="t-label">小計</span><span class="t-val" id="cartTotal">NT$0</span></div>
+    <button class="checkout" id="checkoutBtn">前往結帳</button>
+    <p class="note">本頁為前端展示，結帳功能僅作示意。</p>
+  </div>
+</aside>
+
+<!-- Footer -->
+<footer id="footer">
+  <div class="foot-inner">
+    <div class="foot-brand">
+      <div class="logo">MISS DIOR</div>
+      <p>精品女裝選物。以黑白為底，演繹簡約而雋永的法式優雅。</p>
+    </div>
+    <div class="foot-col">
+      <h4>購物</h4>
+      <a href="white.html">純白套裝</a>
+      <a href="black.html">經典黑套裝</a>
+      <a href="#collection">夏季系列</a>
+    </div>
+    <div class="foot-col">
+      <h4>客戶服務</h4>
+      <a href="#">配送與退換</a>
+      <a href="#">付款方式</a>
+      <a href="#">聯絡我們</a>
+    </div>
+    <div class="foot-col">
+      <h4>追蹤我們</h4>
+      <a href="#">Instagram</a>
+      <a href="#">Facebook</a>
+      <a href="#">LINE 官方帳號</a>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>© 2025 MISS DIOR Select. All rights reserved.</span>
+    <span>本網站為設計展示用途，非官方商店。</span>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+<script src="app.js"></script>
+</body>
+</html>
