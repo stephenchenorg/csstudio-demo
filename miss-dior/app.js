@@ -13,7 +13,7 @@ const PRODUCTS = {
     colors:['白','黑'],
     sizes:['S','M','L'],
     material:'棉 95% / 彈性纖維 5%',
-    images:['images/white-1.jpg','images/white-2.jpg','images/white-3.jpg']
+    images:['images/white-1.webp','images/white-2.webp','images/white-3.webp']
   },
   'black':{
     id:'black',
@@ -26,7 +26,7 @@ const PRODUCTS = {
     colors:['黑','白'],
     sizes:['S','M','L'],
     material:'棉 95% / 彈性纖維 5%',
-    images:['images/black-1.jpg','images/black-2.jpg','images/black-3.jpg']
+    images:['images/black-1.webp','images/black-2.webp','images/black-3.webp']
   }
 };
 
@@ -106,8 +106,8 @@ function initHome(){
     a.innerHTML = `
       <div class="card-img">
         <span class="card-tag">${p.tag}</span>
-        <img class="main" src="${p.images[0]}" alt="${p.name}">
-        <img class="alt" src="${p.images[1]}" alt="${p.name} 細節">
+        <img class="main" src="${p.images[0]}" alt="${p.name}" width="1080" height="1440" loading="lazy" decoding="async">
+        <img class="alt" src="${p.images[1]}" alt="${p.name} 細節" width="1080" height="1440" loading="lazy" decoding="async">
         <div class="card-quick">查看商品</div>
       </div>
       <div class="card-info">
@@ -142,14 +142,17 @@ function initProduct(id){
   const stage = $('pStage');
   p.images.forEach((src,i)=>{
     const im = document.createElement('img');
-    im.src = src; im.alt = p.name; if(i===0) im.classList.add('active');
+    im.src = src; im.alt = p.name;
+    im.width = 1080; im.height = 1440; im.decoding = 'async';
+    im.loading = i===0 ? 'eager' : 'lazy';   // 主圖即時、其餘延遲
+    if(i===0){ im.classList.add('active'); im.setAttribute('fetchpriority','high'); }
     stage.insertBefore(im, stage.querySelector('.p-arrow.prev'));
   });
   const thumbsWrap = $('pThumbs');
   p.images.forEach((src,i)=>{
     const b = document.createElement('button');
     if(i===0) b.classList.add('active');
-    b.innerHTML = `<img src="${src}" alt="縮圖${i+1}">`;
+    b.innerHTML = `<img src="${src}" alt="縮圖${i+1}" width="200" height="200" loading="lazy" decoding="async">`;
     b.addEventListener('click',()=>go(i));
     thumbsWrap.appendChild(b);
   });
