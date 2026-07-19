@@ -19,9 +19,10 @@
 
 ## 核心慣例
 
-- **資料夾名 = 線上網址路徑**，一律 **kebab-case 英文**（`led-360`、`nori-line-chat`）。改資料夾名 = 改線上網址，務必同步更新引用它的地方（例如根 `index.html`）。
+- **資料夾名 = 線上網址路徑**，一律 **kebab-case 英文**（`nori-line-chat`、`miss-dior`）。改資料夾名 = 改線上網址，務必同步更新引用它的地方（例如根 `index.html`、`_redirects`）。
+  - 例外：`360/` 為維持既有對外連結刻意保留數字命名；`_redirects` 已設 `/led-360` → `/360`（301）作為可讀別名。
 - **`netlify/` 為平台約定資料夾**（`netlify.toml` 指定 `netlify/functions`），不可改名。
-- 根 `index.html` 只做一件事：跳轉到預設 demo（目前 `led-360`）。
+- 根 `index.html` 只做一件事：跳轉到預設 demo（目前 `360`）。
 - `_redirects` 是子站「上線開關」：規則存在＝擋下回 404；前面加 `#` 註解掉＝公開。詳見 README。
 
 ## 常見任務

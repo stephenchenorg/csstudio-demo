@@ -11,7 +11,7 @@ CS Studio 的作品 / 提案 demo 集合，以 **Netlify 靜態託管**部署，
 
 | 資料夾 | 網址路徑 | 內容 | 線上狀態 |
 |--------|----------|------|----------|
-| `led-360/` | `/led-360/` | LED 漁業用燈 360° 互動展示（另含 `360-guide.html` 完整方案指南） | ✅ 開啟（根首頁預設導向此站） |
+| `360/` | `/360/` | LED 漁業用燈 360° 互動展示（另含 `360-guide.html` 完整方案指南）。`/led-360` 會 301 導回 `/360` | ✅ 開啟（根首頁預設導向此站） |
 | `e-book/` | `/e-book/` | 電子書 3D 翻書範例（DearFlip 套件 demo） | ✅ 開啟 |
 | `miss-dior/` | `/miss-dior/` | MISS DIOR 時尚商場 demo，含購物車（localStorage） | ✅ 開啟 |
 | `nori-line-chat/` | `/nori-line-chat/` | Nori 客戶 LINE 工作對話紀錄存檔 | ✅ 開啟 |
@@ -19,7 +19,7 @@ CS Studio 的作品 / 提案 demo 集合，以 **Netlify 靜態託管**部署，
 | `h-beam/` | `/h-beam/` | H型鋼排料系統 SteelCut Pro（Excel 匯出 + serverless 排料最佳化） | ⛔ 關閉（見下方開關） |
 | `hg-bio/` | `/hg-bio/` | 和聚國際 保健食品原料 OEM/ODM 官網 demo（含 `admin.html` 後台 demo） | ⛔ 關閉（見下方開關） |
 
-> 根目錄 `index.html` 會自動跳轉到 `/led-360/`。
+> 根目錄 `index.html` 會自動跳轉到 `/360/`。
 
 ---
 
@@ -27,17 +27,19 @@ CS Studio 的作品 / 提案 demo 集合，以 **Netlify 靜態託管**部署，
 
 ```
 .
-├── index.html              # 根首頁：自動跳轉到 led-360
+├── index.html              # 根首頁：自動跳轉到 360
 ├── 404.html                # 共用 404 頁
 ├── _redirects              # 子站「上線開關」（見下方）
 ├── netlify.toml            # Netlify 建置設定（publish = 專案根目錄）
 ├── deploy.sh               # 手動部署腳本
 ├── netlify/functions/      # Serverless Functions（目前僅 h-beam 排料用 optimize.mjs）
-├── led-360/  e-book/  miss-dior/  nori-line-chat/  erp-quote/  h-beam/  hg-bio/
+├── 360/  e-book/  miss-dior/  nori-line-chat/  erp-quote/  h-beam/  hg-bio/
 └── ...
 ```
 
-**命名規則**：子站資料夾一律使用 **kebab-case 英文**（`led-360`、`nori-line-chat`…），因為資料夾名稱 = 線上網址路徑。
+**命名規則**：子站資料夾一律使用 **kebab-case 英文**（`nori-line-chat`、`miss-dior`…），因為資料夾名稱 = 線上網址路徑。
+
+> 例外：`360/` 為維持既有對外連結而保留數字命名；程式上較清楚的別名 `/led-360` 已在 `_redirects` 設 301 導回 `/360`。
 
 ---
 
@@ -47,7 +49,7 @@ repo 是純靜態檔，任意 static server 都能跑：
 
 ```bash
 python3 -m http.server 8899
-# 開 http://localhost:8899/          （會跳轉到 led-360）
+# 開 http://localhost:8899/          （會跳轉到 360）
 # 開 http://localhost:8899/miss-dior/
 ```
 
