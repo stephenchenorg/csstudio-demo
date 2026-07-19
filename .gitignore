@@ -1,2 +1,15 @@
-# Local Netlify folder
+# Netlify
 .netlify
+
+# 依賴（各 demo 若自帶 npm 依賴一律不入版控）
+node_modules/
+
+# 作業系統 / 編輯器雜檔
+.DS_Store
+Thumbs.db
+*.swp
+
+# 建置產出物與大型二進位（h-beam 等）
+windows-build/
+*.msi
+*.exe
