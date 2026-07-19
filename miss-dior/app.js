@@ -13,6 +13,7 @@ const PRODUCTS = {
     colors:['白','黑'],
     sizes:['S','M','L'],
     material:'棉 95% / 彈性纖維 5%',
+    cover:'images/white-cover.webp',
     images:['images/white-1.webp','images/white-2.webp','images/white-3.webp']
   },
   'black':{
@@ -26,6 +27,7 @@ const PRODUCTS = {
     colors:['黑','白'],
     sizes:['S','M','L'],
     material:'棉 95% / 彈性纖維 5%',
+    cover:'images/black-cover.webp',
     images:['images/black-1.webp','images/black-2.webp','images/black-3.webp']
   }
 };
@@ -106,8 +108,8 @@ function initHome(){
     a.innerHTML = `
       <div class="card-img">
         <span class="card-tag">${p.tag}</span>
-        <img class="main" src="${p.images[0]}" alt="${p.name}" width="1080" height="1440" loading="lazy" decoding="async">
-        <img class="alt" src="${p.images[1]}" alt="${p.name} 細節" width="1080" height="1440" loading="lazy" decoding="async">
+        <img class="main" src="${p.cover || p.images[0]}" alt="${p.name}" width="1080" height="1440" loading="lazy" decoding="async">
+        <img class="alt" src="${p.images[0]}" alt="${p.name} 細節" width="1080" height="1440" loading="lazy" decoding="async">
         <div class="card-quick">查看商品</div>
       </div>
       <div class="card-info">
