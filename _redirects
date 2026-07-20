@@ -21,3 +21,7 @@
 # ---- h-beam（目前：關閉）----
 /h-beam      /404.html   404!
 /h-beam/*    /404.html   404!
+
+# ---- tshirt-designer（目前：關閉）----
+/tshirt-designer      /404.html   404!
+/tshirt-designer/*    /404.html   404!

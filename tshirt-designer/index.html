@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>T-shirt Designer — 畫圖印到 3D 衣服</title>
+  <link rel="stylesheet" href="./style.css">
+
+  <!-- importmap：讓下面的 app.js 可以用 "three" / "three/addons/" 這種簡短寫法 import。
+       靜態網站沒有打包工具，就靠這個對應到 CDN 檔案。 -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <header class="topbar">
+    <h1>T-shirt Designer</h1>
+    <p>左邊畫圖，右邊即時印到 3D 衣服上 — 拖曳可 360° 旋轉</p>
+  </header>
+
+  <main class="layout">
+    <!-- 左：繪圖區 -->
+    <section class="panel draw-panel">
+      <div class="toolbar">
+        <label class="tool">
+          顏色
+          <input type="color" id="color" value="#e5322d">
+        </label>
+        <label class="tool">
+          筆刷 <span id="sizeval">16</span>
+          <input type="range" id="size" min="2" max="60" value="16">
+        </label>
+        <button id="eraser" class="btn">橡皮擦</button>
+        <button id="clear" class="btn btn-ghost">清除</button>
+      </div>
+      <div class="canvas-wrap">
+        <canvas id="draw"></canvas>
+      </div>
+      <p class="hint">在白色畫布上塗鴉，沒畫到的地方會露出布料。</p>
+    </section>
+
+    <!-- 右：3D 預覽 -->
+    <section class="panel stage-panel">
+      <div id="stage">
+        <div id="loading">載入 3D 模型中…</div>
+      </div>
+      <div class="stage-foot">
+        <label class="tool inline">
+          <input type="checkbox" id="autorotate"> 自動旋轉
+        </label>
+        <span class="hint">滑鼠拖曳旋轉 · 滾輪縮放</span>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="./app.js"></script>
+  <script>
+    // 純顯示筆刷數值，跟 3D 無關
+    const s = document.getElementById('size')
+    const sv = document.getElementById('sizeval')
+    s.addEventListener('input', () => { sv.textContent = s.value })
+  </script>
+</body>
+</html>
