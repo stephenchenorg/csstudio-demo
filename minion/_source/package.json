@@ -1,0 +1,46 @@
+{
+  "name": "astro-starter",
+  "type": "module",
+  "version": "0.1.1",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "astro dev --host 0.0.0.0",
+    "start": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "lint": "eslint \"*.{js,ts,json}\" \"src/**/*.{js,ts,astro,vue}\""
+  },
+  "dependencies": {
+    "@astrojs/node": "^9.5.2",
+    "@stephenchenorg/astro": "^9.0.0",
+    "astro-cookie-session": "^1.3.0",
+    "clsx": "^2.1.1",
+    "dayjs": "^1.11.13",
+    "ofetch": "^1.4.1",
+    "tailwind-merge": "^3.3.1",
+    "vue": "^3.5.18"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@astrojs/netlify": "^6.5.1",
+    "@astrojs/sitemap": "^3.6.0",
+    "@astrojs/vue": "^5.1.0",
+    "@iconify-json/heroicons": "^1.2.2",
+    "@iconify-json/tabler": "^1.2.19",
+    "@tailwindcss/vite": "^4.1.11",
+    "@types/picomatch": "^4.0.2",
+    "@ycs77/eslint-config": "6.2.1",
+    "astro": "5.18.2",
+    "eslint": "^9.32.0",
+    "eslint-plugin-astro": "^1.3.1",
+    "eslint-plugin-astro-explicit-wrapper": "^1.0.3",
+    "picomatch": "^4.0.3",
+    "tailwindcss": "^4.1.11",
+    "typescript": "^5.9.2",
+    "unplugin-icons": "^22.2.0",
+    "vite": "^6.4.1"
+  }
+}

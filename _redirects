@@ -25,3 +25,12 @@
 # ---- tshirt-designer（目前：關閉）----
 /tshirt-designer      /404.html   404!
 /tshirt-designer/*    /404.html   404!
+
+# ---- minion/_source（永久關閉，勿註解）----
+#  minion 子站的 Astro 原始碼，只為了日後能重新 build 才入版控，
+#  不應該對外瀏覽。即使下面把 minion 打開，這行仍要保留。
+/minion/_source/*    /404.html   404!
+
+# ---- minion（目前：關閉）----
+/minion      /404.html   404!
+/minion/*    /404.html   404!

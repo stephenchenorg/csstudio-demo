@@ -1,0 +1,30 @@
+---
+import ProductCard from '@/components/ui/ProductCard.astro'
+import SectionHeading from '@/components/ui/SectionHeading.astro'
+import type { Product } from '@/data/home'
+
+interface Props {
+  eyebrow?: string
+  title: string
+  subtitle?: string
+  products: Product[]
+  bg?: string
+}
+
+const { eyebrow, title, subtitle, products, bg = 'bg-white' } = Astro.props
+---
+
+<section class:list={[bg, 'py-16 md:py-24']}>
+  <div class="container flex flex-col gap-10">
+    <SectionHeading eyebrow={eyebrow} title={title} subtitle={subtitle} />
+    <div
+      class="-mx-5 flex snap-x snap-mandatory gap-5 overflow-x-auto px-5 pb-2 md:mx-0 md:grid md:grid-cols-4 md:gap-6 md:overflow-visible md:px-0"
+    >
+      {products.map(product => (
+        <div class="w-[70%] shrink-0 snap-start sm:w-[45%] md:w-auto">
+          <ProductCard product={product} />
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

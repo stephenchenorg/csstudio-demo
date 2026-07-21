@@ -1,0 +1,23 @@
+---
+import SectionHeading from '@/components/ui/SectionHeading.astro'
+import StarRating from '@/components/ui/StarRating.astro'
+import { reviews } from '@/data/home'
+---
+
+<section class="bg-cloud py-16 md:py-24">
+  <div class="container flex flex-col gap-10">
+    <SectionHeading eyebrow="Reviews" title="Positive purrs 😻" />
+    <div
+      class="-mx-5 flex snap-x snap-mandatory gap-5 overflow-x-auto px-5 pb-2 md:mx-0 md:grid md:grid-cols-4 md:gap-6 md:overflow-visible md:px-0"
+    >
+      {reviews.map(review => (
+        <article class="flex w-[80%] shrink-0 snap-start flex-col gap-3 rounded-2xl bg-white p-6 shadow-card sm:w-[55%] md:w-auto">
+          <StarRating rating={review.rating} />
+          <h3 class="text-lg font-bold text-navy">{review.title}</h3>
+          <p class="flex-1 text-sm leading-relaxed text-navy/70">{review.body}</p>
+          <p class="text-sm font-semibold text-navy">— {review.author}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

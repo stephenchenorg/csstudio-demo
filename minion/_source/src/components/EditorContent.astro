@@ -1,0 +1,14 @@
+---
+import { processEditorContent } from '@/utils/editorContent'
+
+interface Props {
+  content: string | null | undefined
+  class?: string
+}
+
+const { content, class: className = '' } = Astro.props
+---
+
+{content && (
+  <div class:list={['prose-editor', className]} set:html={processEditorContent(content)} />
+)}

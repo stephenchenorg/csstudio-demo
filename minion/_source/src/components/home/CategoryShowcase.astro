@@ -1,0 +1,44 @@
+---
+import Button from '@/components/ui/Button.astro'
+
+const categories = [
+  {
+    title: 'Human-grade fresh',
+    body: 'Fresh meets cat-needs and preferences, in a variety of proteins and textures.',
+    image: '/minion/images/cat-human-grade.jpg',
+    href: '/minion/',
+    bg: 'bg-mint',
+  },
+  {
+    title: 'Freeze-dried raw',
+    body: 'We took raw protein and freeze-dried it for cats that like crunch.',
+    image: '/minion/images/cat-freeze-dried.jpg',
+    href: '/minion/',
+    bg: 'bg-sky',
+  },
+]
+---
+
+<section class="bg-white pb-16 md:pb-24">
+  <div class="container grid gap-6 md:grid-cols-2">
+    {categories.map(cat => (
+      <article class:list={[cat.bg, 'flex flex-col overflow-hidden rounded-3xl']}>
+        <div class="flex flex-1 flex-col gap-4 p-8 md:p-10">
+          <h3 class="text-2xl font-extrabold text-navy md:text-3xl">{cat.title}</h3>
+          <p class="text-navy/70">{cat.body}</p>
+          <div class="mt-2">
+            <Button href={cat.href} variant="navy">Explore now</Button>
+          </div>
+        </div>
+        <img
+          src={cat.image}
+          alt={cat.title}
+          width="680"
+          height="420"
+          loading="lazy"
+          class="h-56 w-full object-cover md:h-72"
+        />
+      </article>
+    ))}
+  </div>
+</section>

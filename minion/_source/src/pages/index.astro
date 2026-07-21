@@ -1,0 +1,58 @@
+---
+import Benefits from '@/components/home/Benefits.astro'
+import Blog from '@/components/home/Blog.astro'
+import CategoryShowcase from '@/components/home/CategoryShowcase.astro'
+import Certifications from '@/components/home/Certifications.astro'
+import Counter from '@/components/home/Counter.astro'
+import CtaBanner from '@/components/home/CtaBanner.astro'
+import Delivery from '@/components/home/Delivery.astro'
+import Faq from '@/components/home/Faq.astro'
+import FeaturedBrands from '@/components/home/FeaturedBrands.astro'
+import Hero from '@/components/home/Hero.astro'
+import Ingredients from '@/components/home/Ingredients.astro'
+import MainFeatures from '@/components/home/MainFeatures.astro'
+import MoneyBack from '@/components/home/MoneyBack.astro'
+import ProductShowcase from '@/components/home/ProductShowcase.astro'
+import PromoBanner from '@/components/home/PromoBanner.astro'
+import Results from '@/components/home/ResultStats.astro'
+import Reviews from '@/components/home/Reviews.astro'
+import Vet from '@/components/home/Vet.astro'
+import { reelProducts, topProducts } from '@/data/home'
+import Layout from '@/layouts/Layout.astro'
+import { seoMeta } from '@stephenchenorg/astro/page'
+
+const meta = seoMeta({
+  title: 'Minion — Trusted nutrition for your cat',
+})
+---
+
+<Layout meta={meta}>
+  <Hero />
+  <PromoBanner />
+  <Ingredients />
+  <CategoryShowcase />
+  <MainFeatures />
+  <CtaBanner title="Let’s feed your feline friends with hearty and healthy meals!" tone="primary" />
+  <Results />
+  <Vet />
+  <FeaturedBrands />
+  <Benefits />
+  <Certifications />
+  <ProductShowcase
+    eyebrow="Top products"
+    title="Top products of this week"
+    products={topProducts}
+  />
+  <Delivery />
+  <ProductShowcase
+    title="Paw-some reels"
+    products={reelProducts}
+    bg="bg-cloud"
+  />
+  <Counter />
+  <Reviews />
+  <Blog />
+  <MoneyBack />
+  <Faq />
+  <CtaBanner title="Let’s feed your feline friends with hearty and healthy meals!" tone="navy" />
+</Layout>

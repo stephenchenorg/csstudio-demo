@@ -1,0 +1,32 @@
+---
+import SectionHeading from '@/components/ui/SectionHeading.astro'
+import { articles } from '@/data/home'
+---
+
+<section class="bg-white py-16 md:py-24">
+  <div class="container flex flex-col gap-10">
+    <SectionHeading eyebrow="Our blog" title="Product reviews and helpful tips" />
+    <div class="grid gap-8 md:grid-cols-3">
+      {articles.map(article => (
+        <a href={article.href} class="group flex flex-col gap-4">
+          <div class="overflow-hidden rounded-2xl">
+            <img
+              src={article.image}
+              alt={article.title}
+              width="480"
+              height="320"
+              loading="lazy"
+              class="aspect-[3/2] w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+          </div>
+          <div class="flex items-center gap-3 text-xs font-medium text-navy/50">
+            <span>{article.date}</span>
+            <span aria-hidden="true">•</span>
+            <span>{article.comments} comment{article.comments === 1 ? '' : 's'}</span>
+          </div>
+          <h3 class="text-xl font-bold text-navy group-hover:text-primary-600">{article.title}</h3>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

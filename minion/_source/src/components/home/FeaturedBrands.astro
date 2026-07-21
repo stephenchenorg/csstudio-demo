@@ -1,0 +1,25 @@
+---
+import SectionHeading from '@/components/ui/SectionHeading.astro'
+import { featuredBrands } from '@/data/home'
+---
+
+<section class="bg-white py-16 md:py-20">
+  <div class="container flex flex-col items-center gap-10">
+    <SectionHeading
+      eyebrow="Also featured in"
+      title="The best cat food, according to veterinarians"
+    />
+    <div class="grid w-full grid-cols-3 items-center gap-8 md:grid-cols-6">
+      {featuredBrands.map(brand => (
+        <img
+          src={brand.image}
+          alt={brand.name}
+          width="120"
+          height="48"
+          loading="lazy"
+          class="mx-auto h-10 w-auto opacity-60 grayscale transition hover:opacity-100 hover:grayscale-0 md:h-12"
+        />
+      ))}
+    </div>
+  </div>
+</section>

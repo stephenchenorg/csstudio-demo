@@ -1,0 +1,40 @@
+---
+interface Props {
+  eyebrow?: string
+  title: string
+  subtitle?: string
+  align?: 'left' | 'center'
+  light?: boolean
+  class?: astroHTML.JSX.HTMLAttributes['class']
+}
+
+const { eyebrow, title, subtitle, align = 'center', light = false, class: className } = Astro.props
+---
+
+<div
+  class:list={[
+    'flex flex-col gap-3',
+    align === 'center' ? 'items-center text-center' : 'items-start text-left',
+    className,
+  ]}
+>
+  {eyebrow && (
+    <span class:list={['eyebrow', light && 'text-primary-200!']}>{eyebrow}</span>
+  )}
+  <h2
+    class:list={[
+      'text-3xl md:text-4xl lg:text-[2.75rem] font-extrabold tracking-tight',
+      light ? 'text-white' : 'text-navy',
+    ]}
+    set:html={title}
+  />
+  {subtitle && (
+    <p
+      class:list={[
+        'max-w-2xl text-lg',
+        light ? 'text-white/80' : 'text-navy/70',
+      ]}
+      set:html={subtitle}
+    />
+  )}
+</div>

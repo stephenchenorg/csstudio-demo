@@ -1,0 +1,20 @@
+---
+interface Props {
+  clarityId: string
+}
+
+const { clarityId } = Astro.props
+---
+
+<!--
+  Microsoft Clarity tracking code.
+  Free and powerful user behavior analytics with heatmaps and session recordings.
+  Using `is:inline` attribute to prevent Astro optimizations.
+-->
+<script is:inline define:vars={{ clarityId }}>
+  (function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+  })(window, document, "clarity", "script", clarityId);
+</script>

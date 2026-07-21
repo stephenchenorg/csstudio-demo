@@ -1,0 +1,30 @@
+---
+import type { PageMeta } from '@stephenchenorg/astro/page'
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import Footer from '@/layouts/partials/Footer.astro'
+import Header from '@/layouts/partials/Header.astro'
+
+interface Props {
+  // metadata
+  meta: PageMeta
+
+  // layout props
+  // ...
+}
+
+const {
+  meta,
+} = Astro.props
+---
+
+<BaseLayout meta={meta}>
+  <slot name="head" slot="head" />
+
+  <Header />
+
+  <slot />
+
+  <Footer />
+
+  <slot name="scripts" slot="scripts" />
+</BaseLayout>

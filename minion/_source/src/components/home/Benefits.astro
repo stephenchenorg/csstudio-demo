@@ -1,0 +1,34 @@
+---
+import Button from '@/components/ui/Button.astro'
+import SectionHeading from '@/components/ui/SectionHeading.astro'
+import { benefits } from '@/data/home'
+---
+
+<section class="bg-cream py-16 md:py-24">
+  <div class="container grid items-center gap-12 lg:grid-cols-2">
+    <div class="overflow-hidden rounded-3xl">
+      <img
+        src="/minion/images/benefits.jpg"
+        alt="A happy, healthy cat"
+        width="700"
+        height="560"
+        loading="lazy"
+        class="h-full w-full object-cover"
+      />
+    </div>
+    <div class="flex flex-col gap-8">
+      <SectionHeading eyebrow="The results are in…" title="Cats have seen:" align="left" />
+      <ul class="flex flex-col gap-6">
+        {benefits.map(benefit => (
+          <li class="border-l-4 border-primary-500 pl-4">
+            <h3 class="text-lg font-bold text-navy">{benefit.title}</h3>
+            <p class="mt-1 text-navy/70">{benefit.body}</p>
+          </li>
+        ))}
+      </ul>
+      <div>
+        <Button href="/minion/" variant="navy" size="lg">Shop now!</Button>
+      </div>
+    </div>
+  </div>
+</section>

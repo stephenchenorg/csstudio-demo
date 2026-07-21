@@ -1,0 +1,41 @@
+---
+import type { Product } from '@/data/home'
+import StarRating from './StarRating.astro'
+
+interface Props {
+  product: Product
+}
+
+const { product } = Astro.props
+---
+
+<a href={product.href} class="group flex flex-col">
+  <div class="relative overflow-hidden rounded-xl bg-cloud aspect-square">
+    {product.onSale && (
+      <span class="absolute left-3 top-3 z-10 rounded-full bg-sale px-3 py-1 text-xs font-bold text-white">
+        Sale
+      </span>
+    )}
+    <img
+      src={product.image}
+      alt={product.title}
+      width="400"
+      height="400"
+      loading="lazy"
+      class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+    />
+  </div>
+  <div class="mt-4 flex flex-col gap-1.5">
+    <span class="text-xs font-semibold uppercase tracking-wide text-navy/50">{product.brand}</span>
+    <StarRating rating={5} />
+    <h3 class="line-clamp-2 text-sm font-semibold text-navy group-hover:text-primary-600">
+      {product.title}
+    </h3>
+    <div class="mt-1 flex items-center gap-2">
+      <span class="font-bold text-primary-600">{product.price}</span>
+      {product.compareAt && (
+        <span class="text-sm text-navy/40 line-through">{product.compareAt}</span>
+      )}
+    </div>
+  </div>
+</a>

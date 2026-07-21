@@ -1,0 +1,30 @@
+---
+import { certifications } from '@/data/home'
+
+// Duplicate the list so the marquee track loops seamlessly.
+const track = [...certifications, ...certifications]
+---
+
+<section class="overflow-hidden bg-navy py-5">
+  <div class="marquee flex w-max items-center gap-10">
+    {track.map(item => (
+      <span class="flex items-center gap-10 whitespace-nowrap text-sm font-bold uppercase tracking-wide text-white/90 md:text-base">
+        {item}
+        <span class="text-primary-300" aria-hidden="true">🐾</span>
+      </span>
+    ))}
+  </div>
+</section>
+
+<style>
+  .marquee {
+    animation: marquee 28s linear infinite;
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .marquee { animation: none; }
+  }
+</style>

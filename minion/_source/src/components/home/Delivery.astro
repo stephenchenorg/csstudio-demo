@@ -1,0 +1,29 @@
+---
+import Button from '@/components/ui/Button.astro'
+---
+
+<section class="bg-sky py-16 md:py-24">
+  <div class="container grid items-center gap-12 lg:grid-cols-2">
+    <div class="flex flex-col gap-5">
+      <h2 class="text-3xl font-extrabold text-navy md:text-4xl lg:text-5xl">
+        Healthy cat food, delivered. 📦
+      </h2>
+      <p class="max-w-md text-lg text-navy/70">
+        We’re more than just our food: we’ve got all kinds of dry goods to add to your box, too.
+      </p>
+      <div>
+        <Button href="/minion/" variant="navy" size="lg">Get started</Button>
+      </div>
+    </div>
+    <div>
+      <img
+        src="/minion/images/delivery.png"
+        alt="A box of Minion cat food delivered to your door"
+        width="720"
+        height="600"
+        loading="lazy"
+        class="mx-auto w-full max-w-lg object-contain"
+      />
+    </div>
+  </div>
+</section>

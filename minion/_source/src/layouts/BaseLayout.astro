@@ -1,0 +1,106 @@
+---
+import type { PageMeta } from '@stephenchenorg/astro/page'
+import { createCompanySetting } from '@stephenchenorg/astro/company-setting'
+import siteConfig from '@/site.config'
+import ClarityScript from './scripts/ClarityScript.astro'
+import FBPixelScript from './scripts/FBPixelScript.astro'
+import GAScript from './scripts/GAScript.astro'
+import GTMScript from './scripts/GTMScript.astro'
+import LINETagScript from './scripts/LINETagScript.astro'
+import '@/styles/index.css'
+
+interface Props {
+  // metadata
+  meta: PageMeta
+
+  // layout props
+  bodyClass?: string
+}
+
+const {
+  meta,
+  bodyClass,
+} = Astro.props
+
+const companySetting = createCompanySetting({
+  name: siteConfig.name,
+  description: siteConfig.description,
+  logo: new URL('/minion/images/hero.jpg', Astro.site).href,
+})
+
+// const pathname = Astro.url.pathname
+
+const ga4TrackingId = siteConfig.ga4TrackingId
+const gtmId = siteConfig.gtmId
+const lineTagId = siteConfig.lineTagId
+const clarityId = siteConfig.clarityId
+const fbPixelId = siteConfig.fbPixelId
+
+/**
+ * 環境判斷：只有 production 才輸出 SEO/OG/Analytics
+ *
+ * 使用 MODE 而非 DEV 的原因：
+ * - DEV 只在 `yarn dev` 時為 true
+ * - `yarn build --mode staging` 時 DEV 為 false，但 MODE 為 'staging'
+ * - 這樣可以確保 staging 環境也不會被爬蟲索引
+ */
+const isProduction = import.meta.env.MODE === 'production'
+---
+
+<!doctype html>
+<html lang="zh-Hant-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/minion/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{siteConfig.name}</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800;900&family=Noto+Sans+TC:wght@300..800&display=swap" />
+
+    <slot name="head" />
+
+    {/* 非 production 環境：阻止搜尋引擎索引 */}
+    {!isProduction && <meta name="robots" content="noindex, nofollow" />}
+
+    {/* production 環境：輸出完整 SEO/OG 標籤 */}
+    {isProduction && (
+      <>
+        <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+        {meta.seo_description && <meta name="description" content={meta.seo_description} />}
+        {meta.seo_keyword && <meta name="keywords" content={meta.seo_keyword} />}
+        {meta.og_title && <meta property="og:title" content={`${meta.og_title} - ${companySetting.name}`} />}
+        {meta.og_description && <meta property="og:description" content={meta.og_description} />}
+        <meta property="og:url" content={new URL(Astro.url.pathname, Astro.site)} />
+        <meta property="og:site_name" content={companySetting.name} />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content={meta.og_image || companySetting.logo} />
+        {meta.seo_json_ld && <script is:inline type="application/ld+json" set:html={meta.seo_json_ld}></script>}
+      </>
+    )}
+
+    {/* production 環境：載入 Analytics */}
+    {isProduction && (
+      <>
+        {gtmId && <GTMScript gtmId={gtmId} />}
+        {ga4TrackingId && <GAScript ga4TrackingId={ga4TrackingId} />}
+        {lineTagId && <LINETagScript lineTagId={lineTagId} />}
+        {clarityId && <ClarityScript clarityId={clarityId} />}
+        {fbPixelId && <FBPixelScript fbPixelId={fbPixelId} />}
+      </>
+    )}
+
+    {isProduction && meta.seo_head && <Fragment set:html={meta.seo_head} />}
+  </head>
+  <body class:list={['antialiased', bodyClass]}>
+    <slot />
+
+    {isProduction && meta.seo_body && <Fragment set:html={meta.seo_body} />}
+
+    <!-- Scripts -->
+    <slot name="scripts" />
+  </body>
+</html>

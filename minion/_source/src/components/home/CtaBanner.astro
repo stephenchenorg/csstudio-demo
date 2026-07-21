@@ -1,0 +1,22 @@
+---
+import Button from '@/components/ui/Button.astro'
+
+interface Props {
+  title: string
+  buttonLabel?: string
+  href?: string
+  tone?: 'primary' | 'navy'
+}
+
+const { title, buttonLabel = 'Shop now!', href = '/collections/all', tone = 'primary' } = Astro.props
+const bg = tone === 'primary' ? 'bg-primary-500' : 'bg-navy'
+---
+
+<section class={bg}>
+  <div class="container flex flex-col items-center gap-6 py-14 text-center md:py-20">
+    <h2 class="max-w-3xl text-3xl font-extrabold leading-tight text-white md:text-4xl lg:text-5xl">
+      {title}
+    </h2>
+    <Button href={href} variant="white" size="lg">{buttonLabel}</Button>
+  </div>
+</section>

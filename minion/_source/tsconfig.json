@@ -1,0 +1,15 @@
+{
+  "extends": "astro/tsconfigs/strict",
+  "compilerOptions": {
+    "jsx": "preserve",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "types": [
+      "unplugin-icons/types/vue3"
+    ],
+    "allowImportingTsExtensions": false
+  },
+  "exclude": ["public", "dist"]
+}

@@ -1,0 +1,20 @@
+---
+interface Props {
+  ga4TrackingId: string
+}
+
+const { ga4TrackingId } = Astro.props
+---
+
+<!--
+  This section is for Google Analytics 4 (GA4) tracking code.
+  And important part is using `is:inline` attribute on the script tag.
+  Tell Astro ignores all the optimizations it does to scripts and just includes them as they are.
+-->
+<script is:inline src={`https://www.googletagmanager.com/gtag/js?id=${ga4TrackingId}`}></script>
+<script is:inline define:vars={{ ga4TrackingId }}>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', ga4TrackingId);
+</script>

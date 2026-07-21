@@ -1,0 +1,41 @@
+---
+import SectionHeading from '@/components/ui/SectionHeading.astro'
+import { mainFeatures } from '@/data/home'
+
+const numbers = ['01', '02', '03']
+---
+
+<section class="bg-cloud py-16 md:py-24">
+  <div class="container grid items-center gap-12 lg:grid-cols-2">
+    <div>
+      <img
+        src="/minion/images/cta-feed.png"
+        alt="Minion cat food packages with kittens"
+        width="720"
+        height="640"
+        loading="lazy"
+        class="w-full max-w-lg object-contain"
+      />
+    </div>
+    <div class="flex flex-col gap-8">
+      <SectionHeading
+        eyebrow="The main features"
+        title="It is formulated by leading pet nutritionists"
+        align="left"
+      />
+      <ul class="flex flex-col gap-6">
+        {mainFeatures.map((feature, i) => (
+          <li class="flex gap-4">
+            <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary-500 text-sm font-bold text-white">
+              {numbers[i]}
+            </span>
+            <div>
+              <h3 class="text-lg font-bold text-navy">{feature.title}</h3>
+              <p class="mt-1 text-navy/70">{feature.body}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>

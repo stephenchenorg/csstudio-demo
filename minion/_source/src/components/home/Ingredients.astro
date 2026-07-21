@@ -1,0 +1,24 @@
+---
+import SectionHeading from '@/components/ui/SectionHeading.astro'
+---
+
+<section class="bg-white py-16 md:py-24">
+  <div class="container flex flex-col items-center gap-8 text-center">
+    <SectionHeading
+      eyebrow="Our ingredients"
+      title="Yes, that’s all you need to feed your cat 🐈"
+      subtitle="Our cat food is ultra-high protein with no fillers of any kind, because we actually care about cats."
+    />
+    <div class="flex items-center gap-3 rounded-full bg-cloud px-6 py-3">
+      <img
+        src="/minion/images/ingredients.png"
+        alt="AAFCO — Association of American Feed Control Officials certified"
+        width="140"
+        height="40"
+        loading="lazy"
+        class="h-8 w-auto md:h-10"
+      />
+      <span class="text-sm font-semibold text-navy/70">Nutritionally complete &amp; balanced</span>
+    </div>
+  </div>
+</section>

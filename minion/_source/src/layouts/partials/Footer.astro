@@ -1,0 +1,117 @@
+---
+import { cn } from '@/utils/className'
+
+interface Props {
+  class?: astroHTML.JSX.HTMLAttributes['class']
+}
+
+const corporate = [
+  { label: 'About', href: '/minion/' },
+  { label: 'Contact us', href: '/minion/' },
+  { label: 'Locations', href: '/minion/' },
+  { label: 'Blog', href: '/minion/' },
+  { label: 'Grooming', href: '/minion/' },
+  { label: 'Veterinary services', href: '/minion/' },
+  { label: 'Pets hotel', href: '/minion/' },
+  { label: 'Shipping & returns', href: '/minion/' },
+  { label: 'Help', href: '/minion/' },
+  { label: 'Privacy policy', href: '/minion/' },
+]
+
+const shop = [
+  { label: 'Human-grade fresh', href: '/minion/' },
+  { label: 'Freeze-dried raw', href: '/minion/' },
+  { label: 'Wet cat food', href: '/minion/' },
+  { label: 'Dry cat food', href: '/minion/' },
+  { label: 'Kittens', href: '/minion/' },
+  { label: 'Subscriptions', href: '/minion/' },
+]
+
+const socials = ['Twitter', 'Facebook', 'Pinterest', 'Instagram', 'TikTok', 'YouTube']
+const payments = ['Visa', 'Mastercard', 'Amex', 'PayPal', 'Discover']
+const year = new Date().getFullYear()
+---
+
+<footer class={cn('bg-navy text-white/80', Astro.props.class)}>
+  <div class="container py-16">
+    <div class="grid gap-10 lg:grid-cols-[1.2fr_1fr_1fr_1.3fr]">
+      {/* Brand + assistance */}
+      <div class="flex flex-col gap-5">
+        <a href="/minion/" class="flex items-center gap-2 text-2xl font-extrabold text-white">
+          <span aria-hidden="true">😺</span><span class="lowercase">minion</span>
+        </a>
+        <div class="text-sm leading-relaxed">
+          <p class="mb-2 font-bold uppercase tracking-wide text-white">Need assistance?</p>
+          <p>📞 Tel: (123) 456-7890</p>
+          <p class="mt-1">7895 Piermont Dr NE<br />Albuquerque, NM 198866, USA</p>
+          <p class="mt-2 text-white/60">
+            Mon–Thu: 10 AM–7 PM EST<br />
+            Fri: 10 AM–6 PM EST<br />
+            Sat–Sun: 1 PM–6 PM EST
+          </p>
+        </div>
+      </div>
+
+      {/* Corporate */}
+      <div>
+        <p class="mb-4 text-sm font-bold uppercase tracking-wide text-white">Corporate</p>
+        <ul class="flex flex-col gap-2.5 text-sm">
+          {corporate.map(link => (
+            <li><a href={link.href} class="hover:text-primary-300">{link.label}</a></li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Shop */}
+      <div>
+        <p class="mb-4 text-sm font-bold uppercase tracking-wide text-white">Shop</p>
+        <ul class="flex flex-col gap-2.5 text-sm">
+          {shop.map(link => (
+            <li><a href={link.href} class="hover:text-primary-300">{link.label}</a></li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Newsletter */}
+      <div class="flex flex-col gap-4">
+        <p class="text-sm font-bold uppercase tracking-wide text-white">Newsletter signup</p>
+        <p class="text-sm">Sign up for our e-mail and be the first to know about our special offers!</p>
+        <form class="flex flex-col gap-3" method="post" action="#">
+          <input
+            type="email"
+            name="email"
+            required
+            placeholder="Please enter your e-mail"
+            class="w-full rounded-lg border border-white/20 bg-white/10 px-4 py-3 text-sm text-white placeholder:text-white/50 focus:border-primary-300 focus:outline-none"
+          />
+          <button type="submit" class="rounded-lg bg-primary-500 px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-600">
+            Subscribe
+          </button>
+        </form>
+        <label class="flex items-start gap-2 text-xs text-white/60">
+          <input type="checkbox" required class="mt-0.5" />
+          <span>By clicking the button you agree to the Privacy Policy and Terms and Conditions.</span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  {/* Bottom bar */}
+  <div class="border-t border-white/10">
+    <div class="container flex flex-col items-center justify-between gap-4 py-6 text-sm md:flex-row">
+      <p>&copy; {year}, minion — trusted nutrition for your cat.</p>
+      <div class="flex flex-wrap items-center gap-4">
+        <div class="flex items-center gap-3">
+          {socials.map(name => (
+            <a href="#" aria-label={name} class="text-white/60 hover:text-primary-300">{name}</a>
+          ))}
+        </div>
+      </div>
+    </div>
+    <div class="container flex flex-wrap items-center gap-2 pb-6">
+      {payments.map(name => (
+        <span class="rounded border border-white/15 bg-white/5 px-2 py-1 text-xs text-white/60">{name}</span>
+      ))}
+    </div>
+  </div>
+</footer>
