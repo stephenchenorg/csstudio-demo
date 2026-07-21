@@ -1,7 +1,8 @@
+# 依賴與工具鏈本體（package.json / package-lock.json 要入版控，才能重建）
 .tools/
 node_modules/
-package.json
-package-lock.json
+
+# 建置產出
 dist/
 src-tauri/target/
 *.app

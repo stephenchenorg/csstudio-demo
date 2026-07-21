@@ -1,7 +1,13 @@
 # Netlify
 .netlify
 
-# 依賴（各 demo 若自帶 npm 依賴一律不入版控）
+# 環境變數／機密（.env.example 為範本，要入版控）
+.env
+.env.*
+!.env.example
+
+# 依賴（各 demo 若自帶 npm 依賴一律不入版控；
+#       package.json / lockfile 要入版控，才能重建依賴）
 node_modules/
 
 # 作業系統 / 編輯器雜檔
