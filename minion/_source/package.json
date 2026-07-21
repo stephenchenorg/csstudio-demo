@@ -14,7 +14,7 @@
     "lint": "eslint \"*.{js,ts,json}\" \"src/**/*.{js,ts,astro,vue}\""
   },
   "dependencies": {
-    "@astrojs/node": "^9.5.2",
+    "@astrojs/node": "^11.0.2",
     "@stephenchenorg/astro": "^9.0.0",
     "astro-cookie-session": "^1.3.0",
     "clsx": "^2.1.1",
