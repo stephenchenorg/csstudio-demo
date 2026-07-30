@@ -14,9 +14,9 @@
 /led-360      /360           301
 /led-360/*    /360/:splat    301
 
-# ---- hg-bio（目前：關閉）----
-/hg-bio      /404.html   404!
-/hg-bio/*    /404.html   404!
+# ---- hg-bio（目前：開啟）----
+# /hg-bio      /404.html   404!
+# /hg-bio/*    /404.html   404!
 
 # ---- h-beam（目前：關閉）----
 /h-beam      /404.html   404!
