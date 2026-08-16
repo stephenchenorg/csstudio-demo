@@ -398,7 +398,9 @@
     height: 100%; font-family: var(--mono); font-size: 12px;
     font-weight: 700; overflow: hidden; white-space: nowrap; cursor: default;
     transition: filter 0.15s;
+    border-right: 1px solid rgba(0,0,0,0.15);
   }
+  .cut-piece:last-child { border-right: none; }
   .cut-piece:hover { filter: brightness(0.9); }
 
   .cut-waste {
@@ -429,9 +431,25 @@
   @media print {
     .no-print { display: none !important; }
     body { background: white; }
-    .panel, .spec-group { box-shadow: none; }
+    .panel, .spec-group { box-shadow: none; overflow: visible; }
     .scroll-area { max-height: none; overflow: visible; }
     .main-grid { grid-template-columns: 1fr; }
+    .result-spec-section, .result-spec-section-body { overflow: visible; }
+    .cut-bar { overflow: visible; break-inside: avoid; page-break-inside: avoid; }
+    .cut-visual { overflow: visible; }
+
+    /* Chrome/print engines strip background colors by default — without this
+       the cut-diagram bar prints as blank white segments with no way to
+       tell pieces apart. Force every colored element to keep its fill. */
+    * {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
+    .cut-visual { height: 30px; }
+    .cut-piece { font-size: 11px; border-right-color: rgba(0,0,0,0.35); }
+    .cut-piece, .cut-waste { color: #000 !important; }
+    .util-pill { border: 1px solid rgba(0,0,0,0.2); }
   }
 </style>
 <script src="./vendor/solver.global.js"></script>
@@ -1185,6 +1203,7 @@ function exportToExcel() {
   const aoa = [];
   const cellStyles = {};
   const merges = [];
+  const rowHeights = {};
   const colLetter = (i) => String.fromCharCode(65 + i);
   const ref = (r0, c0) => `${colLetter(c0)}${r0 + 1}`;
 
@@ -1226,14 +1245,56 @@ function exportToExcel() {
 
   let r = 6; // current 0-indexed row
 
-  results.forEach(spec => {
+  results.forEach((spec, si) => {
     // Spec header row
-    aoa.push(['＊型鋼規格:', spec.spec.name, '單位重:', spec.spec.unitWeight, 'kg/m']);
+    aoa.push([`＊型鋼規格 #${si + 1}:`, spec.spec.name, '單位重:', spec.spec.unitWeight, 'kg/m']);
     cellStyles[ref(r, 0)] = { font: { bold: true }, alignment: { horizontal: 'right' } };
     cellStyles[ref(r, 1)] = { font: { bold: true, color: { rgb: '1A56DB' } } };
     cellStyles[ref(r, 2)] = { font: { bold: true }, alignment: { horizontal: 'right' } };
     cellStyles[ref(r, 3)] = { alignment: { horizontal: 'center' } };
     r++;
+
+    // Requested parts (input BOM)
+    const reqParts = specs[si] ? specs[si].parts : [];
+    if (reqParts.length) {
+      aoa.push(['需求零件清單']);
+      cellStyles[ref(r, 0)] = { font: { bold: true, sz: 12 } };
+      r++;
+
+      aoa.push(['代號', '長度(mm)', '數量']);
+      ['A', 'B', 'C'].forEach(c => {
+        cellStyles[`${c}${r + 1}`] = {
+          font: { bold: true },
+          fill: { fgColor: { rgb: 'F2F2F2' } },
+          alignment: { horizontal: 'center', vertical: 'center' },
+          border: fullBorder,
+        };
+      });
+      r++;
+
+      reqParts.forEach(p => {
+        aoa.push([p.name, Number(p.length), Number(p.qty)]);
+        ['A', 'B', 'C'].forEach(c => {
+          cellStyles[`${c}${r + 1}`] = {
+            border: fullBorder,
+            alignment: { horizontal: c === 'A' ? 'left' : 'right', vertical: 'center' },
+          };
+        });
+        r++;
+      });
+
+      // Spacer
+      aoa.push([]);
+      r++;
+    }
+
+    // Color map for the cut-diagram bar (mirrors the on-screen 切割示意圖 colors)
+    const COLOR_HEX = ['BFDBFE', 'BBF7D0', 'FED7AA', 'E9D5FF', 'FDE68A', 'A5F3FC', 'FECACA', 'D1FAE5'];
+    const WASTE_HEX = 'E5E7EB';
+    const allLens = [...new Set(spec.bins.flatMap(b => b.pieces.map(p => p.length)))].sort((a, b) => b - a);
+    const colorMapHex = {};
+    allLens.forEach((l, i) => { colorMapHex[l] = COLOR_HEX[i % COLOR_HEX.length]; });
+    const BAR_COLS = 12; // squeezed into columns O:Z, proportional to piece length
 
     // Bin rows
     spec.bins.forEach(bin => {
@@ -1247,7 +1308,35 @@ function exportToExcel() {
       Object.keys(align).forEach(c => {
         cellStyles[`${c}${r + 1}`] = { border: fullBorder, alignment: { horizontal: align[c], vertical: 'center' } };
       });
+      cellStyles[ref(r, 2)] = { border: fullBorder, alignment: { horizontal: 'left', vertical: 'center', wrapText: true } };
       merges.push({ s: { r, c: 2 }, e: { r, c: 6 } });
+      // cutCombo can be long (many cut pieces); wrap + grow row height so it isn't truncated
+      const comboLines = Math.ceil((bin.cutCombo || '').length / 55) || 1;
+      rowHeights[r] = Math.max(20, comboLines * 16 + 6);
+      r++;
+
+      // Proportional colored bar row — the Excel equivalent of the on-screen 切割示意圖
+      let units = bin.pieces.map(p => Math.max(1, Math.round(p.length / bin.stock * BAR_COLS)));
+      let sumUnits = units.reduce((a, b) => a + b, 0);
+      while (sumUnits > BAR_COLS) {
+        const maxIdx = units.indexOf(Math.max(...units));
+        if (units[maxIdx] <= 1) break;
+        units[maxIdx]--; sumUnits--;
+      }
+      const wasteUnits = Math.max(0, BAR_COLS - sumUnits);
+
+      const barRow = new Array(26).fill('');
+      aoa.push(barRow);
+      let col = 14; // column O
+      bin.pieces.forEach((p, pi) => {
+        for (let u = 0; u < units[pi] && col <= 25; u++, col++) {
+          cellStyles[ref(r, col)] = { fill: { fgColor: { rgb: colorMapHex[p.length] } }, border: fullBorder };
+        }
+      });
+      for (let u = 0; u < wasteUnits && col <= 25; u++, col++) {
+        cellStyles[ref(r, col)] = { fill: { fgColor: { rgb: WASTE_HEX } }, border: fullBorder };
+      }
+      rowHeights[r] = 12;
       r++;
     });
 
@@ -1317,8 +1406,14 @@ function exportToExcel() {
   ws['!cols'] = [
     { wch: 16 }, { wch: 8 }, { wch: 12 }, { wch: 12 }, { wch: 12 }, { wch: 12 }, { wch: 12 },
     { wch: 12 }, { wch: 8 }, { wch: 12 }, { wch: 12 }, { wch: 12 }, { wch: 8 }, { wch: 14 },
+    // O:Z — narrow columns used only for the proportional cut-diagram bar row
+    ...Array(12).fill({ wch: 6 }),
   ];
+  const maxRow = aoa.length;
   ws['!rows'] = [{ hpx: 32 }];
+  for (let ri2 = 1; ri2 < maxRow; ri2++) {
+    ws['!rows'][ri2] = rowHeights[ri2] ? { hpx: rowHeights[ri2] } : undefined;
+  }
 
   Object.keys(cellStyles).forEach(addr => {
     if (ws[addr]) ws[addr].s = cellStyles[addr];
@@ -1368,14 +1463,36 @@ function renderResults(results) {
     html += `<details class="result-spec-section" open>
     <summary>
       <div class="result-spec-header">
-        <span class="result-spec-name">${r.spec.name}</span>
+        <span class="result-spec-name">型鋼規格 #${ri + 1}&emsp;${r.spec.name}</span>
         <span class="result-spec-meta">單位重: ${r.spec.unitWeight} kg/m &emsp;|&emsp; ${r.bins.length} 支母材</span>
       </div>
     </summary>
     <div class="result-spec-section-body">
     <div class="result-spec-block">`;
 
+    // Requested parts (input BOM) table
+    const reqParts = specs[ri] ? specs[ri].parts : [];
+    if (reqParts.length) {
+      html += `<div class="section-title">需求零件清單</div>`;
+      html += `<table class="data-table">
+        <thead><tr>
+          <th style="text-align:left">代號</th>
+          <th>長度(mm)</th>
+          <th>數量</th>
+        </tr></thead>
+        <tbody>`;
+      reqParts.forEach(p => {
+        html += `<tr>
+          <td style="text-align:left">${p.name}</td>
+          <td>${Number(p.length).toLocaleString()}</td>
+          <td>${p.qty}</td>
+        </tr>`;
+      });
+      html += `</tbody></table>`;
+    }
+
     // Main data table (Excel-style)
+    if (reqParts.length) html += `<div class="section-title">切割配置</div>`;
     html += `<table class="data-table">
       <thead><tr>
         <th style="text-align:left">定尺料(mm)</th>
