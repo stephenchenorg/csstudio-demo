@@ -19,3 +19,6 @@ Thumbs.db
 windows-build/
 *.msi
 *.exe
+
+# Claude 工作進度筆記（個人用，不入版控）
+claude-progress-*.md
