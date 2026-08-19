@@ -25,7 +25,7 @@ jobs:
             ~/.cargo/registry
             ~/.cargo/git
             h-beam/node_modules/pake-cli/src-tauri/target
-          key: ${{ runner.os }}-cargo-pake-${{ hashFiles('h-beam/index.html') }}
+          key: ${{ runner.os }}-cargo-pake-${{ hashFiles('h-beam/index.html', 'h-beam/vendor/**') }}
           restore-keys: |
             ${{ runner.os }}-cargo-pake-
 
