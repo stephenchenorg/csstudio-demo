@@ -7,27 +7,39 @@
 <link href="./vendor/fonts/fonts.css" rel="stylesheet">
 <style>
   :root {
-    --bg: #f4f5f7;
-    --surface: #ffffff;
-    --surface2: #f8f9fa;
-    --border: #dde1e7;
-    --border2: #c8cdd6;
-    --accent: #1a56db;
-    --accent-light: #e8f0fe;
-    --accent2: #d44000;
-    --green: #0e7c42;
-    --green-light: #e6f4ec;
-    --yellow: #92610a;
-    --yellow-light: #fef3cd;
-    --red: #b91c1c;
-    --text: #111827;
-    --text2: #4b5563;
-    --text3: #9ca3af;
-    --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.05);
-    --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
-    --mono: 'Share Tech Mono', monospace;
+    /* 紙感底色 */
+    --bg: #FAF8F3;              /* --color-paper：頁面背景 */
+    --surface: #FFFFFF;         /* --color-card：卡片 */
+    --surface2: #F1EFE8;        /* --color-row-alt：表格交錯行／表單區底 */
+    --row-hover: #ECE9DE;
+
+    /* 邊框 */
+    --border: #D3D1C7;          /* --color-line */
+    --border2: #B4B2A9;         /* --color-line-strong */
+
+    /* 墨藍主色 */
+    --accent: #042C53;          /* --color-ink：標題列、主按鈕 */
+    --accent-hover: #0C447C;    /* --color-ink-hover */
+    --accent-light: #E6F1FB;    /* ink 淺色底（tag／focus ring／強調區塊） */
+    --accent-soft: #185FA5;     /* --color-ink-soft：連結、focus ring 邊框 */
+    --ink-on-dark: #85B7EB;     /* --color-ink-on-dark：深底上的次要文字 */
+
+    /* 語意（損耗分級：<1% good／1~3% 中間級沿用 fg-muted+row-alt／>3% bad） */
+    --green: #0F6E56;           /* --color-good */
+    --green-light: #E1F5EE;     /* --color-good-bg */
+    --red: #993C1D;             /* --color-bad */
+    --red-light: #FAECE7;       /* --color-bad-bg */
+
+    /* 文字 */
+    --text: #2C2C2A;            /* --color-fg */
+    --text2: #5F5E5A;           /* --color-fg-muted */
+    --text3: #888780;           /* --color-fg-subtle */
+
+    --shadow: none;
+    --shadow-md: 0 2px 8px rgba(4,44,83,0.08);
+    --mono: 'IBM Plex Mono', 'Share Tech Mono', monospace;
     --sans: 'Noto Sans TC', sans-serif;
-    --display: 'Barlow Condensed', sans-serif;
+    --display: 'Noto Sans TC', sans-serif;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -40,6 +52,8 @@
     font-size: 19px;
   }
 
+  strong { font-weight: 500; }
+
   .app { max-width: 1520px; margin: 0 auto; padding: 24px; }
 
   /* HEADER */
@@ -47,7 +61,8 @@
     display: flex; align-items: center; justify-content: space-between;
     margin-bottom: 20px;
     background: var(--surface);
-    border: 1px solid var(--border);
+    border: 0.5px solid var(--border);
+    border-radius: 8px;
     padding: 14px 24px;
     box-shadow: var(--shadow);
   }
@@ -58,15 +73,15 @@
     width: 42px; height: 42px;
     background: var(--accent);
     display: flex; align-items: center; justify-content: center;
-    font-family: var(--display); font-weight: 900; font-size: 26px;
+    font-family: var(--display); font-weight: 500; font-size: 26px;
     color: white; letter-spacing: -2px;
   }
 
   .logo-text h1 {
-    font-family: var(--display); font-weight: 900; font-size: 24px;
-    color: var(--text); line-height: 1; letter-spacing: 0.5px;
+    font-family: var(--display); font-weight: 500; font-size: 18px;
+    color: var(--text); line-height: 1.3;
   }
-  .logo-text p { font-size: 13px; color: var(--text3); letter-spacing: 1px; margin-top: 2px; }
+  .logo-text p { font-size: 12px; color: var(--text3); margin-top: 2px; }
 
   .header-right { display: flex; gap: 8px; align-items: center; }
 
@@ -78,10 +93,15 @@
   }
   @media (max-width: 1100px) { .main-grid { grid-template-columns: 1fr; } }
 
+  .left-column {
+    background: var(--surface2); border-radius: 8px; padding: 14px;
+  }
+
   /* PANELS */
   .panel {
     background: var(--surface);
-    border: 1px solid var(--border);
+    border: 0.5px solid var(--border);
+    border-radius: 8px;
     box-shadow: var(--shadow);
     margin-bottom: 16px; overflow: hidden;
   }
@@ -89,40 +109,40 @@
 
   .panel-header {
     display: flex; align-items: center; justify-content: space-between;
-    padding: 11px 18px;
-    border-bottom: 1px solid var(--border);
+    padding: 11px 18px 11px 15px;
+    border-bottom: 0.5px solid var(--border);
+    border-left: 3px solid var(--accent);
     background: var(--surface2);
   }
 
   .panel-title {
-    font-family: var(--display); font-weight: 700; font-size: 15px;
-    letter-spacing: 1px; color: var(--text);
+    font-family: var(--display); font-weight: 500; font-size: 15px;
+    color: var(--accent);
     display: flex; align-items: center; gap: 8px;
   }
-
-  .dot { width: 8px; height: 8px; background: var(--accent); border-radius: 1px; transform: rotate(45deg); flex-shrink: 0; }
-  .dot.green { background: var(--green); }
 
   .panel-body { padding: 16px 18px; }
 
   /* FORM ROWS */
-  .form-row { display: flex; gap: 10px; margin-bottom: 10px; align-items: end; flex-wrap: wrap; }
+  .form-row { display: flex; gap: 12px; margin-bottom: 12px; align-items: end; flex-wrap: wrap; }
   .form-group { display: flex; flex-direction: column; gap: 4px; }
-  .form-group label { font-size: 12px; font-weight: 600; color: var(--text3); letter-spacing: 0.5px; }
+  .form-group label { font-size: 13px; font-weight: 400; color: var(--text2); }
   .form-group input, .form-group select {
     background: var(--surface); border: 1px solid var(--border2);
     color: var(--text); font-family: var(--mono); font-size: 15px;
-    padding: 7px 10px; outline: none; transition: all 0.15s;
+    font-variant-numeric: tabular-nums;
+    height: 40px; padding: 0 10px; outline: none; transition: all 0.15s;
   }
-  .form-group input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(26,86,219,0.1); }
+  .form-group input:focus { border-color: var(--accent-soft); box-shadow: 0 0 0 3px rgba(24,95,165,0.12); }
 
   /* STOCK TAGS */
   .stock-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
   .stock-tag {
     display: inline-flex; align-items: center; gap: 6px;
     padding: 5px 10px; border: 1px solid var(--accent);
-    background: var(--accent-light); border-radius: 2px;
-    font-family: var(--mono); font-size: 14px; color: var(--accent); font-weight: 700;
+    background: var(--accent-light); border-radius: 4px;
+    font-family: var(--mono); font-size: 14px; color: var(--accent); font-weight: 500;
+    font-variant-numeric: tabular-nums;
   }
   .stock-tag-del {
     background: none; border: none; cursor: pointer;
@@ -136,74 +156,90 @@
   .stock-add-row input {
     background: var(--surface); border: 1px solid var(--border2);
     color: var(--text); font-family: var(--mono); font-size: 14px;
-    padding: 5px 10px; width: 160px; outline: none; transition: all 0.15s;
+    font-variant-numeric: tabular-nums;
+    height: 40px; padding: 0 10px; width: 160px; outline: none; transition: all 0.15s;
   }
-  .stock-add-row input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(26,86,219,0.1); }
+  .stock-add-row input:focus { border-color: var(--accent-soft); box-shadow: 0 0 0 3px rgba(24,95,165,0.12); }
 
   .kerf-row {
     display: flex; align-items: center; gap: 10px;
     padding: 9px 12px;
-    background: var(--surface2); border: 1px solid var(--border);
+    background: var(--surface2); border: 0.5px solid var(--border);
+    border-radius: 6px;
   }
-  .kerf-row label { font-size: 14px; color: var(--text2); flex: 1; }
+  .kerf-row label { font-size: 13px; color: var(--text2); flex: 1; }
   .kerf-row input {
     background: var(--surface); border: 1px solid var(--border2);
     color: var(--text); font-family: var(--mono); font-size: 15px;
-    padding: 5px 8px; width: 60px; outline: none; text-align: center;
+    font-variant-numeric: tabular-nums;
+    height: 40px; padding: 0 8px; width: 60px; outline: none; text-align: center;
   }
-  .kerf-unit { font-size: 13px; color: var(--text3); font-family: var(--mono); }
+  .kerf-unit { font-size: 12px; color: var(--text3); font-family: var(--mono); }
 
   /* SPEC GROUP */
   .spec-group {
     background: var(--surface);
-    border: 1px solid var(--border);
+    border: 0.5px solid var(--border);
+    border-radius: 8px;
     box-shadow: var(--shadow);
     margin-bottom: 12px;
+    overflow: hidden;
   }
   .spec-header {
     display: flex; align-items: center; justify-content: space-between;
     padding: 10px 16px;
-    background: var(--accent-light);
-    border-bottom: 1px solid var(--border);
+    background: var(--accent);
+    border-bottom: 0.5px solid var(--border);
   }
   .spec-header-title {
-    font-family: var(--display); font-weight: 700; font-size: 15px;
-    letter-spacing: 1px; color: var(--accent);
+    font-family: var(--display); font-weight: 500; font-size: 15px;
+    color: #fff;
   }
+  .spec-header .btn-ghost {
+    color: var(--ink-on-dark); border-color: rgba(255,255,255,0.4);
+  }
+  .spec-header .btn-ghost:hover {
+    color: #fff; border-color: #fff; background: rgba(255,255,255,0.12);
+  }
+  .spec-header .btn-danger { color: #F4B8A3; }
+  .spec-header .btn-danger:hover { color: #fff; }
   .spec-body { padding: 14px 16px; }
 
   /* PARTS TABLE */
   table { width: 100%; border-collapse: collapse; }
 
   thead th {
-    font-size: 11px; font-weight: 600; letter-spacing: 1px;
-    color: var(--text3); text-transform: uppercase;
-    padding: 7px 6px; text-align: left;
+    font-size: 13px; font-weight: 400;
+    color: var(--text2);
+    padding: 10px 14px; text-align: left;
     border-bottom: 2px solid var(--border);
     background: var(--surface2); white-space: nowrap;
   }
 
-  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
+  tbody tr { border-bottom: 0.5px solid var(--border); transition: background 0.1s; }
   tbody tr:last-child { border-bottom: none; }
-  tbody tr:hover { background: #fafbff; }
+  tbody tr:hover { background: var(--row-hover); }
+  tbody tr:nth-child(even) { background: var(--surface2); }
+  tbody tr:nth-child(even):hover { background: var(--row-hover); }
 
-  tbody td { padding: 3px 3px; vertical-align: middle; }
+  tbody td { padding: 6px 8px; vertical-align: middle; }
 
   tbody td input[type="text"],
   tbody td input[type="number"] {
     background: transparent; border: 1px solid transparent;
-    color: var(--text); font-family: var(--mono); font-size: 14px;
-    padding: 5px 6px; width: 100%; outline: none; transition: all 0.15s;
+    color: var(--text); font-family: var(--mono); font-size: 15px;
+    font-variant-numeric: tabular-nums;
+    padding: 10px 8px; width: 100%; outline: none; transition: all 0.15s;
   }
-  tbody td input:focus { background: var(--accent-light); border-color: var(--accent); }
+  tbody td input:focus { background: var(--accent-light); border-color: var(--accent-soft); }
   tbody td input[type="number"] { text-align: right; }
 
   .del-btn {
     background: none; border: none; cursor: pointer;
     color: var(--text3); padding: 4px 7px; font-size: 17px;
-    transition: color 0.15s; border-radius: 2px;
+    transition: color 0.15s; border-radius: 4px;
   }
-  .del-btn:hover { color: var(--red); background: #fef2f2; }
+  .del-btn:hover { color: var(--red); background: var(--red-light); }
 
   /* BUTTONS */
   .btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -212,11 +248,11 @@
     font-family: var(--sans); font-weight: 500; font-size: 13px;
     padding: 7px 13px; border: none; cursor: pointer;
     transition: all 0.15s; display: inline-flex;
-    align-items: center; gap: 5px; border-radius: 2px;
+    align-items: center; gap: 5px; border-radius: 4px;
   }
 
   .btn-ghost {
-    background: transparent; border: 1px solid var(--border2); color: var(--text2);
+    background: transparent; border: 1px solid var(--border2); color: var(--text);
   }
   .btn-ghost:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
 
@@ -225,17 +261,18 @@
   }
 
   .btn-danger {
-    background: transparent; border: 1px solid #fecaca; color: var(--red);
+    background: transparent; border: none; color: var(--red);
+    padding: 5px 6px; text-decoration: underline; text-underline-offset: 2px;
   }
-  .btn-danger:hover { background: #fef2f2; }
+  .btn-danger:hover { color: #7A2F16; }
 
   .btn-primary {
     background: var(--accent); color: #fff;
     width: 100%; justify-content: center;
-    padding: 12px 16px; font-size: 16px; font-weight: 700;
-    letter-spacing: 0.5px; margin-top: 12px; border-radius: 2px;
+    padding: 12px 16px; font-size: 16px; font-weight: 500;
+    margin-top: 12px; border-radius: 4px;
   }
-  .btn-primary:hover { background: #1447c0; box-shadow: var(--shadow-md); }
+  .btn-primary:hover { background: var(--accent-hover); box-shadow: var(--shadow-md); }
 
   .btn-print {
     background: transparent; border: 1px solid var(--border2); color: var(--text2);
@@ -274,9 +311,11 @@
   /* RESULT TABLES */
   .result-spec-section {
     margin-bottom: 20px;
-    border: 1px solid var(--border);
+    border: 0.5px solid var(--border);
+    border-radius: 8px;
     background: var(--surface);
     box-shadow: var(--shadow);
+    overflow: hidden;
   }
   .result-spec-section summary {
     cursor: pointer; list-style: none;
@@ -300,85 +339,95 @@
     border-bottom: none;
   }
   .result-spec-name {
-    font-family: var(--display); font-weight: 900; font-size: 22px;
+    font-family: var(--display); font-weight: 500; font-size: 15px;
     color: #fff;
   }
-  .result-spec-meta { font-size: 14px; color: rgba(255,255,255,0.8); }
+  .result-spec-meta { font-size: 14px; font-family: var(--mono); color: var(--ink-on-dark); }
 
-  .data-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .data-table { width: 100%; border-collapse: collapse; font-size: 15px; }
   .data-table thead th {
-    background: var(--surface2); font-size: 11px; padding: 7px 10px;
-    font-weight: 600; letter-spacing: 1px; color: var(--text3);
-    text-transform: uppercase; border-bottom: 2px solid var(--border); text-align: right;
+    background: var(--surface2); font-size: 13px; padding: 12px 14px;
+    font-weight: 400; color: var(--text2);
+    border-bottom: 2px solid var(--border); text-align: right;
     white-space: nowrap;
   }
   .data-table thead th:first-child,
   .data-table thead th:nth-child(3) { text-align: left; }
   .data-table thead th:nth-child(2) { text-align: center; }
 
-  .data-table tbody tr { border-bottom: 1px solid var(--border); }
-  .data-table tbody tr:hover { background: var(--surface2); }
+  .data-table tbody tr { border-bottom: 0.5px solid var(--border); }
+  .data-table tbody tr:hover { background: var(--row-hover); }
   .data-table tbody td {
-    padding: 8px 10px; font-family: var(--mono); text-align: right;
+    padding: 13px 14px; font-family: var(--mono); text-align: right;
+    font-variant-numeric: tabular-nums;
   }
-  .data-table tbody td:first-child { text-align: left; font-weight: 700; }
+  .data-table tbody td:first-child { text-align: left; font-weight: 500; }
   .data-table tbody td:nth-child(2) { text-align: center; }
   .data-table tbody td:nth-child(3) { text-align: left; font-family: var(--sans); font-size: 13px; }
   .data-table tbody td:nth-child(5) { text-align: center; }
 
   .data-table tfoot td {
-    padding: 8px 10px; font-family: var(--mono); text-align: right;
-    border-top: 2px solid var(--border); font-weight: 700;
+    padding: 13px 14px; font-family: var(--mono); text-align: right;
+    border-top: 2px solid var(--border); font-weight: 500;
+    font-variant-numeric: tabular-nums;
   }
 
   .util-pill {
-    display: inline-block; padding: 2px 8px; border-radius: 10px;
-    font-size: 12px; font-weight: 700; font-family: var(--mono);
+    display: inline-block; padding: 2px 7px; border-radius: 4px;
+    font-size: 12px; font-weight: 500; font-family: var(--mono);
+    font-variant-numeric: tabular-nums;
   }
   .util-high { background: var(--green-light); color: var(--green); }
-  .util-mid { background: var(--yellow-light); color: var(--yellow); }
-  .util-low { background: #fef2f2; color: var(--red); }
+  .util-mid { background: var(--surface2); color: var(--text2); }
+  .util-low { background: var(--red-light); color: var(--red); }
 
   /* PROCUREMENT SUMMARY */
   .procurement-block { margin-top: 24px; padding-top: 16px; border-top: 2px solid var(--border); }
   .procurement-title {
-    font-family: var(--display); font-weight: 900; font-size: 18px;
-    letter-spacing: 1px; color: var(--text); margin-bottom: 14px;
+    font-family: var(--display); font-weight: 500; font-size: 18px;
+    color: var(--text); margin-bottom: 14px;
   }
   .procurement-spec {
     margin-bottom: 12px; padding: 10px 14px;
-    background: var(--surface2); border: 1px solid var(--border);
+    background: var(--surface2); border: 0.5px solid var(--border);
+    border-radius: 6px;
   }
   .procurement-spec-name {
-    font-weight: 700; font-size: 15px; color: var(--accent); margin-bottom: 6px;
+    font-weight: 500; font-size: 15px; color: var(--accent); margin-bottom: 6px;
   }
   .procurement-item {
     display: flex; gap: 14px; font-family: var(--mono); font-size: 15px;
+    font-variant-numeric: tabular-nums;
     padding: 3px 0;
   }
   .procurement-item .stock-label { color: var(--text2); min-width: 50px; }
-  .procurement-item .stock-qty { font-weight: 700; color: var(--text); }
+  .procurement-item .stock-qty { font-weight: 500; color: var(--text); }
 
   .procurement-totals {
     margin-top: 14px; padding: 12px 16px;
     background: var(--accent-light); border: 1px solid var(--accent);
+    border-radius: 6px;
     display: flex; gap: 30px; flex-wrap: wrap;
   }
   .procurement-total-item { display: flex; flex-direction: column; gap: 2px; }
-  .procurement-total-label { font-size: 12px; font-weight: 600; color: var(--accent); letter-spacing: 0.5px; }
-  .procurement-total-value { font-family: var(--display); font-weight: 900; font-size: 24px; color: var(--text); }
+  .procurement-total-label { font-size: 12px; font-weight: 500; color: var(--accent); }
+  .procurement-total-value {
+    font-family: var(--mono); font-weight: 500; font-size: 26px; color: var(--text);
+    font-variant-numeric: tabular-nums;
+  }
 
   /* CUT DIAGRAMS */
   .section-title {
-    font-family: var(--display); font-weight: 700; font-size: 13px;
-    letter-spacing: 2px; text-transform: uppercase; color: var(--text2);
+    font-family: var(--display); font-weight: 500; font-size: 13px;
+    color: var(--text2);
     margin-bottom: 8px; margin-top: 20px;
     display: flex; align-items: center; gap: 10px;
   }
   .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
   .cut-bar {
-    margin-bottom: 6px; border: 1px solid var(--border);
+    margin-bottom: 6px; border: 0.5px solid var(--border);
+    border-radius: 6px;
     overflow: hidden; transition: box-shadow 0.15s;
   }
   .cut-bar:hover { box-shadow: var(--shadow-md); }
@@ -386,39 +435,41 @@
   .cut-bar-header {
     display: flex; justify-content: space-between; align-items: center;
     padding: 7px 12px;
-    background: var(--surface2); border-bottom: 1px solid var(--border);
+    background: var(--surface2); border-bottom: 0.5px solid var(--border);
   }
-  .cut-bar-id { font-family: var(--mono); font-size: 13px; color: var(--text2); font-weight: 600; }
-  .cut-bar-meta { font-size: 12px; color: var(--text3); }
+  .cut-bar-id { font-family: var(--mono); font-size: 13px; color: var(--text2); font-weight: 500; }
+  .cut-bar-meta { font-size: 13px; color: var(--text2); font-family: var(--mono); font-variant-numeric: tabular-nums; }
 
   .cut-visual { display: flex; height: 44px; width: 100%; overflow: hidden; gap: 1px; }
 
   .cut-piece {
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    height: 100%; font-family: var(--mono); font-size: 12px;
-    font-weight: 700; overflow: hidden; white-space: nowrap; cursor: default;
+    height: 100%; font-family: var(--mono); font-size: 13px;
+    font-variant-numeric: tabular-nums;
+    font-weight: 400; overflow: hidden; white-space: nowrap; cursor: default;
     transition: filter 0.15s; line-height: 1.25;
-    border-right: 1px solid rgba(0,0,0,0.15);
+    border-left: 3px solid currentColor;
+    border-right: 1px solid rgba(255,255,255,0.7);
   }
   .cut-piece:last-child { border-right: none; }
-  .cut-piece:hover { filter: brightness(0.9); }
-  .cut-piece-code { font-size: 13px; font-weight: 700; }
+  .cut-piece:hover { filter: brightness(0.96); }
+  .cut-piece-code { font-size: 13px; font-weight: 500; }
 
   .cut-waste {
-    background: repeating-linear-gradient(45deg,#e5e7eb,#e5e7eb 3px,#f3f4f6 3px,#f3f4f6 9px);
+    background: repeating-linear-gradient(45deg,var(--surface2),var(--surface2) 3px,var(--surface) 3px,var(--surface) 9px);
     display: flex; align-items: center; justify-content: center;
-    font-size: 11px; color: var(--text3); font-family: var(--mono);
+    font-size: 12px; color: var(--text3); font-family: var(--mono);
+    font-variant-numeric: tabular-nums;
     border-left: 1px dashed var(--border2);
   }
 
-  .color-0 { background: #bfdbfe; color: #1e40af; }
-  .color-1 { background: #bbf7d0; color: #065f46; }
-  .color-2 { background: #fed7aa; color: #92400e; }
-  .color-3 { background: #e9d5ff; color: #5b21b6; }
-  .color-4 { background: #fde68a; color: #78350f; }
-  .color-5 { background: #a5f3fc; color: #0e7490; }
-  .color-6 { background: #fecaca; color: #991b1b; }
-  .color-7 { background: #d1fae5; color: #064e3b; }
+  /* 依零件代號配色，同代號必定同色（見 getPartColor） */
+  .part-color-0 { background: #E6F1FB; color: #0C447C; }
+  .part-color-1 { background: #E1F5EE; color: #085041; }
+  .part-color-2 { background: #FAEEDA; color: #633806; }
+  .part-color-3 { background: #EEEDFE; color: #3C3489; }
+  .part-color-4 { background: #FAECE7; color: #712B13; }
+  .part-color-5 { background: #F1EFE8; color: #444441; }
 
   .divider { height: 1px; background: var(--border); margin: 18px 0; }
   .running { animation: pulse 0.9s infinite; }
@@ -438,19 +489,29 @@
     .result-spec-section, .result-spec-section-body { overflow: visible; }
     .cut-bar { overflow: visible; break-inside: avoid; page-break-inside: avoid; }
     .cut-visual { overflow: visible; }
+    table tr, .data-table tr { break-inside: avoid; page-break-inside: avoid; }
 
-    /* Chrome/print engines strip background colors by default — without this
-       the cut-diagram bar prints as blank white segments with no way to
-       tell pieces apart. Force every colored element to keep its fill. */
+    /* 深墨藍標題列吃墨面積大，改成白底黑框黑字 */
+    .spec-header, .result-spec-section summary {
+      background: #fff !important; color: #000 !important;
+      border: 1px solid #000;
+    }
+    .spec-header-title, .result-spec-name { color: #000 !important; }
+    .result-spec-meta { color: #333 !important; }
+
     * {
       -webkit-print-color-adjust: exact !important;
       print-color-adjust: exact !important;
       color-adjust: exact !important;
     }
     .cut-visual { height: 38px; }
-    .cut-piece { font-size: 11px; line-height: 1.15; border-right-color: rgba(0,0,0,0.35); }
+    .cut-piece {
+      font-size: 11px; line-height: 1.15;
+      background: #fff !important; color: #000 !important;
+      border-left: 3px solid #000; border-right: 1px solid #000;
+    }
     .cut-piece-code { font-size: 12px; }
-    .cut-piece, .cut-waste { color: #000 !important; }
+    .cut-waste { color: #333 !important; }
     .util-pill { border: 1px solid rgba(0,0,0,0.2); }
   }
 </style>
@@ -477,12 +538,12 @@
   <div class="main-grid">
 
     <!-- LEFT: INPUT -->
-    <div class="no-print">
+    <div class="no-print left-column">
 
       <!-- Project Info + Global Settings -->
       <div class="panel">
         <div class="panel-header">
-          <span class="panel-title"><span class="dot"></span>專案 / 全域設定</span>
+          <span class="panel-title">專案 / 全域設定</span>
         </div>
         <div class="panel-body">
           <div class="form-row">
@@ -496,7 +557,7 @@
             </div>
           </div>
 
-          <div style="font-size:12px;font-weight:600;letter-spacing:1px;color:var(--text3);margin-bottom:8px;margin-top:6px;">可用定尺料 (mm)</div>
+          <div style="font-size:13px;font-weight:400;color:var(--text2);margin-bottom:8px;margin-top:6px;">可用定尺料 (mm)</div>
           <div class="stock-tags" id="stockTags"></div>
           <div class="stock-add-row">
             <input type="number" id="stockAddInput" step="1" min="1">
@@ -528,10 +589,10 @@
     <div>
       <div class="panel">
         <div class="panel-header">
-          <span class="panel-title"><span class="dot green"></span>排料優化結果</span>
+          <span class="panel-title">排料優化結果</span>
           <div style="display:flex;align-items:center;gap:12px">
             <span id="resultMeta" style="font-size:12px;color:var(--text3)">等待計算</span>
-            <button class="btn btn-ghost btn-sm" id="exportBtn" onclick="exportToExcel()" disabled style="opacity:0.5;cursor:not-allowed">&#x2B07;&#xFE0F; 匯出 Excel</button>
+            <button class="btn btn-ghost btn-sm no-print" id="exportBtn" onclick="exportToExcel()" disabled style="opacity:0.5;cursor:not-allowed">&#x2B07;&#xFE0F; 匯出 Excel</button>
           </div>
         </div>
         <div class="panel-body" id="resultsPanel">
@@ -558,7 +619,15 @@ let specIdCounter = 0;
 let partIdCounter = 0;
 let latestResults = null;
 
-const COLORS = ['color-0','color-1','color-2','color-3','color-4','color-5','color-6','color-7'];
+const PART_COLORS = ['part-color-0','part-color-1','part-color-2','part-color-3','part-color-4','part-color-5'];
+const partColorMap = {};
+function getPartColor(code) {
+  if (!partColorMap[code]) {
+    const used = Object.keys(partColorMap).length;
+    partColorMap[code] = PART_COLORS[used % PART_COLORS.length];
+  }
+  return partColorMap[code];
+}
 
 // =====================================================
 //  STOCK TAGS (user can add/remove freely)
@@ -1176,8 +1245,9 @@ function runOptimize() {
   }));
 }
 
-function utilClass(pct) {
-  return pct >= 90 ? 'util-high' : pct >= 75 ? 'util-mid' : 'util-low';
+// pct = 損耗率（waste %），依三級分色：<1% 佳／1~3% 普通／>3% 偏高
+function utilClass(wastePct) {
+  return wastePct < 1 ? 'util-high' : wastePct <= 3 ? 'util-mid' : 'util-low';
 }
 
 // =====================================================
@@ -1436,6 +1506,9 @@ function exportToExcel() {
 }
 
 function renderResults(results) {
+  // reset so this render's part codes get colors from the top of the cycle
+  Object.keys(partColorMap).forEach(k => delete partColorMap[k]);
+
   const projectId = document.getElementById('projectId').value || '';
   const projectName = document.getElementById('projectName').value || '';
   const kerf = document.getElementById('kerfInput').value || '3';
@@ -1511,9 +1584,8 @@ function renderResults(results) {
       <tbody>`;
 
     r.bins.forEach(bin => {
-      const utilPct = 100 - bin.wastePercent;
       html += `<tr>
-        <td style="font-weight:700">${bin.stock.toLocaleString()}</td>
+        <td style="font-weight:500">${bin.stock.toLocaleString()}</td>
         <td style="text-align:center">1</td>
         <td style="text-align:left;font-family:var(--sans);font-size:13px">${bin.cutCombo}</td>
         <td>${bin.cutCount}</td>
@@ -1521,7 +1593,7 @@ function renderResults(results) {
         <td>${bin.usedLength.toLocaleString()}</td>
         <td>${bin.purchaseWeight.toFixed(1)}</td>
         <td>${bin.wasteWeight.toFixed(1)}</td>
-        <td><span class="util-pill ${utilClass(utilPct)}">${bin.wastePercent.toFixed(2)}</span></td>
+        <td><span class="util-pill ${utilClass(bin.wastePercent)}">${bin.wastePercent.toFixed(2)}</span></td>
         <td>${bin.waste.toLocaleString()}</td>
       </tr>`;
     });
@@ -1547,12 +1619,6 @@ function renderResults(results) {
     html += `<div class="section-title">切割示意圖</div>`;
     html += `<div class="scroll-area">`;
 
-    // Build color map for this spec
-    const specParts = specs[ri] ? specs[ri].parts : [];
-    const allLens = [...new Set(r.bins.flatMap(b => b.pieces.map(p => p.length)))].sort((a, b) => b - a);
-    const colorMap = {};
-    allLens.forEach((l, i) => { colorMap[l] = COLORS[i % COLORS.length]; });
-
     r.bins.forEach((bin, idx) => {
       html += `<div class="cut-bar">
         <div class="cut-bar-header">
@@ -1563,7 +1629,7 @@ function renderResults(results) {
 
       bin.pieces.forEach(piece => {
         const pct = (piece.length / bin.stock * 100).toFixed(2);
-        const cls = colorMap[piece.length] || 'color-0';
+        const cls = getPartColor(piece.name);
         const pctNum = parseFloat(pct);
         const label = pctNum > 10
           ? `<span class="cut-piece-code">${piece.name}</span>${piece.length}`
