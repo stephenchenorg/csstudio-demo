@@ -58,20 +58,21 @@ jobs:
           echo "building version $VERSION"
           npx pake ./build-src/index.html --name "SteelCut Pro" --width 1520 --height 900 --use-local-file --app-version "$VERSION"
 
-      # 打包後 pake 的 web root 就是 node_modules/pake-cli/dist，
-      # 缺任何一個 vendor 檔案代表這版桌機 App 又會壞掉，直接讓 build 失敗。
+      # 直接檢查產出的 exe：Tauri 把前端資源內嵌進 binary，檔名會以明文留在 asset table
+      # （內容本身經 brotli 壓縮，所以只驗檔名）。缺任何一個代表這版桌機 App 又會壞掉。
       - name: Verify vendor assets were bundled
         shell: bash
         run: |
-          root="node_modules/pake-cli/dist"
+          echo "--- pake-cli web root ---"
+          ls -la node_modules/pake-cli/dist/ || true
+          ls -la node_modules/pake-cli/dist/vendor/ || true
+          EXE=$(find node_modules/pake-cli/src-tauri/target -path "*release*" -name "*.exe" \
+            -not -path "*deps*" -not -path "*build*" -not -path "*incremental*" | head -1)
+          echo "--- 檢查 $EXE ---"
+          if [ -z "$EXE" ]; then echo "找不到產出的 exe"; exit 1; fi
           fail=0
-          for f in index.html vendor/xlsx.bundle.min.js vendor/solver.global.js vendor/fonts/fonts.css; do
-            if [ -f "$root/$f" ]; then
-              echo "OK   $f"
-            else
-              echo "MISS $f"
-              fail=1
-            fi
+          for f in xlsx.bundle.min.js solver.global.js fonts.css; do
+            if grep -q -a -F "$f" "$EXE"; then echo "OK   $f"; else echo "MISS $f"; fail=1; fi
           done
           exit $fail
 
