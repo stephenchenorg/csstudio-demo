@@ -15,7 +15,8 @@ H 型鋼排料系統（SteelCut Pro），單檔 HTML + JS，用 Pake 打包成�
   ```bash
   export RUSTUP_HOME="$PWD/.tools/rustup" CARGO_HOME="$PWD/.tools/cargo" PATH="$PWD/.tools/cargo/bin:$PATH"
   rm -rf build-src && mkdir -p build-src && cp index.html build-src/ && cp -R vendor build-src/vendor
-  npx pake ./build-src/index.html --name "SteelCut Pro" --width 1520 --height 900 --use-local-file
+  npx pake ./build-src/index.html --name "SteelCut Pro" --width 1520 --height 900 --use-local-file \
+    --app-version "$(node -p "require('./package.json').version")"
   # 驗證 vendor 有進包，缺檔就是又壞了
   ls node_modules/pake-cli/dist/vendor/xlsx.bundle.min.js
   ```
@@ -44,4 +45,5 @@ H 型鋼排料系統（SteelCut Pro），單檔 HTML + JS，用 Pake 打包成�
 - ❌ 不要 commit `.tools/`、`node_modules/`、`*.dmg`、`*.msi`、`*.exe`、`pake-build.log`（已在 .gitignore）
 - ❌ 不要把 `vendor/` 加進 .gitignore（桌機版需要這些檔案）
 - ❌ 不要把 pake 指令的 `--use-local-file` 拿掉，也不要把打包來源改回 `./index.html`（vendor 會整包消失）
+- ❌ 不要漏掉 `--app-version`（不然 App 內顯示的版本永遠是 pake 預設的 `1.0.0`，客戶回報問題時查不出裝了哪版）
 - ❌ 不要把 `src-tauri/target` 加回 GitHub Actions 快取（舊 target 會讓 Tauri 沿用舊的內嵌資源，改了檔案卻打包不進去）

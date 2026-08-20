@@ -49,9 +49,14 @@ jobs:
           cp -R vendor build-src/vendor
           ls -la build-src build-src/vendor
 
+      # --app-version 讀 package.json，否則 App 內顯示的永遠是 pake 預設的 1.0.0，
+      # 客戶回報問題時無從判斷手上裝的是哪一版。
       - name: Build MSI
         shell: bash
-        run: npx pake ./build-src/index.html --name "SteelCut Pro" --width 1520 --height 900 --use-local-file
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "building version $VERSION"
+          npx pake ./build-src/index.html --name "SteelCut Pro" --width 1520 --height 900 --use-local-file --app-version "$VERSION"
 
       # 打包後 pake 的 web root 就是 node_modules/pake-cli/dist，
       # 缺任何一個 vendor 檔案代表這版桌機 App 又會壞掉，直接讓 build 失敗。
