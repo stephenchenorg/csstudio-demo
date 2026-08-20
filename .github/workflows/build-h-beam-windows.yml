@@ -18,16 +18,18 @@ jobs:
 
       - uses: dtolnay/rust-toolchain@stable
 
-      - name: Cache Cargo
+      # 只快取 Cargo registry，不快取 src-tauri/target。
+      # target 快取會讓 Tauri 沿用舊的內嵌資源（restore-keys 前綴比對會撈到舊 target），
+      # 導致 index.html / vendor 改了卻沒被重新打包進 App。
+      - name: Cache Cargo registry
         uses: actions/cache@v4
         with:
           path: |
             ~/.cargo/registry
             ~/.cargo/git
-            h-beam/node_modules/pake-cli/src-tauri/target
-          key: ${{ runner.os }}-cargo-pake-${{ hashFiles('h-beam/index.html', 'h-beam/vendor/**') }}
+          key: ${{ runner.os }}-cargo-registry-${{ hashFiles('h-beam/package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-cargo-pake-
+            ${{ runner.os }}-cargo-registry-
 
       - name: Install pake-cli
         shell: bash
@@ -35,9 +37,38 @@ jobs:
           npm init -y > /dev/null
           npm install pake-cli --no-fund --no-audit
 
+      # pake 不加 --use-local-file 時只會複製 index.html 單檔，vendor/ 不會進包
+      # （桌機版 xlsx / solver / 字型全部 404）。改成準備一個乾淨的來源目錄再整包帶走，
+      # 避免 --use-local-file 把 node_modules 一起複製進去。
+      - name: Prepare build source
+        shell: bash
+        run: |
+          rm -rf build-src
+          mkdir -p build-src
+          cp index.html build-src/
+          cp -R vendor build-src/vendor
+          ls -la build-src build-src/vendor
+
       - name: Build MSI
         shell: bash
-        run: npx pake ./index.html --name "SteelCut Pro" --width 1520 --height 900
+        run: npx pake ./build-src/index.html --name "SteelCut Pro" --width 1520 --height 900 --use-local-file
+
+      # 打包後 pake 的 web root 就是 node_modules/pake-cli/dist，
+      # 缺任何一個 vendor 檔案代表這版桌機 App 又會壞掉，直接讓 build 失敗。
+      - name: Verify vendor assets were bundled
+        shell: bash
+        run: |
+          root="node_modules/pake-cli/dist"
+          fail=0
+          for f in index.html vendor/xlsx.bundle.min.js vendor/solver.global.js vendor/fonts/fonts.css; do
+            if [ -f "$root/$f" ]; then
+              echo "OK   $f"
+            else
+              echo "MISS $f"
+              fail=1
+            fi
+          done
+          exit $fail
 
       - name: Upload MSI
         uses: actions/upload-artifact@v4

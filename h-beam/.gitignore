@@ -10,3 +10,9 @@ src-tauri/target/
 *.exe
 *.msi
 pake-build.log
+
+# pake 打包用的乾淨來源目錄（index.html + vendor 的複本）
+build-src/
+
+# 工作進度筆記
+claude-progress-*.md
