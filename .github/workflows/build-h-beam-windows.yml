@@ -6,6 +6,7 @@ on:
 jobs:
   build:
     runs-on: windows-latest
+    timeout-minutes: 40
     defaults:
       run:
         working-directory: h-beam
@@ -15,6 +16,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: npm
+          cache-dependency-path: h-beam/package-lock.json
 
       - uses: dtolnay/rust-toolchain@stable
 
@@ -31,11 +34,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-cargo-registry-
 
+      # package.json / package-lock.json 已經有 pake-cli，用 npm ci 裝就好。
+      # 原本的 npm init -y + npm install pake-cli 會改寫 package.json，
+      # 而且每次都重新解析相依，曾經卡住 38 分鐘。
       - name: Install pake-cli
         shell: bash
-        run: |
-          npm init -y > /dev/null
-          npm install pake-cli --no-fund --no-audit
+        run: npm ci --no-fund --no-audit
 
       # pake 不加 --use-local-file 時只會複製 index.html 單檔，vendor/ 不會進包
       # （桌機版 xlsx / solver / 字型全部 404）。改成準備一個乾淨的來源目錄再整包帶走，
