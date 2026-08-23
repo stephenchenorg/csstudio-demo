@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>發票回饋 App 系統開發報價單 - 渙潮科技</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Microsoft JhengHei", "PingFang TC", "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .header .subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .header .saas-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .quote-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .quote-info div {
+            text-align: left;
+        }
+
+        /* Content */
+        .content {
+            padding: 40px;
+        }
+
+        /* Section */
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            color: #667eea;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* Info Table */
+        .info-table {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .info-box {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .info-box h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .info-box p {
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .info-box strong {
+            color: #333;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            border: 1px solid #e0e0e0;
+            padding: 12px 15px;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        th {
+            background: #f8f9fa;
+            color: #333;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background: #fafafa;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        /* Price Highlight */
+        .price-highlight {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin: 30px 0;
+        }
+
+        .price-highlight h2 {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .price-row:last-child {
+            border-bottom: none;
+        }
+
+        .price-row.total {
+            font-size: 24px;
+            font-weight: bold;
+            padding-top: 20px;
+            margin-top: 10px;
+            border-top: 2px solid rgba(255,255,255,0.5);
+        }
+
+        /* Accordion Styles */
+        .accordion {
+            margin-bottom: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .accordion-header {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .accordion-header:hover {
+            background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+        }
+
+        .accordion-header h4 {
+            color: #667eea;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+        }
+
+        .accordion-header .badge {
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+        }
+
+        .accordion-header .arrow {
+            font-size: 20px;
+            color: #667eea;
+            transition: transform 0.3s ease;
+        }
+
+        .accordion.active .accordion-header .arrow {
+            transform: rotate(180deg);
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+            background: white;
+        }
+
+        .accordion.active .accordion-content {
+            max-height: 3000px;
+        }
+
+        .accordion-inner {
+            padding: 25px;
+        }
+
+        /* Feature Item */
+        .feature-item {
+            border-left: 3px solid #667eea;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            background: #f8f9ff;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .feature-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .feature-item h5 {
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+
+        .feature-item p {
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        .feature-item .tech-tag {
+            display: inline-block;
+            background: #e8f4fd;
+            color: #667eea;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            margin-right: 5px;
+            margin-top: 5px;
+        }
+
+        .feature-item .saas-note {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin-top: 10px;
+            font-size: 12px;
+            color: #856404;
+        }
+
+        .feature-item .saas-note strong {
+            color: #664d03;
+        }
+
+        /* SaaS Architecture Box */
+        .saas-box {
+            background: linear-gradient(135deg, #e8f4fd 0%, #f0e6ff 100%);
+            border: 2px solid #667eea;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .saas-box h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .saas-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .saas-box li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+            font-size: 14px;
+        }
+
+        .saas-box li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        /* Payment Schedule */
+        .payment-schedule {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 20px 0;
+        }
+
+        .payment-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .payment-item:last-child {
+            border-bottom: none;
+        }
+
+        .payment-phase {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+
+        .payment-phase .num {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .payment-phase .label {
+            font-size: 10px;
+        }
+
+        .payment-detail {
+            flex: 1;
+        }
+
+        .payment-detail h4 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .payment-detail p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .payment-amount {
+            text-align: right;
+        }
+
+        .payment-amount .amount {
+            font-size: 20px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .payment-amount .percent {
+            font-size: 14px;
+            color: #999;
+        }
+
+        /* Bank Info */
+        .bank-info {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .bank-info h4 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+
+        .bank-info p {
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        /* Signature */
+        .signature-section {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        .signature-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            margin-top: 30px;
+        }
+
+        .signature-box {
+            text-align: center;
+        }
+
+        .signature-box h4 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .signature-line {
+            border-bottom: 1px solid #333;
+            height: 60px;
+            margin-bottom: 10px;
+        }
+
+        .signature-box p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Footer */
+        .footer {
+            background: #333;
+            color: white;
+            padding: 30px 40px;
+            text-align: center;
+        }
+
+        .footer p {
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .container {
+                box-shadow: none;
+            }
+
+            .accordion-content {
+                max-height: none !important;
+            }
+
+            .section {
+                page-break-inside: avoid;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .info-table,
+            .signature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .payment-item {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .payment-phase {
+                margin: 0 0 15px 0;
+            }
+
+            .payment-amount {
+                text-align: center;
+                margin-top: 15px;
+            }
+        }
+
+        /* Complexity Badge */
+        .complexity-high { background: #dc3545; }
+        .complexity-medium { background: #ffc107; color: #333; }
+        .complexity-low { background: #28a745; }
+
+        /* Notes */
+        .notes {
+            background: #e8f4fd;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .notes h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .notes ul {
+            margin-left: 20px;
+        }
+
+        .notes li {
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        /* Feature Table */
+        .feature-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .feature-table .module-name {
+            background: #f0f0ff;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #667eea;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 30px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -24px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #667eea;
+            border: 3px solid white;
+            box-shadow: 0 0 0 2px #667eea;
+        }
+
+        .timeline-item h4 {
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+
+        .timeline-item p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* Sub feature list */
+        .sub-features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .sub-features li {
+            font-size: 12px;
+            color: #555;
+            padding: 5px 10px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            list-style: none;
+        }
+
+        @media (max-width: 768px) {
+            .sub-features {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>發票回饋 App 系統開發報價單</h1>
+            <p class="subtitle">以發票為導流入口的消費者回饋平台 — 賣家推薦分潤模式</p>
+            <span class="saas-badge">Invoice-Driven Referral Platform</span>
+            <div class="quote-info">
+                <div>
+                    <p><strong>報價單號：</strong>QT-20260823-001</p>
+                    <p><strong>報價日期：</strong>2026 年 08 月 23 日</p>
+                </div>
+                <div>
+                    <p><strong>報價有效期：</strong>30 天</p>
+                    <p><strong>專案代碼：</strong>INVOICE-APP-2026</p>
+                </div>
+            </div>
+            <div style="margin-top: 20px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.3);">
+                <p style="font-size: 14px; margin-bottom: 10px;">🔗 相關專案：</p>
+                <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;">
+                    <a href="../erp-quote/" target="_blank" style="background: rgba(255,255,255,0.2); color: white; padding: 6px 12px; border-radius: 4px; text-decoration: none; font-size: 13px;">BigSeller 類型 SaaS ERP 報價單</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="content">
+            <!-- 客戶與廠商資訊 -->
+            <div class="section">
+                <h2 class="section-title">一、客戶與廠商資訊</h2>
+                <div class="info-table">
+                    <div class="info-box">
+                        <h3>甲方（客戶）</h3>
+                        <p><strong>公司名稱：</strong>台米大數據有限公司 TAIMI BIGDATA CO., LTD.</p>
+                        <p><strong>統一編號：</strong>83207409</p>
+                        <p><strong>公司地址：</strong>臺中市潭子區潭陽里中山路二段293號1樓</p>
+                        <p><strong>負責人：</strong>曾煥余</p>
+                        <p><strong>聯絡電話：</strong>04-2535-2667</p>
+                    </div>
+                    <div class="info-box">
+                        <h3>乙方（廠商）</h3>
+                        <p><strong>公司名稱：</strong>渙潮科技有限公司</p>
+                        <p><strong>統一編號：</strong>60634762</p>
+                        <p><strong>公司地址：</strong>台中市北屯區東山里橫坑巷 27-35 號 1 樓</p>
+                        <p><strong>負責人：</strong>蔡美麗</p>
+                        <p><strong>聯絡人：</strong>陳立昇 (SA 架構師)</p>
+                        <p><strong>聯絡電話：</strong>0982-885-485</p>
+                        <p><strong>電子郵件：</strong>tasb00429@gmail.com</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 專案概述與商業邏輯 -->
+            <div class="section">
+                <h2 class="section-title">二、專案概述與商業邏輯</h2>
+
+                <div class="info-box" style="border-left: 4px solid #2d7bc9; background: #eef7ff; margin-bottom: 25px;">
+                    <strong>本專案與 ERP 專案之關係</strong><br>
+                    本專案為 ERP 系統之<strong>延伸專案，獨立計價</strong>。因功能需與 ERP 整合，其中「發票模組」與「賣家分潤頁面」建置於 ERP 系統內，該部分費用已含於本報價，非 ERP 合約範圍。詳見第五章。
+                </div>
+
+                <h3 style="color: #667eea;">2.1 一句話說明</h3>
+                <div class="saas-box" style="font-size: 17px; text-align: center; padding: 25px;">
+                    <strong>讓開發票這件事，變成一條招募推薦人的管道。</strong>
+                </div>
+                <p style="margin-top: 15px; line-height: 1.9;">
+                    ERP 的賣家客戶每天都在開發票，每一張發票都會送到一位消費者手上。本專案將這些發票轉化為導流入口——消費者收到發票後裝上 App，往後於 App 內領券至蝦皮消費，產生的聯盟佣金依比例分潤，而<strong>當初開出那張發票的賣家可持續分得佣金</strong>。
+                </p>
+                <p style="line-height: 1.9;">
+                    賣家無須額外支出（發票本就要開），即獲得一條被動收入——這是本模式招募推薦人的核心誘因，也是與一般返利 App 最大的差異。
+                </p>
+
+                <h3 style="margin-top: 35px; color: #667eea;">2.2 三個角色與分潤</h3>
+                <table class="feature-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 15%;">角色</th>
+                            <th style="width: 25%;">是誰</th>
+                            <th style="width: 45%;">在系統中的行為</th>
+                            <th style="width: 15%;" class="text-center">分潤</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="module-name">消費者</td>
+                            <td>收到發票的買家</td>
+                            <td>下載 App、領券、至蝦皮消費、提領回饋</td>
+                            <td class="text-center"><span class="badge complexity-high">60%</span></td>
+                        </tr>
+                        <tr>
+                            <td class="module-name">賣家</td>
+                            <td>貴司 ERP 的客戶</td>
+                            <td>以自己登記之公司開立發票（即完成推薦）</td>
+                            <td class="text-center"><span class="badge complexity-medium">30%</span></td>
+                        </tr>
+                        <tr>
+                            <td class="module-name">平台</td>
+                            <td>台米大數據</td>
+                            <td>營運 App 與 ERP</td>
+                            <td class="text-center"><span class="badge complexity-low">10%</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3 style="margin-top: 35px; color: #667eea;">2.3 完整流程</h3>
+                <div style="max-width: 720px; margin: 20px auto;">
+                    <div style="background: #f5f0ff; border-left: 4px solid #667eea; padding: 14px 18px; border-radius: 6px; margin-bottom: 8px;">
+                        <strong style="color: #667eea;">1</strong>　賣家以自己登記的公司開立發票給買家
+                    </div>
+                    <div style="text-align: center; color: #667eea; font-size: 18px; line-height: 1;">↓</div>
+                    <div style="background: #f5f0ff; border-left: 4px solid #667eea; padding: 14px 18px; border-radius: 6px; margin: 8px 0;">
+                        <strong style="color: #667eea;">2</strong>　發票／中獎通知帶導流連結（含賣家識別碼）
+                    </div>
+                    <div style="text-align: center; color: #667eea; font-size: 18px; line-height: 1;">↓</div>
+                    <div style="background: #f5f0ff; border-left: 4px solid #667eea; padding: 14px 18px; border-radius: 6px; margin: 8px 0;">
+                        <strong style="color: #667eea;">3</strong>　消費者下載 App → <strong>綁定歸屬關係</strong>（此消費者歸屬該賣家）
+                    </div>
+                    <div style="text-align: center; color: #667eea; font-size: 18px; line-height: 1;">↓</div>
+                    <div style="background: #f5f0ff; border-left: 4px solid #667eea; padding: 14px 18px; border-radius: 6px; margin: 8px 0;">
+                        <strong style="color: #667eea;">4</strong>　消費者於 App 內領取隱藏券／優惠券 → 跳轉蝦皮消費
+                    </div>
+                    <div style="text-align: center; color: #667eea; font-size: 18px; line-height: 1;">↓</div>
+                    <div style="background: #f5f0ff; border-left: 4px solid #667eea; padding: 14px 18px; border-radius: 6px; margin: 8px 0;">
+                        <strong style="color: #667eea;">5</strong>　蝦皮回報成交訂單與佣金
+                    </div>
+                    <div style="text-align: center; color: #667eea; font-size: 18px; line-height: 1;">↓</div>
+                    <div style="background: #667eea; color: #fff; padding: 16px 18px; border-radius: 6px; margin: 8px 0; text-align: center;">
+                        <strong>6</strong>　該筆佣金依 <strong>6 : 3 : 1</strong> 分帳<br>
+                        <span style="font-size: 14px; opacity: .92;">消費者 60%　　賣家 30%　　平台 10%</span>
+                    </div>
+                    <div style="text-align: center; color: #667eea; font-size: 18px; line-height: 1;">↓</div>
+                    <div style="background: #f5f0ff; border-left: 4px solid #667eea; padding: 14px 18px; border-radius: 6px; margin-top: 8px;">
+                        <strong style="color: #667eea;">7</strong>　雙方各自於錢包累積，並申請提領
+                    </div>
+                </div>
+
+                <div class="notes" style="margin-top: 25px;">
+                    <strong>關於回饋金來源</strong><br>
+                    回饋金來源為<strong>蝦皮聯盟行銷佣金</strong>，非賣家出資、亦非平台補貼。因各類目佣金率不同、賣家加碼不同，系統採<strong>後驗計算</strong>：每筆交易依該筆實際佣金計算，App 端顯示為「預估回饋」，於蝦皮回報實際佣金後始行確認。帳務狀態流轉為：待確認 → 已確認 → 已提領。
+                </div>
+            </div>
+
+            <!-- 核心規則 -->
+            <div class="section">
+                <h2 class="section-title">三、核心規則</h2>
+
+                <div class="feature-item">
+                    <h5>💰 分潤規則</h5>
+                    <table class="info-table">
+                        <tr><td style="width: 30%;"><strong>分潤比例</strong></td><td>消費者 60%　賣家 30%　平台 10%</td></tr>
+                        <tr><td><strong>分潤基礎</strong></td><td>該筆交易之蝦皮聯盟實收佣金</td></tr>
+                        <tr><td><strong>結算單位</strong></td><td>以「交易」為單位逐筆計算，非期間總額分配</td></tr>
+                        <tr><td><strong>帳務結構</strong></td><td>每筆交易產生三筆分錄，掛於同一交易識別碼下</td></tr>
+                        <tr><td><strong>退貨處理</strong></td><td>三筆分錄同步回沖</td></tr>
+                    </table>
+                </div>
+
+                <div class="feature-item">
+                    <h5>🎯 歸屬規則</h5>
+                    <p>歸屬機制是本模式的核心——若無法辨識消費者由哪位賣家帶入，賣家分潤即無從計算。</p>
+                    <table class="info-table">
+                        <tr><td style="width: 30%;"><strong>綁定時機</strong></td><td>消費者首次經由某賣家連結進入時綁定</td></tr>
+                        <tr><td><strong>是否可被覆蓋</strong></td><td>否。首次歸屬即固定，後續賣家不覆蓋</td></tr>
+                        <tr><td><strong>歸屬期限</strong></td><td>可於後台彈性設定（終身／N 天／僅首筆）</td></tr>
+                        <tr><td><strong>參數變更影響</strong></td><td>已綁定關係不受影響，新參數僅對新綁定生效</td></tr>
+                    </table>
+                </div>
+
+                <div class="feature-item">
+                    <h5>📸 快照原則</h5>
+                    <p><strong>設定是給未來用的，歷史一律看快照。</strong>系統於綁定與交易發生的當下，即記錄當時適用的規則，計算時讀取該筆快照而非當前設定。</p>
+                    <ul class="sub-features">
+                        <li><strong>綁定關係</strong>：消費者、賣家、綁定時間、當時之歸屬規則</li>
+                        <li><strong>交易分錄</strong>：金額外，另存成交當下之三方分潤比例</li>
+                    </ul>
+                    <div class="saas-note">
+                        <strong>為什麼必須這樣做：</strong><br>
+                        若未採此原則，日後調整分潤比例將連動變更歷史帳目，導致已結算給賣家的金額與系統重算結果不符，稽核時無法還原當時數字。此為財務系統的必要設計。
+                    </div>
+                </div>
+
+                <div class="feature-item">
+                    <h5>🔗 歸屬技術方案（雙軌設計）</h5>
+                    <p>消費者點擊連結時通常尚未安裝 App，需經商店下載後首次開啟，此時系統仍須能辨識其來源賣家，此技術稱為 <strong>Deferred Deep Link（延遲深層連結）</strong>。</p>
+                    <table class="info-table">
+                        <tr><td style="width: 30%;"><strong>主要：連結自動歸屬</strong></td><td>Universal Links（iOS）／App Links（Android）搭配歸因服務</td></tr>
+                        <tr><td><strong>後備：手動推薦碼</strong></td><td>賣家專屬碼直接印於發票，使用者安裝後手動輸入</td></tr>
+                    </table>
+                    <div class="saas-note">
+                        <strong>設計說明：</strong><br>
+                        業界原用之 Firebase Dynamic Links 已於 2025 年 8 月 25 日終止服務，自動歸屬在 iOS 隱私政策下亦存在辨識損耗。本專案善用「發票」此一實體接觸點，將推薦碼直接印於發票上作為後備，可救回自動歸屬失敗之案例——<strong>此為本模式相對其他返利 App 的獨有優勢。</strong>
+                    </div>
+                    <span class="tech-tag">Universal Links</span>
+                    <span class="tech-tag">App Links</span>
+                    <span class="tech-tag">Deferred Deep Link</span>
+                </div>
+            </div>
+
+            <!-- 功能模組 -->
+            <div class="section">
+                <h2 class="section-title">四、功能模組（點擊展開）</h2>
+                <p style="margin-bottom: 20px; color: #666;">點擊各模組查看詳細功能說明</p>
+
+                <div class="accordion active">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <h4><span class="badge">A1</span> 消費者端 App（iOS + Android 雙平台）</h4>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-inner">
+                            <table class="feature-table">
+                                <thead><tr><th style="width: 25%;">模組</th><th>功能內容</th></tr></thead>
+                                <tbody>
+                                    <tr><td class="module-name">會員系統</td><td>手機號碼註冊登入（OTP 簡訊驗證）、生物辨識快速登入、個人資料管理</td></tr>
+                                    <tr><td class="module-name">歸屬綁定</td><td>連結自動歸屬、手動輸入推薦碼（後備機制）</td></tr>
+                                    <tr><td class="module-name">導購回饋</td><td>優惠券／隱藏券清單、點擊跳轉蝦皮（帶聯盟追蹤參數）、回饋訂單追蹤、預估回饋顯示</td></tr>
+                                    <tr><td class="module-name">發票專區</td><td>顯示經貴司系統開立之發票、對獎、中獎通知</td></tr>
+                                    <tr><td class="module-name">積分錢包</td><td>待確認／已確認回饋、積分歷程、積分 1:1 兌換現金</td></tr>
+                                    <tr><td class="module-name">提領功能</td><td>銀行帳戶設定、提領申請、提領進度查詢</td></tr>
+                                    <tr><td class="module-name">推播通知</td><td>回饋入帳、發票中獎、活動通知</td></tr>
+                                </tbody>
+                            </table>
+                            <div class="notes" style="margin-top: 15px;">
+                                <strong>發票專區之資料範圍：</strong>僅顯示經貴司系統開立之發票。使用者於其他通路（超商、賣場等）取得之發票不在範圍內。若日後需擴充為「全通路發票管家」（讀取使用者手機條碼載具內所有發票），須另行串接財政部電子發票 API，並依《電子發票應用程式介面使用規範》第六點取得 CNS 27001／ISO 27001 認證，屬另案評估。
+                            </div>
+                            <span class="tech-tag">Flutter</span>
+                            <span class="tech-tag">iOS / Android</span>
+                            <span class="tech-tag">FCM 推播</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <h4><span class="badge">A2</span> ERP 發票模組（本專案衍生，整合於 ERP）</h4>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-inner">
+                            <p>本模組為執行本專案所必要之基礎建設——發票是導流入口，須先具備開立與資料落地能力，App 端的導流、歸屬與發票專區方能運作。模組整合於 ERP 系統，<strong>費用已包含於本報價內</strong>。</p>
+                            <table class="feature-table">
+                                <thead><tr><th style="width: 28%;">項目</th><th>內容</th></tr></thead>
+                                <tbody>
+                                    <tr><td class="module-name">營業人資料管理</td><td>各賣家統編、營業人身分、與關貿網路之對應設定</td></tr>
+                                    <tr><td class="module-name">字軌配號管理</td><td>每期發票號碼區段之配號、使用與餘量監控（多租戶下之字軌隔離）</td></tr>
+                                    <tr><td class="module-name">發票開立</td><td>B2C（含手機條碼載具、捐贈碼）／B2B（含買方統編）</td></tr>
+                                    <tr><td class="module-name">作廢／折讓／註銷</td><td>各流程與期限控管</td></tr>
+                                    <tr><td class="module-name">關貿網路串接</td><td>傳輸、上傳狀態追蹤、失敗重試、對帳</td></tr>
+                                    <tr><td class="module-name">發票資料落地</td><td>發票主檔、明細、買方載具欄位留存，供 App 端使用</td></tr>
+                                    <tr><td class="module-name">中獎清冊</td><td>取得中獎名單、通知買家</td></tr>
+                                    <tr><td class="module-name">媒體申報檔</td><td>依財政部格式產出</td></tr>
+                                    <tr><td class="module-name">導流機制</td><td>賣家推薦碼印製於發票、開立通知帶識別碼連結（本案專屬）</td></tr>
+                                </tbody>
+                            </table>
+                            <span class="tech-tag">關貿網路</span>
+                            <span class="tech-tag">財政部電子發票</span>
+                            <span class="tech-tag">多租戶字軌隔離</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <h4><span class="badge">A3</span> 賣家端功能（介面置於 ERP 內）</h4>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-inner">
+                            <table class="feature-table">
+                                <thead><tr><th style="width: 28%;">功能</th><th>說明</th></tr></thead>
+                                <tbody>
+                                    <tr><td class="module-name">分潤總覽</td><td>累計推薦人數、累計分潤金額</td></tr>
+                                    <tr><td class="module-name">分潤明細</td><td>逐筆交易、對應消費者、佣金金額與分潤金額</td></tr>
+                                    <tr><td class="module-name">賣家錢包</td><td>餘額、待確認／已確認金額</td></tr>
+                                    <tr><td class="module-name">提領功能</td><td>提領申請、進度查詢</td></tr>
+                                    <tr><td class="module-name">推薦碼／連結</td><td>取得專屬推薦碼與連結，供印製於發票</td></tr>
+                                </tbody>
+                            </table>
+                            <div class="saas-note">
+                                <strong>架構設計：介面置於 ERP，程式邏輯獨立於 App 後端。</strong><br>
+                                • 分潤帳本、計算、快照、結算等邏輯全部位於 App 後端（獨立服務）<br>
+                                • ERP 端僅建置頁面，透過 API 向 App 後端取得資料<br>
+                                • 賣家使用體驗為「於 ERP 內查看」，但兩套系統各自獨立、可分別驗收<br><br>
+                                <strong>理由：</strong>賣家須使用 ERP 開立發票方能產生資料流，故賣家與 ERP 客戶為同一群使用者，不宜要求其記憶兩組帳號、切換兩個系統。在哪裡開票，就在哪裡看賺了多少。同時，將程式邏輯獨立可避免與 ERP 專案相互牽動時程與驗收範圍。
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion">
+                    <div class="accordion-header" onclick="toggleAccordion(this)">
+                        <h4><span class="badge">A4</span> 後台管理系統</h4>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-inner">
+                            <table class="feature-table">
+                                <thead><tr><th style="width: 22%;">模組</th><th style="width: 33%;">後台功能</th><th>管理欄位</th></tr></thead>
+                                <tbody>
+                                    <tr><td class="module-name">營運總覽</td><td>Dashboard</td><td>會員數、回饋發放、提領統計、賣家分潤統計</td></tr>
+                                    <tr><td class="module-name">會員管理</td><td>清單／查詢／停權</td><td>基本資料、歸屬來源賣家、積分餘額</td></tr>
+                                    <tr><td class="module-name">賣家管理</td><td>賣家清單、推薦碼管理</td><td>推薦人數、推薦成效、分潤累計</td></tr>
+                                    <tr><td class="module-name">分潤管理</td><td>三方分錄查詢、參數設定</td><td>分潤比例、歸屬期限參數、分錄明細</td></tr>
+                                    <tr><td class="module-name">回饋帳務</td><td>回饋紀錄管理</td><td>訂單來源、佣金金額、狀態（待確認／已確認）</td></tr>
+                                    <tr><td class="module-name">提領審核</td><td>消費者提領 ＋ 賣家提領（雙邊）</td><td>申請金額、銀行帳戶、審核狀態、撥款名單匯出</td></tr>
+                                    <tr><td class="module-name">優惠券管理</td><td>優惠券／隱藏券上架</td><td>標題、圖片、連結、期間、排序、狀態</td></tr>
+                                    <tr><td class="module-name">發票監控</td><td>開立與導流狀態</td><td>開立紀錄、導流成效、異常清單</td></tr>
+                                    <tr><td class="module-name">推播管理</td><td>推播訊息發送</td><td>標題、內容、對象、排程</td></tr>
+                                </tbody>
+                            </table>
+                            <span class="tech-tag">Laravel</span>
+                            <span class="tech-tag">Filament PHP</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 與 ERP 專案的關係 -->
+            <div class="section">
+                <h2 class="section-title">五、與 ERP 專案的關係</h2>
+                <div class="info-box">
+                    <table class="info-table">
+                        <tr>
+                            <td style="width: 32%;"><strong>發票模組</strong></td>
+                            <td>本專案衍生之需求，建置於 ERP 系統內。<strong>費用含於本報價</strong>，非 ERP 合約範圍。</td>
+                        </tr>
+                        <tr>
+                            <td><strong>賣家分潤頁面</strong></td>
+                            <td>介面置於 ERP，程式邏輯位於 App 後端。<strong>費用含於本報價</strong>。</td>
+                        </tr>
+                        <tr>
+                            <td><strong>賣家帳號體系</strong></td>
+                            <td>沿用 ERP 既有之多租戶架構（Tenant／Member），無須重建登入系統。</td>
+                        </tr>
+                        <tr>
+                            <td><strong>執行順序</strong></td>
+                            <td>App 端之導流、歸屬與發票專區均建立於「發票資料流經 ERP」之前提上，故<strong>發票模組須先行完成</strong>，App 相關功能方能整合驗證。</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 技術架構 -->
+            <div class="section">
+                <h2 class="section-title">六、技術架構</h2>
+                <table class="feature-table">
+                    <thead><tr><th style="width: 25%;">項目</th><th>技術</th></tr></thead>
+                    <tbody>
+                        <tr><td class="module-name">App 框架</td><td>Flutter（iOS / Android 雙平台單一程式碼）</td></tr>
+                        <tr><td class="module-name">後端框架</td><td>Laravel（PHP 8.3）</td></tr>
+                        <tr><td class="module-name">後台系統</td><td>Filament PHP</td></tr>
+                        <tr><td class="module-name">資料庫</td><td>MySQL 8.0</td></tr>
+                        <tr><td class="module-name">快取機制</td><td>Redis</td></tr>
+                        <tr><td class="module-name">推播服務</td><td>Firebase Cloud Messaging（FCM）</td></tr>
+                        <tr><td class="module-name">深層連結</td><td>Universal Links（iOS）／App Links（Android）</td></tr>
+                        <tr><td class="module-name">發票介接</td><td>關貿網路加值服務中心</td></tr>
+                    </tbody>
+                </table>
+                <div class="saas-note" style="margin-top: 15px;">
+                    <strong>關於 Flutter：</strong>本專案以 Flutter 開發雙平台原生應用程式，非網頁包殼。Flutter 自帶渲染引擎並編譯為各平台原生機器碼，產出標準 <code>.ipa</code> / <code>.aab</code> 安裝檔，走與原生開發相同之審核上架流程。以單一程式碼同步雙平台，可確保兩平台之金額計算邏輯完全一致——對涉及分潤與提領的系統而言，此為重要的品質保障。
+                </div>
+            </div>
+
+            <!-- 報價明細 -->
+            <div class="section">
+                <h2 class="section-title">七、報價明細</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 55%;">項目</th>
+                            <th style="width: 15%;" class="text-center">數量</th>
+                            <th style="width: 30%;" class="text-right">金額</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>消費者端 App 雙平台開發（會員、歸屬、導購、發票、錢包、提領、推播）</td><td class="text-center">1 式</td><td class="text-right">$XXX</td></tr>
+                        <tr><td>後端 API ＋ 三方分潤帳本 ＋ 排程</td><td class="text-center">1 式</td><td class="text-right">$XXX</td></tr>
+                        <tr><td>蝦皮聯盟行銷 API 串接</td><td class="text-center">1 式</td><td class="text-right">$XXX</td></tr>
+                        <tr style="background: #fff3cd;"><td><strong>ERP 發票模組</strong>（關貿串接、字軌配號、開立／作廢／折讓、資料落地）</td><td class="text-center">1 式</td><td class="text-right">$XXX</td></tr>
+                        <tr><td>發票導流機制（推薦碼印製、開立通知連結）</td><td class="text-center">1 式</td><td class="text-right">$XXX</td></tr>
+                        <tr><td>歸屬機制（Deferred Deep Link ＋ 推薦碼雙軌）</td><td class="text-center">1 式</td><td class="text-right">$XXX</td></tr>
+                        <tr><td>賣家錢包與提領功能</td><td class="text-center">1 式</td><td class="text-right">$XXX</td></tr>
+                        <tr><td>ERP 賣家分潤頁面（API ＋ 頁面建置）</td><td class="text-center">1 式</td><td class="text-right">$XXX</td></tr>
+                        <tr><td>後台管理系統（含賣家管理、分潤管理、雙邊提領審核）</td><td class="text-center">1 式</td><td class="text-right">$XXX</td></tr>
+                        <tr><td>整合測試、雙平台上架</td><td class="text-center">1 式</td><td class="text-right">$XXX</td></tr>
+                    </tbody>
+                    <tfoot>
+                        <tr style="background: #f8f9fa;">
+                            <td colspan="2" class="text-right"><strong>小計</strong></td>
+                            <td class="text-right"><strong>$XXX</strong></td>
+                        </tr>
+                    </tfoot>
+                </table>
+
+                <div class="price-highlight">
+                    <h2>費用總計</h2>
+                    <div class="price-row">
+                        <span>開發費用小計</span>
+                        <span>NT$ XXX</span>
+                    </div>
+                    <div class="price-row">
+                        <span>營業稅 5%（外加）</span>
+                        <span>NT$ XXX</span>
+                    </div>
+                    <div class="price-row total">
+                        <span>總計（含稅）</span>
+                        <span>NT$ XXX</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 專案時程 -->
+            <div class="section">
+                <h2 class="section-title">八、專案時程規劃</h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <h4>Phase 1：需求確認與 API 驗證</h4>
+                        <p>功能細節確認、UI 設計方向、蝦皮聯盟 API 文件審閱與追蹤參數實測、關貿介接規格確認</p>
+                        <p style="color: #667eea; margin-top: 5px;"><strong>預計週期：XXX</strong></p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4>Phase 2：ERP 發票模組開發</h4>
+                        <p>關貿串接、字軌配號、開立與作廢折讓、發票資料落地、導流機制</p>
+                        <p style="color: #667eea; margin-top: 5px;"><strong>預計週期：XXX</strong></p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4>Phase 3：App 與分潤系統開發</h4>
+                        <p>雙平台 App、三方分潤帳本、歸屬機制、雙邊錢包與提領、後台管理</p>
+                        <p style="color: #667eea; margin-top: 5px;"><strong>預計週期：XXX</strong></p>
+                    </div>
+                    <div class="timeline-item">
+                        <h4>Phase 4：整合測試與上架</h4>
+                        <p>歸屬機制實機驗證、分潤對帳測試、雙平台送審上架、驗收</p>
+                        <p style="color: #667eea; margin-top: 5px;"><strong>預計週期：XXX</strong></p>
+                    </div>
+                </div>
+                <p style="margin-top: 20px; text-align: center; font-size: 18px; color: #667eea;">
+                    <strong>總專案週期：約 XXX</strong>
+                </p>
+            </div>
+
+            <!-- 付款方式 -->
+            <div class="section">
+                <h2 class="section-title">九、付款方式（分四期）</h2>
+                <div class="payment-schedule">
+                    <div class="payment-item">
+                        <div class="payment-phase">
+                            <span class="num">1</span>
+                            <span class="label">第一期</span>
+                        </div>
+                        <div class="payment-detail">
+                            <h4>簽約訂金</h4>
+                            <p>簽約後 5 個工作日內支付，確認收款後正式啟動專案</p>
+                        </div>
+                        <div class="payment-amount">
+                            <div class="amount">NT$ XXX</div>
+                            <div class="percent">30%</div>
+                        </div>
+                    </div>
+                    <div class="payment-item">
+                        <div class="payment-phase">
+                            <span class="num">2</span>
+                            <span class="label">第二期</span>
+                        </div>
+                        <div class="payment-detail">
+                            <h4>ERP 發票模組完成</h4>
+                            <p>完成關貿串接、字軌配號、發票開立與資料落地，導流機制可運作後支付</p>
+                        </div>
+                        <div class="payment-amount">
+                            <div class="amount">NT$ XXX</div>
+                            <div class="percent">30%</div>
+                        </div>
+                    </div>
+                    <div class="payment-item">
+                        <div class="payment-phase">
+                            <span class="num">3</span>
+                            <span class="label">第三期</span>
+                        </div>
+                        <div class="payment-detail">
+                            <h4>App 主要功能與分潤系統完成</h4>
+                            <p>完成雙平台 App、三方分潤帳本、歸屬機制，交付內部測試版後支付</p>
+                        </div>
+                        <div class="payment-amount">
+                            <div class="amount">NT$ XXX</div>
+                            <div class="percent">20%</div>
+                        </div>
+                    </div>
+                    <div class="payment-item">
+                        <div class="payment-phase">
+                            <span class="num">4</span>
+                            <span class="label">第四期</span>
+                        </div>
+                        <div class="payment-detail">
+                            <h4>驗收尾款</h4>
+                            <p>雙平台上架完成、系統整合驗收通過後支付</p>
+                        </div>
+                        <div class="payment-amount">
+                            <div class="amount">NT$ XXX</div>
+                            <div class="percent">20%</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="notes" style="margin-top: 20px;">
+                    各期開立統一發票時，均以未稅金額加計 5% 營業稅請款。
+                </div>
+            </div>
+
+            <!-- 匯款資訊 -->
+            <div class="section">
+                <h2 class="section-title">十、匯款資訊</h2>
+                <div class="bank-info">
+                    <p><strong>公司名稱：</strong>渙潮科技有限公司</p>
+                    <p><strong>匯款銀行：</strong>台北富邦銀行 - 中港分行</p>
+                    <p><strong>銀行代碼：</strong>012</p>
+                    <p><strong>匯款帳號：</strong>8212-0000-678958</p>
+                </div>
+                <div class="notes" style="margin-top: 20px;">
+                    <strong>匯款提醒：</strong>匯款後請告知「帳號末五碼」及「匯款公司名稱」，並將匯款資訊寄至 tasb00429@gmail.com。發票將於收款確認後開立。
+                </div>
+            </div>
+
+            <!-- 合作條款 -->
+            <div class="section">
+                <h2 class="section-title">十一、合作條款</h2>
+
+                <h4 style="margin-bottom: 15px; color: #667eea;">11.1 客戶配合事項</h4>
+                <ul style="margin-left: 20px; margin-bottom: 20px;">
+                    <li style="margin-bottom: 8px;">提供已取得之 <strong>蝦皮聯盟行銷 API 文件、金鑰與測試帳號</strong></li>
+                    <li style="margin-bottom: 8px;">提供 <strong>關貿網路之服務合約、帳號與介接權限</strong>（發票模組串接所需）</li>
+                    <li style="margin-bottom: 8px;">協助各賣家完成營業人資料與發票字軌之申請</li>
+                    <li style="margin-bottom: 8px;">以貴司名義申請 Apple Developer 與 Google Play Console 帳號</li>
+                    <li style="margin-bottom: 8px;">提供 App 名稱、Logo、品牌素材與文案</li>
+                </ul>
+
+                <h4 style="margin-bottom: 15px; color: #667eea;">11.2 保固與維護</h4>
+                <ul style="margin-left: 20px; margin-bottom: 20px;">
+                    <li style="margin-bottom: 8px;">正式上線後提供 <strong>6 個月</strong> 免費保固期</li>
+                    <li style="margin-bottom: 8px;">保固期間提供程式 Bug 修復服務（不含需求變更）</li>
+                    <li style="margin-bottom: 8px;">保固期內分潤計算錯誤之修正與資料校正，由乙方負責</li>
+                    <li style="margin-bottom: 8px;">保固期後可選擇簽訂年度維護合約</li>
+                </ul>
+
+                <h4 style="margin-bottom: 15px; color: #667eea;">11.3 驗收標準</h4>
+                <ul style="margin-left: 20px; margin-bottom: 20px;">
+                    <li style="margin-bottom: 8px;"><strong>功能驗收：</strong>所有功能模組依規格正常運作</li>
+                    <li style="margin-bottom: 8px;"><strong>歸屬驗收：</strong>連結自動歸屬與手動推薦碼皆能正確綁定來源賣家</li>
+                    <li style="margin-bottom: 8px;"><strong>帳務驗收：</strong>三方分潤金額與蝦皮回報之佣金一致，退貨回沖正確</li>
+                    <li style="margin-bottom: 8px;"><strong>上架驗收：</strong>iOS 與 Android 雙平台審核通過並正式上架</li>
+                </ul>
+
+                <h4 style="margin-bottom: 15px; color: #667eea;">11.4 賣家資格說明</h4>
+                <ul style="margin-left: 20px; margin-bottom: 20px;">
+                    <li style="margin-bottom: 8px;">參與本模式之賣家須為<strong>已登記、具統編與發票字軌之營業人</strong></li>
+                    <li style="margin-bottom: 8px;">未辦理商業登記之個人賣場無法開立發票，不在本模式適用範圍內</li>
+                </ul>
+
+                <h4 style="margin-bottom: 15px; color: #667eea;">11.5 個人資料處理</h4>
+                <ul style="margin-left: 20px; margin-bottom: 20px;">
+                    <li style="margin-bottom: 8px;">發票所含消費者資料，法律上之蒐集者為開立發票之賣家</li>
+                    <li style="margin-bottom: 8px;">將該等資料用於本 App 之導流與分潤計算，需取得 ① 賣家之授權（於 ERP 服務條款處理）② 消費者之同意（於 App 註冊流程處理）</li>
+                    <li style="margin-bottom: 8px;">系統將留存雙方同意軌跡</li>
+                </ul>
+
+                <h4 style="margin-bottom: 15px; color: #667eea;">11.6 排除條款（實報實銷或另計）</h4>
+                <ul style="margin-left: 20px; margin-bottom: 20px;">
+                    <li style="margin-bottom: 8px;">網域 (Domain) 購買與續約費用</li>
+                    <li style="margin-bottom: 8px;">雲端主機月租費（依用量計價）</li>
+                    <li style="margin-bottom: 8px;"><strong>簡訊 OTP 費用</strong>（會員註冊驗證用，每則約 NT$ 0.8-1.5，依實際發送量計費）</li>
+                    <li style="margin-bottom: 8px;"><strong>歸因服務月費</strong>（若採用第三方歸因平台，選型後確認）</li>
+                    <li style="margin-bottom: 8px;">Apple Developer（US$ 99/年）與 Google Play Console（US$ 25）帳號費用</li>
+                    <li style="margin-bottom: 8px;">提領撥款之實際金流作業與手續費（撥款由貴司執行，系統提供審核與名單匯出）</li>
+                    <li style="margin-bottom: 8px;">分潤之稅務申報與扣繳作業</li>
+                    <li style="margin-bottom: 8px;">洗錢防制、實名驗證等營運政策之制定（系統依確認後之規則實作）</li>
+                    <li style="margin-bottom: 8px;"><strong>全通路發票管家</strong>（需另行串接財政部 API 並取得 CNS 27001／ISO 27001 認證）</li>
+                    <li style="margin-bottom: 8px;">行銷素材設計與廣告投放</li>
+                </ul>
+
+                <h4 style="margin-bottom: 15px; color: #667eea;">11.7 智慧財產權</h4>
+                <ul style="margin-left: 20px;">
+                    <li style="margin-bottom: 8px;">專案完成並全額付款後，系統原始碼（App、後端、後台、ERP 發票模組與分潤頁面）著作權歸甲方所有</li>
+                    <li style="margin-bottom: 8px;">乙方保留使用通用元件與框架於其他專案之權利</li>
+                </ul>
+            </div>
+
+            <!-- 簽約專區 -->
+            <div class="section signature-section">
+                <h2 class="section-title">十二、簽約確認</h2>
+
+                <p style="margin-bottom: 20px;">
+                    本報價單經雙方確認無誤後，即視為正式合約。甲方（客戶）確認已詳閱並同意本報價單之所有條款，乙方（廠商）承諾依據本報價單所載內容執行專案開發。如有未盡事宜，雙方得另行協議並以書面補充之。
+                </p>
+
+                <div class="signature-grid">
+                    <div class="signature-box">
+                        <h4>甲方（客戶）</h4>
+                        <p><strong>公司名稱：</strong>台米大數據有限公司 TAIMI BIGDATA CO., LTD.</p>
+                        <p><strong>統一編號：</strong>83207409</p>
+                        <p><strong>代表人：</strong>曾煥余</p>
+                        <div class="signature-line"></div>
+                        <p>簽章</p>
+                        <p style="margin-top: 20px;"><strong>簽約日期：</strong>_____年_____月_____日</p>
+                    </div>
+
+                    <div class="signature-box">
+                        <h4>乙方（廠商）</h4>
+                        <p><strong>公司名稱：</strong>渙潮科技有限公司</p>
+                        <p><strong>統一編號：</strong>60634762</p>
+                        <p><strong>代表人：</strong>蔡美麗</p>
+                        <div class="signature-line"></div>
+                        <p>簽章</p>
+                        <p style="margin-top: 20px;"><strong>簽約日期：</strong>_____年_____月_____日</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p><strong>渙潮科技有限公司 Waves Technology Co., Ltd.</strong></p>
+            <p>SA 架構師：陳立昇 | 電話：0982-885-485 | Email：tasb00429@gmail.com</p>
+            <p style="margin-top: 10px; opacity: 0.7;">本報價單有效期限為報價日起 30 日內</p>
+        </div>
+    </div>
+
+    <script>
+        function toggleAccordion(header) {
+            const accordion = header.parentElement;
+            accordion.classList.toggle('active');
+        }
+
+        // 預設展開第一個
+        document.addEventListener('DOMContentLoaded', function() {
+            // 可以選擇是否預設展開第一個
+            // document.querySelector('.accordion').classList.add('active');
+        });
+    </script>
+</body>
+</html>
