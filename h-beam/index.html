@@ -4,6 +4,97 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>H型鋼排料系統 — SteelCut Pro</title>
+<script>
+// 全域錯誤攔截器：桌機版打包後客戶端沒有 devtools 可看 console，
+// 沒有這層的話任何 JS 例外都會無聲無息死掉（按鈕沒反應、沒 alert、沒結果）。
+// 註冊時機要越早越好，放在所有其他 <script> 之前，連 vendor 腳本載入失敗都攔得到。
+(function () {
+  var APP_VERSION = '1.0.3'; // 手動同步 package.json version，跟桌機版打包時 --app-version 一致
+  var errorLog = [];
+  var panel = null;
+
+  function formatError(entry) {
+    var lines = [];
+    lines.push('[' + entry.time + '] ' + entry.type);
+    lines.push(entry.message);
+    if (entry.source) lines.push('位置: ' + entry.source + ':' + entry.line + ':' + entry.col);
+    if (entry.stack) lines.push(entry.stack);
+    return lines.join('\n');
+  }
+
+  function flush() {
+    var el = document.getElementById('feLog');
+    if (!el) return;
+    el.textContent = errorLog.map(formatError).join('\n\n' + new Array(41).join('-') + '\n\n');
+  }
+
+  function renderPanel() {
+    if (panel || !document.body) return;
+    panel = document.createElement('div');
+    panel.id = 'fatalErrorPanel';
+    panel.style.cssText = 'position:fixed;inset:0;z-index:999999;background:rgba(20,10,10,0.94);'
+      + 'color:#fff;font-family:"Share Tech Mono",monospace;font-size:13px;padding:24px;'
+      + 'overflow:auto;display:flex;flex-direction:column;gap:12px;';
+    panel.innerHTML =
+      '<div style="font-size:18px;font-weight:bold;color:#ff6b6b;">'
+      + '&#x26A0;&#xFE0F; SteelCut Pro 發生錯誤，麻煩截圖此畫面回報開發者</div>'
+      + '<div style="opacity:0.75;">版本: ' + APP_VERSION
+      + ' ｜ 瀏覽器引擎: <span id="feUA"></span></div>'
+      + '<pre id="feLog" style="white-space:pre-wrap;word-break:break-all;background:#000;'
+      + 'padding:12px;border-radius:6px;flex:1;user-select:text;"></pre>'
+      + '<button id="feClose" style="align-self:flex-start;padding:8px 16px;cursor:pointer;">'
+      + '關閉（App 可能仍可繼續操作）</button>';
+    document.body.appendChild(panel);
+    document.getElementById('feUA').textContent = navigator.userAgent;
+    document.getElementById('feClose').onclick = function () { panel.style.display = 'none'; };
+  }
+
+  function capture(entry) {
+    errorLog.push(entry);
+    if (document.body) {
+      renderPanel();
+      panel.style.display = 'flex';
+      flush();
+    }
+  }
+
+  window.__reportFatalError = function (err, type) {
+    capture({
+      time: new Date().toLocaleTimeString(),
+      type: type || 'JS 錯誤',
+      message: err && err.message ? err.message : String(err),
+      stack: err && err.stack ? err.stack : ''
+    });
+  };
+
+  window.onerror = function (message, source, line, col, error) {
+    capture({
+      time: new Date().toLocaleTimeString(),
+      type: 'JS 錯誤',
+      message: String(message),
+      source: source,
+      line: line,
+      col: col,
+      stack: error && error.stack ? error.stack : ''
+    });
+    return false;
+  };
+
+  window.addEventListener('unhandledrejection', function (event) {
+    var reason = event.reason;
+    capture({
+      time: new Date().toLocaleTimeString(),
+      type: '未處理的 Promise 錯誤',
+      message: reason && reason.message ? reason.message : String(reason),
+      stack: reason && reason.stack ? reason.stack : ''
+    });
+  });
+
+  document.addEventListener('DOMContentLoaded', function () {
+    if (errorLog.length) renderPanel();
+  });
+})();
+</script>
 <link href="./vendor/fonts/fonts.css" rel="stylesheet">
 <style>
   :root {
@@ -1222,27 +1313,36 @@ function runOptimize() {
     '<div class="results-empty"><div class="icon running">&#x2699;&#xFE0F;</div><div>計算中…</div></div>';
   meta.textContent = '計算中…';
 
-  // Double rAF so the "計算中" message actually paints before the
-  // synchronous solver locks the main thread.
-  requestAnimationFrame(() => requestAnimationFrame(() => {
-    const results = optimizeAll();
-    const btn = document.getElementById('exportBtn');
-    if (!results || !results.length) {
+  // 用 setTimeout 而非 requestAnimationFrame 讓「計算中」先畫出來再鎖住主執行緒。
+  // rAF 在視窗不是最前景/被縮到工作列時完全不會觸發（瀏覽器規格行為），
+  // 桌機版視窗只要沒有保持在前景，計算就會永遠卡在「計算中…」、無錯誤、無反應——
+  // 這正是客戶回報「按了都沒反應、沒有錯誤訊息」的重現條件。setTimeout 不受視窗焦點影響。
+  setTimeout(() => {
+    try {
+      const results = optimizeAll();
+      const btn = document.getElementById('exportBtn');
+      if (!results || !results.length) {
+        panel.innerHTML =
+          '<div class="results-empty"><div class="icon">&#x26A0;&#xFE0F;</div><div>請至少輸入一組型鋼規格及零件</div></div>';
+        meta.textContent = '等待計算';
+        latestResults = null;
+        btn.disabled = true;
+        btn.style.opacity = '0.5';
+        btn.style.cursor = 'not-allowed';
+        return;
+      }
+      latestResults = results;
+      btn.disabled = false;
+      btn.style.opacity = '1';
+      btn.style.cursor = 'pointer';
+      renderResults(results);
+    } catch (err) {
+      if (window.__reportFatalError) window.__reportFatalError(err, '計算時發生錯誤');
       panel.innerHTML =
-        '<div class="results-empty"><div class="icon">&#x26A0;&#xFE0F;</div><div>請至少輸入一組型鋼規格及零件</div></div>';
-      meta.textContent = '等待計算';
-      latestResults = null;
-      btn.disabled = true;
-      btn.style.opacity = '0.5';
-      btn.style.cursor = 'not-allowed';
-      return;
+        '<div class="results-empty"><div class="icon">&#x26A0;&#xFE0F;</div><div>計算發生錯誤，請截圖回報</div></div>';
+      meta.textContent = '發生錯誤';
     }
-    latestResults = results;
-    btn.disabled = false;
-    btn.style.opacity = '1';
-    btn.style.cursor = 'pointer';
-    renderResults(results);
-  }));
+  }, 30);
 }
 
 // pct = 損耗率（waste %），依三級分色：<1% 佳／1~3% 普通／>3% 偏高
