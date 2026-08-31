@@ -760,9 +760,24 @@
 
                 <div class="feature-item">
                     <h5>💰 分潤規則</h5>
-                    <table class="info-table">
-                        <tr><td style="width: 30%;"><strong>分潤比例</strong></td><td>消費者 60%　賣家 30%　平台 10%</td></tr>
-                        <tr><td><strong>分潤基礎</strong></td><td>該筆交易之蝦皮聯盟實收佣金</td></tr>
+                    <p style="margin-bottom: 10px;">分潤比例依「這位消費者是怎麼被帶進 App 的」分成四種情境，✅ 已由業主確認：</p>
+                    <table class="feature-table">
+                        <thead>
+                            <tr><th>情境</th><th>推薦人</th><th class="text-center">推薦人拿多少</th><th class="text-center">實際購買的消費者拿多少</th><th class="text-center">平台拿多少</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td class="module-name">A：推薦人是賣家</td><td>賣家（ERP 客戶）</td><td class="text-center">30%</td><td class="text-center">60%</td><td class="text-center">10%</td></tr>
+                            <tr><td class="module-name">B：推薦人是會員</td><td>消費者（App 會員互推）</td><td class="text-center">60%</td><td class="text-center">30%</td><td class="text-center">10%</td></tr>
+                            <tr><td class="module-name">C：沒有推薦人</td><td>不存在</td><td class="text-center">—</td><td class="text-center">60%</td><td class="text-center"><strong>40%</strong></td></tr>
+                            <tr><td class="module-name">D：推薦人身分無法辨識</td><td>不發放</td><td class="text-center">0%</td><td class="text-center">60%</td><td class="text-center"><strong>40%</strong></td></tr>
+                        </tbody>
+                    </table>
+                    <div class="saas-note">
+                        <strong>情境 C／D 補充：</strong>「多出來的 30%」（原本 10% ＋ 無人可領的 30%）收款主體為<strong>晨星網運有限公司</strong>（統編 94146611，ERP 及發票購營運用），非台米大數據（統編 83207409，案子開發票用），兩者為不同法人。<br><br>
+                        <strong>情境 D 成因：</strong>① 推薦人（賣家或會員）事後刪除／停用帳號　② 自動歸因（Deferred Deep Link）抓到過期或錯誤的識別碼　③ 賣家帳號因稅籍異常等原因被財資中心停權。手動輸入推薦碼打錯／查無此碼，於輸入當下即擋下驗證，不會流入此情境。
+                    </div>
+                    <table class="info-table" style="margin-top: 15px;">
+                        <tr><td style="width: 30%;"><strong>分潤基礎</strong></td><td>該筆交易之蝦皮聯盟實收佣金</td></tr>
                         <tr><td><strong>結算單位</strong></td><td>以「交易」為單位逐筆計算，非期間總額分配</td></tr>
                         <tr><td><strong>帳務結構</strong></td><td>每筆交易產生三筆分錄，掛於同一交易識別碼下</td></tr>
                         <tr><td><strong>退貨處理</strong></td><td>三筆分錄同步回沖</td></tr>
@@ -916,7 +931,8 @@
                                     <tr><td class="module-name">賣家管理</td><td>賣家清單、推薦碼管理</td><td>推薦人數、推薦成效、分潤累計</td></tr>
                                     <tr><td class="module-name">分潤管理</td><td>三方分錄查詢、參數設定</td><td>分潤比例、歸屬期限參數、分錄明細</td></tr>
                                     <tr><td class="module-name">回饋帳務</td><td>回饋紀錄管理</td><td>訂單來源、佣金金額、狀態（待確認／已確認）</td></tr>
-                                    <tr><td class="module-name">提領審核</td><td>消費者提領 ＋ 賣家提領（雙邊）</td><td>申請金額、銀行帳戶、審核狀態、撥款名單匯出</td></tr>
+                                    <tr><td class="module-name">提領審核</td><td>消費者提領 ＋ 賣家提領（雙邊）</td><td>申請金額、銀行帳戶、審核狀態、<strong>匯出提領人清單</strong>（供人工下載後上傳至網路銀行後台，進行一次性批量撥款）</td></tr>
+                                    <tr><td class="module-name">帳務稽核匯出</td><td>Excel 匯出</td><td>訂單、三方分潤分錄、提領紀錄皆可匯出，供銀行或稅務查帳時提出佐證，每一筆金流可追溯</td></tr>
                                     <tr><td class="module-name">優惠券管理</td><td>優惠券／隱藏券上架</td><td>標題、圖片、連結、期間、排序、狀態</td></tr>
                                     <tr><td class="module-name">發票監控</td><td>開立與導流狀態</td><td>開立紀錄、導流成效、異常清單</td></tr>
                                     <tr><td class="module-name">推播管理</td><td>推播訊息發送</td><td>標題、內容、對象、排程</td></tr>
