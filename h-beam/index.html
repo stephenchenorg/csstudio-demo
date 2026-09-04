@@ -9,7 +9,7 @@
 // 沒有這層的話任何 JS 例外都會無聲無息死掉（按鈕沒反應、沒 alert、沒結果）。
 // 註冊時機要越早越好，放在所有其他 <script> 之前，連 vendor 腳本載入失敗都攔得到。
 (function () {
-  var APP_VERSION = '1.0.3'; // 手動同步 package.json version，跟桌機版打包時 --app-version 一致
+  var APP_VERSION = '1.0.4'; // 手動同步 package.json version，跟桌機版打包時 --app-version 一致
   var errorLog = [];
   var panel = null;
 
@@ -1058,7 +1058,10 @@ function solveILP(distinctLens, demand, stocks, kerf) {
   if (!allPatterns.length || allPatterns.length > 1500) return null;
 
   const model = { optimize: 'cost', opType: 'min', constraints: {}, variables: {}, ints: {} };
-  distinctLens.forEach(len => { model.constraints['L' + len] = { min: demand[len] }; });
+  // 一定要用 equal，不能用 min（>=）——min 允許 solver 為了壓低總用料而「順便」多切出
+  // 不影響用料效率的零件，導致實際切出的支數超過客戶要求的數量（多切的那支因為找不到
+  // 對應需求零件名稱，會在畫面上顯示成 '?'，但真正的問題是多浪費了一支鋼材，不只是顯示）。
+  distinctLens.forEach(len => { model.constraints['L' + len] = { equal: demand[len] }; });
   allPatterns.forEach((p, i) => {
     const v = { cost: p.stock };
     distinctLens.forEach((len, j) => { if (p.counts[j] > 0) v['L' + len] = p.counts[j]; });
@@ -1354,6 +1357,33 @@ function utilClass(wastePct) {
 //  EXCEL EXPORT
 // =====================================================
 
+// 桌機版沒有瀏覽器原生的下載列/存檔對話框可看，匯出成功與否全靠這個提示才看得到
+// （桌機版是靠 Pake 注入的攔截機制把檔案默默存進系統「下載」資料夾，
+// 只搭配一個角落 3 秒小提示，客人很容易誤以為「按了完全沒反應」）。
+// 這裡自己刻一個持續 6 秒、置底置中、可手動關閉的提示，不依賴 Pake 的提示是否被看到。
+function showExportNotice(message, isError) {
+  const old = document.getElementById('exportNotice');
+  if (old) old.remove();
+
+  const el = document.createElement('div');
+  el.id = 'exportNotice';
+  el.style.cssText = 'position:fixed;left:50%;bottom:28px;transform:translateX(-50%);'
+    + 'z-index:999998;max-width:90%;padding:12px 18px;border-radius:10px;'
+    + 'font-family:var(--sans,sans-serif);font-size:14px;line-height:1.5;'
+    + 'color:#fff;box-shadow:0 4px 16px rgba(0,0,0,0.3);display:flex;align-items:center;gap:10px;'
+    + (isError ? 'background:#b91c1c;' : 'background:#166534;');
+  el.innerHTML = '<span>' + (isError ? '&#x26A0;&#xFE0F; ' : '&#x2705; ') + message + '</span>'
+    + '<button style="background:transparent;border:1px solid rgba(255,255,255,0.5);color:#fff;'
+    + 'border-radius:6px;padding:2px 8px;cursor:pointer;flex-shrink:0;">關閉</button>';
+  el.querySelector('button').onclick = function () { el.remove(); };
+  document.body.appendChild(el);
+
+  clearTimeout(showExportNotice._timer);
+  showExportNotice._timer = setTimeout(function () {
+    if (el.parentNode) el.remove();
+  }, 6000);
+}
+
 function exportToExcel() {
   if (!latestResults || !latestResults.length) {
     alert('請先計算後再匯出');
@@ -1363,6 +1393,8 @@ function exportToExcel() {
     alert('xlsx 函式庫載入失敗，請確認 vendor/xlsx.bundle.min.js 存在');
     return;
   }
+
+  try {
 
   const projectId = document.getElementById('projectId').value || '';
   const projectName = document.getElementById('projectName').value || '';
@@ -1603,6 +1635,11 @@ function exportToExcel() {
     : `型鋼採購建議單_${ymd}.xlsx`;
 
   XLSX.writeFile(wb, filename);
+  showExportNotice('已匯出「' + filename + '」，桌面版會存到系統「下載」資料夾');
+  } catch (err) {
+    if (window.__reportFatalError) window.__reportFatalError(err, '匯出 Excel 時發生錯誤');
+    showExportNotice('匯出失敗，請截圖上方錯誤訊息回報開發者', true);
+  }
 }
 
 function renderResults(results) {
