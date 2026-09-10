@@ -10,6 +10,6 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "pake-cli": "^3.11.5"
+    "pake-cli": "^3.16.2"
   }
 }
