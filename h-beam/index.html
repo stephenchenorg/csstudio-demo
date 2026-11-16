@@ -928,7 +928,7 @@ function renderSpecs() {
                 <td><input type="number" value="${p.length}" step="1" min="0"
                   onchange="updatePart(${spec.id},${p.id},'length',this.value)" style="text-align:right"></td>
                 <td><input type="number" value="${p.qty}" step="1" min="1"
-                  onchange="updatePart(${spec.id},${p.id},'qty',this.value)" style="text-align:right;width:50px"></td>
+                  onchange="updatePart(${spec.id},${p.id},'qty',this.value)" style="text-align:right;width:76px"></td>
                 <td><button class="del-btn" onclick="removePart(${spec.id},${p.id})">&#xD7;</button></td>
               </tr>
             `).join('')}
@@ -1057,11 +1057,14 @@ function solveILP(distinctLens, demand, stocks, kerf) {
   }
   if (!allPatterns.length || allPatterns.length > 1500) return null;
 
-  const model = { optimize: 'cost', opType: 'min', constraints: {}, variables: {}, ints: {} };
-  // 一定要用 equal，不能用 min（>=）——min 允許 solver 為了壓低總用料而「順便」多切出
-  // 不影響用料效率的零件，導致實際切出的支數超過客戶要求的數量（多切的那支因為找不到
-  // 對應需求零件名稱，會在畫面上顯示成 '?'，但真正的問題是多浪費了一支鋼材，不只是顯示）。
-  distinctLens.forEach(len => { model.constraints['L' + len] = { equal: demand[len] }; });
+  // timeout：branch-and-bound 最多跑這麼久，時間到就拿目前找到的最好解，避免畫面卡死。
+  const model = { optimize: 'cost', opType: 'min', constraints: {}, variables: {}, ints: {},
+                  options: { timeout: ILP_TIMEOUT_MS } };
+  // 用 min（>=）而不是 equal：equal 會讓 branch-and-bound 極難找到可行解
+  // （客戶實測 7 種長度 × 6000 定尺跑 5 分鐘以上沒結果）。
+  // min 可能「順便」多切出零件，所以下面 trimSurplus() 會把多出來的零件拿掉——
+  // 拿掉零件不會增加用料，因此結果仍然是最少用料，也不會多切。
+  distinctLens.forEach(len => { model.constraints['L' + len] = { min: demand[len] }; });
   allPatterns.forEach((p, i) => {
     const v = { cost: p.stock };
     distinctLens.forEach((len, j) => { if (p.counts[j] > 0) v['L' + len] = p.counts[j]; });
@@ -1081,7 +1084,47 @@ function solveILP(distinctLens, demand, stocks, kerf) {
       bins.push({ stock: p.stock, counts: [...p.counts], usedLength: p.used, waste: p.stock - p.used });
     }
   });
-  return bins.length ? bins : null;
+  return bins.length ? trimSurplus(bins, distinctLens, demand, kerf) : null;
+}
+
+const ILP_TIMEOUT_MS = 6000;
+
+// 把超過需求數量的零件從料上拿掉（從最後面的料開始拿），重算用量與餘料。
+function trimSurplus(bins, distinctLens, demand, kerf) {
+  distinctLens.forEach((len, j) => {
+    let surplus = bins.reduce((s, b) => s + b.counts[j], 0) - demand[len];
+    for (let k = bins.length - 1; k >= 0 && surplus > 0; k--) {
+      const take = Math.min(surplus, bins[k].counts[j]);
+      bins[k].counts[j] -= take;
+      surplus -= take;
+    }
+  });
+  const kept = bins.filter(b => b.counts.some(c => c > 0));
+  kept.forEach(b => {
+    b.usedLength = patternUsed(b.counts, distinctLens, kerf);
+    b.waste = b.stock - b.usedLength;
+  });
+  return kept;
+}
+
+// 理論下限（總採購長度）＝「用定尺長度湊得出來、且 ≥ 總用量」的最小總長。
+// heuristic 若已經達到下限，就證明是最佳解，不必再跑 ILP。
+function stockLowerBound(distinctLens, demand, stocks, kerf) {
+  const need = distinctLens.reduce((s, len) => s + demand[len] * (len + kerf), 0);
+  if (!stocks.every(Number.isInteger)) return need;
+  const gcd = (x, y) => (y ? gcd(y, x % y) : x);
+  const g = stocks.reduce(gcd);
+  const units = stocks.map(st => st / g);
+  const target = Math.ceil(need / g);
+  const limit = target + Math.max(...units);
+  if (limit > 2e6) return need;
+  const ok = new Uint8Array(limit + 1);
+  ok[0] = 1;
+  for (let v = 1; v <= limit; v++) {
+    for (const u of units) if (v >= u && ok[v - u]) { ok[v] = 1; break; }
+    if (ok[v] && v >= target) return v * g;
+  }
+  return need;
 }
 
 // Fallback: multi-start heuristic search (used when solver is unavailable
@@ -1214,8 +1257,13 @@ function optimizeSpec(parts, stockLengths, kerf) {
 
   const stocks = [...stockLengths].sort((a, b) => b - a);
 
-  const bestBins = solveILP(distinctLens, demand, stocks, kerf)
-                || solveHeuristic(distinctLens, demand, stocks, kerf);
+  // 先跑很快的 heuristic；已達理論下限就直接用，否則再跑 ILP（有 timeout），兩者取用料少的。
+  const total = bins => bins ? bins.reduce((s, b) => s + b.stock, 0) : Infinity;
+  let bestBins = solveHeuristic(distinctLens, demand, stocks, kerf);
+  if (total(bestBins) > stockLowerBound(distinctLens, demand, stocks, kerf)) {
+    const ilpBins = solveILP(distinctLens, demand, stocks, kerf);
+    if (total(ilpBins) < total(bestBins)) bestBins = ilpBins;
+  }
 
   // Post-process: assign part names and build cut combos
   const namePool = {};
@@ -1252,9 +1300,15 @@ function optimizeSpec(parts, stockLengths, kerf) {
   return bestBins;
 }
 
+// 不能寫 `parseFloat(v) || 3`：0 是 falsy，客人把損耗改成 0 會被偷偷換回 3。
+function readKerf() {
+  const v = parseFloat(document.getElementById('kerfInput').value);
+  return Number.isFinite(v) && v >= 0 ? v : 3;
+}
+
 function optimizeAll() {
   const sl = [...stockLengths].sort((a, b) => a - b);
-  const kerf = parseFloat(document.getElementById('kerfInput').value) || 3;
+  const kerf = readKerf();
 
   if (!sl.length) { alert('請至少新增一種定尺料長度'); return null; }
 
@@ -1398,7 +1452,7 @@ function exportToExcel() {
 
   const projectId = document.getElementById('projectId').value || '';
   const projectName = document.getElementById('projectName').value || '';
-  const kerf = parseFloat(document.getElementById('kerfInput').value) || 3;
+  const kerf = readKerf();
   const results = latestResults;
 
   const thinBorder = { style: 'thin', color: { rgb: '808080' } };
@@ -1634,8 +1688,25 @@ function exportToExcel() {
     ? `型鋼採購建議單_${projectId}_${ymd}.xlsx`
     : `型鋼採購建議單_${ymd}.xlsx`;
 
+  // 桌機版（Pake/Tauri）：不走 XLSX.writeFile 的 <a download> 假點擊——那條路要靠 Pake 在
+  // DOMContentLoaded 後偷換 createElement/createObjectURL 才攔得到，攔不到時 WebView 會默默吞掉、
+  // 什麼檔案都沒有，我們卻照樣顯示「已匯出」。改成直接呼叫 Pake 的 Rust 指令寫檔，成功/失敗都是真的。
+  const tauriInvoke = window.__TAURI__ && window.__TAURI__.core && window.__TAURI__.core.invoke;
+  if (tauriInvoke) {
+    const bytes = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+    tauriInvoke('download_file_by_binary', {
+      params: { filename, binary: Array.from(new Uint8Array(bytes)), language: 'zh' },
+    }).then(function () {
+      showExportNotice('已匯出「' + filename + '」到電腦的「下載」資料夾（Downloads）。同名檔案會自動加編號。');
+    }).catch(function (err) {
+      if (window.__reportFatalError) window.__reportFatalError(err, '匯出 Excel 寫檔失敗');
+      showExportNotice('匯出失敗：' + err + '，請截圖回報開發者', true);
+    });
+    return;
+  }
+
   XLSX.writeFile(wb, filename);
-  showExportNotice('已匯出「' + filename + '」，桌面版會存到系統「下載」資料夾');
+  showExportNotice('已匯出「' + filename + '」，請查看瀏覽器的下載項目');
   } catch (err) {
     if (window.__reportFatalError) window.__reportFatalError(err, '匯出 Excel 時發生錯誤');
     showExportNotice('匯出失敗，請截圖上方錯誤訊息回報開發者', true);
